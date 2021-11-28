@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class RoomUser extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'created_at',
+        'updated_at'
+    ];
 }
