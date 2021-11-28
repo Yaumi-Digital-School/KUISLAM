@@ -1,0 +1,12 @@
+{
+    "web": {
+        "client_id":"1095519982693-r212281jeq9tgsrldr64mqohck255226.apps.googleusercontent.com",
+        "project_id":"quizgenerator",
+        "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+        "token_uri":"https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret":"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",
+        "redirect_uris":["http://127.0.0.1:8000/auth/google/callback"],
+        "javascript_origins":["http://127.0.0.1:8000"]
+    }
+}    
