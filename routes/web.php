@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,5 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/quizzes', QuizController::class);   
 });
 
+Route::get('/makeroom/{room}', [RoomController::class, 'makeRoom'])->name('room.make');
+Route::get('/rooms/{room}', [RoomController::class, 'waitingRoom'])->name('room.waiting');
 
 require __DIR__.'/auth.php';

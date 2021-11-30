@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Quiz;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Topic extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
 }

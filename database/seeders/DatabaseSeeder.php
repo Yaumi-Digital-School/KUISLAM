@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             LeaderboardSeeder::class,
             TopicSeeder::class,
             QuizSeeder::class,
+            RoomSeeder::class,
+            RoomUserSeeder::class,
         ]);
     }
 }

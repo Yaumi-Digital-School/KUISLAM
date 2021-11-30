@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Leaderboard::class);
     }
+
+    public function roomusers()
+    {
+        return $this->hasMany(RoomUser::class);
+    }
 }
