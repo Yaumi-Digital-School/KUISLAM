@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Leaderboard;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,4 +38,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function leaderboards()
+    {
+        return $this->hasMany(Leaderboard::class);
+    }
 }

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +25,13 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('auth.googlecallback');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
+    Route::resource('/topics', TopicController::class);
+    Route::resource('/quizzes', QuizController::class);   
+});
+
 
 require __DIR__.'/auth.php';
