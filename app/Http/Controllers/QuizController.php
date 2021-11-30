@@ -9,6 +9,26 @@ use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
+    public function getAllQuiz(){
+        return Quiz::all()->sortBy('title');
+    }
+    
+    public function getOneQuiz($id){
+        return Quiz::findOrfail($id);
+    }
+
+    public function createQuiz($data){
+        return Quiz::create($data);
+    }
+
+    public function updateQuiz($id, $data){
+        return Quiz::findOrfail($id)->update($data);
+    }
+
+    public function deleteQuiz($id){
+        return Quiz::findOrfail($id)->delete();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +37,7 @@ class QuizController extends Controller
     public function index(Quiz $quiz){
         // route : quizzes (GET)
         // route name : quizzes.index
-        $quiz = Quiz::all()->sortBy('title');
+        $quiz = $this->getAllQuiz();
         // return view('v_quizzes', compact('quiz'));
         return '<h1> ini halaman untuk list quiz</h1>';
     }
@@ -50,7 +70,7 @@ class QuizController extends Controller
             'title' => $request->title,
             'image' => $imageName
         ];
-        Quiz::create($data);
+        $this->createQuiz($data);
         return redirect()->route('quizzes.index');
     }
 
@@ -63,7 +83,8 @@ class QuizController extends Controller
     public function show($id){
         // route : quizzes/{quiz} (GET)
         // route name : quizzes.show
-
+        $quiz = $this->getOneQuiz($id);
+        return '<h1> ini halaman yang berisi detail informasi quiz dengan id = ' . $id . '</h1>';
     }
 
     /**
@@ -95,7 +116,7 @@ class QuizController extends Controller
             'title' => $request->title,
             'image' => $imageName
         ];
-        quiz::where('id', $id)->update($data);
+        $this->updateQuiz($id, $data);
         return redirect()->route('quizzes.index');
     }
 
@@ -108,7 +129,7 @@ class QuizController extends Controller
     public function destroy($id){
         // route : quizzes/{quiz} (DELETE)
         // route name : quizzes.destroy
-        Quiz::where('id', $id)->delete();
+        $this->deleteQuiz($id);
         return redirect()->route('quizzes.index');
     }
 }

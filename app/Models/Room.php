@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
-    protected $guarded = [
-        'code'
-    ];
+    protected $guarded = [];
 }

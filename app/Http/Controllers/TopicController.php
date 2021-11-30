@@ -7,6 +7,27 @@ use Illuminate\Http\Request;
 
 class TopicController extends Controller
 {
+
+    public function getAllTopic(){
+        return Topic::all()->sortBy('title');
+    }
+
+    public function getOneTopic($id){
+        return Topic::where('id', $id)->first();
+    }
+
+    public function createTopic($data){
+        return Topic::create($data);
+    }
+
+    public function updateTopic($id, $data){
+        return Topic::where('id', $id)->update($data);
+    }
+
+    public function deleteTopic($id){
+        return Topic::where('id', $id)->delete();
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +36,7 @@ class TopicController extends Controller
     public function index(Topic $topic){
         // route : topics (GET)
         // route name : topics.index
-        $topic = Topic::all()->sortBy('title');
+        $topic = $this->getAllTopic();
         // return view('v_topics', compact('topic'));
         return '<h1> ini halaman untuk list topic</h1>';
     }
@@ -43,7 +64,7 @@ class TopicController extends Controller
         $data = [
             'title' => $request->title,
         ];
-        Topic::create($data);
+        $this->createTopic($data);
         return redirect()->route('topics.index');
     }
 
@@ -84,7 +105,7 @@ class TopicController extends Controller
         $data = [
             'title' => $request->title,
         ];
-        Topic::where('id', $id)->update($data);
+        $this->updateTopic($id, $data);
         return redirect()->route('topics.index');
     }
 
@@ -97,7 +118,7 @@ class TopicController extends Controller
     public function destroy($id){
         // route : topics/{topic} (DELETE)
         // route name : topics.destroy
-        Topic::where('id', $id)->delete();
+        $this->deleteTopic($id);
         return redirect()->route('topics.index');
     }
 }

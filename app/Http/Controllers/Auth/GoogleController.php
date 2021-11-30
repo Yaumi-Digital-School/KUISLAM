@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
@@ -31,7 +32,7 @@ class GoogleController extends Controller
                 return redirect()->intended('dashboard');
             }else{
                 // Available alpha caracters
-                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
                 // generate a pin based on 2 * 7 digits + a random character
                 $pin = mt_rand(1000000, 9999999)
@@ -45,7 +46,7 @@ class GoogleController extends Controller
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
                     'username' => $user->getEmail(),
-                    'password' => bcrypt($password),
+                    'password' => Hash::make($password),
                     'avatar' => $user->getAvatar(),
                     'role' => 'user',
                     'google_id' => $user->getId(),
