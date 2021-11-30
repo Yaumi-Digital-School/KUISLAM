@@ -9,7 +9,6 @@ class Room extends Model
 {
     use HasFactory;
     protected $guarded = [
-        'quiz_id', 
         'code'
     ];
 }
