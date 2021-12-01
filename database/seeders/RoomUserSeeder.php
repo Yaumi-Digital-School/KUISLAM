@@ -21,7 +21,7 @@ class RoomUserSeeder extends Seeder
                 'rank' => 1,
                 'points' => 10000,
                 'is_host' => true,
-                'is_active' => false
+                'is_active' => true
             ],
             [
                 'user_id' => 2,
@@ -29,7 +29,7 @@ class RoomUserSeeder extends Seeder
                 'rank' => 2,
                 'points' => 9000,
                 'is_host' => false,
-                'is_active' => false
+                'is_active' => true
             ],
             [
                 'user_id' => 3,
@@ -37,7 +37,7 @@ class RoomUserSeeder extends Seeder
                 'rank' => 3,
                 'points' => 8000,
                 'is_host' => false,
-                'is_active' => false
+                'is_active' => true
             ],
             [
                 'user_id' => 4,
@@ -45,7 +45,7 @@ class RoomUserSeeder extends Seeder
                 'rank' => 4,
                 'points' => 7000,
                 'is_host' => false,
-                'is_active' => false
+                'is_active' => true
             ],
             [
                 'user_id' => 1,

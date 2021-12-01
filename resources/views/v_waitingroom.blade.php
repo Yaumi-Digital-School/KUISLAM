@@ -14,6 +14,7 @@
                           <tr>
                             <th>NO.</th>
                             <th>NAME</th>
+                            <th>Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -24,6 +25,11 @@
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->user->name }}</td>
+                                    @if ($data->is_host === 1)
+                                        <td>Host</td>
+                                    @else
+                                        <td>Player</td>
+                                    @endif
                                 </tr>   
                             @endforeach
                         </tbody>
