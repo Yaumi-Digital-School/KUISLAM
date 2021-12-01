@@ -32,9 +32,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
     Route::resource('/topics', TopicController::class);
     Route::resource('/quizzes', QuizController::class);   
+    
+    Route::prefix('/rooms')->group(function () {
+        Route::get('/join', [RoomController::class, 'enterCode'])->name('room.entercode');
+        Route::post('/join', [RoomController::class, 'joinRoomWithCode'])->name('room.joincode'); // Not Tested Yet
+        
+        Route::prefix('/{room}')->group(function () {
+            Route::post('/make', [RoomController::class, 'makeRoom'])->name('room.make');
+            Route::get('/join', [RoomController::class, 'joinRoomWithLink'])->name('room.joinlink');
+            Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
+            Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+        });
+    });
 });
 
-Route::get('/makeroom/{room}', [RoomController::class, 'makeRoom'])->name('room.make');
-Route::get('/rooms/{room}', [RoomController::class, 'waitingRoom'])->name('room.waiting');
+
+
 
 require __DIR__.'/auth.php';

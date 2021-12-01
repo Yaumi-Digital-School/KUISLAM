@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TopicController;
 
 /*
@@ -22,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // For testing only
 Route::resource('/topics', TopicController::class);
-Route::resource('/quizzes', QuizController::class); 
+Route::resource('/quizzes', QuizController::class);
+Route::post('/rooms/join', [RoomController::class, 'joinRoomWithCode'])->name('room.joincode');

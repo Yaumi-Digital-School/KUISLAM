@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -59,7 +60,7 @@ class QuizController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(QuizRequest $request){
         // route : quizzes (POST)
         // route name : quizzes.create
         $slug = Str::slug($request->title);
@@ -106,7 +107,7 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
+    public function update(QuizRequest $request, $id){
         // route : quizzes/{quiz} (PUT)
         // route name : quizzes.update
         $slug = Str::slug($request->title);

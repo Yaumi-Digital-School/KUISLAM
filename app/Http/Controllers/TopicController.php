@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,7 @@ class TopicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request){
+    public function store(TopicRequest $request){
         // route : topics (POST)
         // route name : topics.create
         $data = [
@@ -99,7 +100,7 @@ class TopicController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
+    public function update(TopicRequest $request, $id){
         // route : topics/{topic} (PUT)
         // route name : topics.update
         $data = [
