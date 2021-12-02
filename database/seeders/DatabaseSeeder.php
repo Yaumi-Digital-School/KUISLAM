@@ -3,6 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\QuizSeeder;
+use Database\Seeders\RoomSeeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\TopicSeeder;
+use Database\Seeders\QuestionSeeder;
+use Database\Seeders\RoomUserSeeder;
+use Database\Seeders\LeaderboardSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +25,7 @@ class DatabaseSeeder extends Seeder
             LeaderboardSeeder::class,
             TopicSeeder::class,
             QuizSeeder::class,
+            QuestionSeeder::class,
             RoomSeeder::class,
             RoomUserSeeder::class,
         ]);
