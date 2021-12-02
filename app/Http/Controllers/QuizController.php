@@ -72,6 +72,7 @@ class QuizController extends Controller
             'image' => $imageName
         ];
         $this->createQuiz($data);
+        
         return redirect()->route('quizzes.index');
     }
 
@@ -85,6 +86,7 @@ class QuizController extends Controller
         // route : quizzes/{quiz} (GET)
         // route name : quizzes.show
         $quiz = $this->getOneQuiz($id);
+
         return '<h1> ini halaman yang berisi detail informasi quiz dengan id = ' . $id . '</h1>';
     }
 
@@ -112,12 +114,14 @@ class QuizController extends Controller
         // route name : quizzes.update
         $slug = Str::slug($request->title);
         $imageName = $slug . '.jpg';
+
         $data = [
             'topic_id' => $request->topic_id,
             'title' => $request->title,
             'image' => $imageName
         ];
         $this->updateQuiz($id, $data);
+
         return redirect()->route('quizzes.index');
     }
 

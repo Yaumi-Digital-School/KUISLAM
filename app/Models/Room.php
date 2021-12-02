@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\RoomQuestion;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Room extends Model
 {
     use HasFactory;
-protected $guarded = [];
+    protected $guarded = [];
+
+    public function roomquestions()
+    {
+        return $this->hasMany(RoomQuestion::class);
+    }
 }

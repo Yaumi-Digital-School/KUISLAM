@@ -17,15 +17,15 @@ class RoomSeeder extends Seeder
         $room = [
             [
                 'quiz_id' => 1,
-                'code' => 1562,
+                'code' => 156462,
             ],
             [
                 'quiz_id' => 2,
-                'code' => 1412,
+                'code' => 141512,
             ],
             [
                 'quiz_id' => 3,
-                'code' => 4121,
+                'code' => 412421,
             ]
             ];
             foreach ($room as $key => $value) {
