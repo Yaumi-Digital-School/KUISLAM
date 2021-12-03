@@ -22553,6 +22553,10 @@ select {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+.font-poppins {
+  font-family: Poppins;
+}
+
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -53853,6 +53857,10 @@ select {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .sm\:font-poppins {
+    font-family: Poppins;
+  }
+
   .sm\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -85139,6 +85147,10 @@ select {
 
   .md\:font-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .md\:font-poppins {
+    font-family: Poppins;
   }
 
   .md\:text-xs {
@@ -116429,6 +116441,10 @@ select {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .lg\:font-poppins {
+    font-family: Poppins;
+  }
+
   .lg\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -147717,6 +147733,10 @@ select {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   }
 
+  .xl\:font-poppins {
+    font-family: Poppins;
+  }
+
   .xl\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -179003,6 +179023,10 @@ select {
 
   .\32xl\:font-mono {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  .\32xl\:font-poppins {
+    font-family: Poppins;
   }
 
   .\32xl\:text-xs {
