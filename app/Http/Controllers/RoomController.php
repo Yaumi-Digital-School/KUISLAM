@@ -6,113 +6,56 @@ use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
 use App\Models\RoomUser;
+use App\Models\RoomQuestion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\RoomUserController;
-use App\Http\Controllers\RoomQuestionController;
 
 class RoomController extends Controller
 {
-    public function __construct(){
-        $this->RoomUser = new RoomUserController();
-        $this->Question = new QuestionController();
-        $this->RoomQuestion = new RoomQuestionController();
-    }
-
-    public function getQuizId($quizId){
-        return Quiz::where('id', $quizId)->first();
-    }
-
-    public function getCode(){
-        return mt_rand(100000, 999999);
-    }
-
-    public function getRoomById($roomId){
-        return Room::where('id', $roomId)->first();
-    }
-
-    public function getRoomByCode($code){
-        return Room::where('code', $code)->first();
-    }
-
-    public function getAllWaitingPlayer($code){
-        $room = Room::where('code', $code)->first();
-        return RoomUser::where('room_id', $room->id)->get();
-    }
-
-    public function createRoom($data){
-        return Room::create($data);
-    }
-
-    public function deleteRoom($id){
-        return Room::where('id', $id)->delete();
-    }
-
-    public function deleteRoomByCode($code){
-        return Room::where('code', $code)->delete();
-    }
-
-    public function isInRoom($code){
-        $room = $this->getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('is_active', true)->first();
-    }
-
-    // public function verifyToCreateAnotherRoom($roomId){
-    //     $room 
-    //     $host = RoomUser::where('user_id', Auth::id())->where('is_host', true)->first();
-    //     if($host){
-    //         return redirect()->route('room.waiting', $code);
-    //     }else{
-    //         return $this->makeRoom($quizId);
-    //     }
-    // }
-
-
     public function makeRoom($quizId){
         /* Method ini untuk membuat Room */
-        $code = $this->getCode();
+        $code = Room::getCode();
 
-        $questionId = $this->Question->getRandomQuestion($quizId);
+        $questionId = Question::getRandomQuestion($quizId);
 
         $dataRoom = [
-            'quiz_id' => $this->getQuizId($quizId)->id,
+            'quiz_id' => Quiz::getQuizId($quizId)->id,
             'code' => $code,
         ];        
-        $room = $this->createRoom($dataRoom);
+        $room = Room::create($dataRoom);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
                 'question_id' => $questionId[$i],
                 'room_id' => $room->id,
             ];
-            $this->RoomQuestion->createRoomQuestion($dataRoomQuestion);
+            RoomQuestion::create($dataRoomQuestion);
         }
 
         $dataRoomUser = [
-            'user_id' => Auth::id(),
+            'user_id' => Auth::user()->id,
             'room_id' => $room->id,
             'is_host' => 1,
             'is_active' => 1
         ];        
-        $this->RoomUser->createRoomUser($dataRoomUser);
+        RoomUser::create($dataRoomUser);
 
         return redirect()->route('room.waiting', $room->code);
     }
 
     public function joinRoomWithLink($code){  
         /* Method ini dipanggil ketika User memasukkan link kedalam URL */
-        $room = $this->getRoomByCode($code);
+        $room = Room::getRoomByCode($code);
 
         $dataRoomUser = [
-            'user_id' => Auth::id(),
+            'user_id' => Auth::user()->id,
             'room_id' => $room->id,
             'is_host' => 0,
             'is_active' => 1
         ];
         
-        $this->RoomUser->createRoomUser($dataRoomUser);
+        RoomUser::create($dataRoomUser);
         return redirect()->route('room.waiting', $room->code);
     }
 
@@ -123,25 +66,25 @@ class RoomController extends Controller
 
     public function joinRoomWithCode(Request $request){  
         /* Method ini dipanggil ketika USER menginput CODE Room */
-        $room = $this->getRoomByCode($request->code);
+        $room = Room::getRoomByCode($request->code);
 
         $dataRoomUser = [
-            'user_id' => Auth::id(),
+            'user_id' => Auth::user()->id,
             'room_id' => $room->id,
             'is_host' => 0,
             'is_active' => 1
         ];
-        $this->RoomUser->createRoomUser($dataRoomUser);
+        RoomUser::create($dataRoomUser);
 
         return redirect()->route('room.waiting', $room->code);
     }
 
     public function waitingRoom($code, RoomUser $roomUser){
         /* Method ini dipanggil ketika Room berhasil dibuat */
-        $isInRoom = $this->isInRoom($code);
-        dd($isInRoom);
+        $isInRoom = RoomUser::isInRoom($code);
+        // dd($isInRoom);
         if($isInRoom){
-            $roomUser = $this->getAllWaitingPlayer($code);
+            $roomUser = RoomUser::getAllWaitingPlayer($code);
 
             return view('v_waitingroom', compact('roomUser'));
         }else{
@@ -151,20 +94,19 @@ class RoomController extends Controller
 
     public function exitRoom($code){
         /* Method ini dipanggil ketika Room tidak jadi digunakan atau ketika room Master keluar */
-        $host = $this->RoomUser->isHost($code);
-        $player = $this->RoomUser->isPlayer($code);
+        $host = RoomUser::isHost($code);
+        $player = RoomUser::isPlayer($code);
 
         if($host){
-            $this->RoomUser->deleteRoomUserByCode($code);
-            $this->RoomQuestion->deleteRoomQuestion($code);
-            $this->deleteRoomByCode($code);
+            RoomUser::deleteRoomUserByCode($code);
+            RoomQuestion::deleteRoomQuestion($code);
+            Room::deleteRoomByCode($code);
 
             return redirect()->route('dashboard');
         }elseif ($player){
-            $this->RoomUser->deleteRoomUserByUserId(Auth::id(), $code);
+            RoomUser::deleteRoomUserByUserId();
             
             return redirect()->route('dashboard');
         }
-        
     }
 }

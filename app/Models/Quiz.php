@@ -15,4 +15,24 @@ class Quiz extends Model
     {
         return $this->belongsTo(Topic::class);
     }
+
+    public static function getQuizId($quizId){
+        return Quiz::where('id', $quizId)->first();
+    }
+    
+    public static function getAllQuiz(){
+        return Quiz::all()->sortBy('title');
+    }
+    
+    public static function getOneQuiz($id){
+        return Quiz::findOrfail($id);
+    }
+
+    public static function updateQuiz($id, $data){
+        return Quiz::findOrfail($id)->update($data);
+    }
+
+    public static function deleteQuiz($id){
+        return Quiz::findOrfail($id)->delete();
+    }
 }
