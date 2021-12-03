@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class LeaderboardController extends Controller
 {
-    public function getCurrentPoint(){
-        return Leaderboard::where('user_id', Auth::user()->id)->first();
-    }
-
-    public function getAllLeaderboard(){
-        return Leaderboard::all()->sortByDesc('point');
-    }
-
     public function index(Leaderboard $leaderboard){
         /* Ini harusnya ketrigger ketika room telah berakhir */
         // $roomUser = RoomUser::where('user_id', Auth::user()->id)->where('is_active', false)->first();
@@ -28,10 +20,8 @@ class LeaderboardController extends Controller
         //     'point' => $currentPoint->point + $roomUser->point,
         // ]);
             // dd($this->getCurrentPoint());
-        $leaderboard = $this->getAllLeaderboard();
+        $leaderboard = Leaderboard::getAllLeaderboard();
         // dd($leaderboard);
         return view('v_leaderboard', compact('leaderboard'));
-    }
-
-    
+    }    
 }

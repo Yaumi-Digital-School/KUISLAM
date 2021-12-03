@@ -15,4 +15,20 @@ class Topic extends Model
     {
         return $this->hasMany(Quiz::class);
     }
+
+    public static function getAllTopic(){
+        return Topic::all()->sortBy('title');
+    }
+
+    public static function getOneTopic($id){
+        return Topic::where('id', $id)->first();
+    }
+
+    public static function updateTopic($id, $data){
+        return Topic::where('id', $id)->update($data);
+    }
+
+    public static function deleteTopic($id){
+        return Topic::where('id', $id)->delete();
+    }
 }

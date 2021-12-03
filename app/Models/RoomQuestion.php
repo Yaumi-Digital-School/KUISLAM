@@ -15,4 +15,9 @@ class RoomQuestion extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public static function deleteRoomQuestion($code){
+        $room = Room::getRoomByCode($code);
+        return RoomQuestion::where('room_id', $room->id)->delete();
+    }
 }
