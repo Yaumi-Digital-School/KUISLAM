@@ -13,6 +13,13 @@ module.exports = {
                 poppins: ["Poppins"],
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                green: {
+                    lightBg: '#8ACC3B',
+                    darkBg: '#81C530',
+                    nav: '#6DAF2B'
+                }
+            },
         },
     },
 
