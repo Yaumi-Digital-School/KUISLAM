@@ -19,7 +19,7 @@
                 <form action="" method="POST">
                     <div class="bg-white rounded-lg mx-4 pb-2 max-w-md min-w-min">
                         <div>
-                            <img src="{{ asset('images/login_form.png') }}" alt="">
+                            <img src="{{ asset('images/register_form.png') }}" alt="">
                         </div>
                         <div class="flex flex-col space-y-5">
                             <div class="flex flex-col space-y-2 text-center font-bold text-xl pt-6">
@@ -27,7 +27,7 @@
                                 <h1>Quiz Generator</h1>
                             </div>
                             <p class="lg:hidden text-justify text-sm w-5/6 mx-auto text-gray-400 ">Asah dan tingkatkan kemampuan kamu mengenal islam dengan mengikuti kuis !</p>
-                            <a href="" class="flex justify-center items-center bg-blue-500 w-5/6 mx-auto px-3 py-2 rounded-md ">
+                            <a href="" class="flex justify-center items-center bg-blue-500 hover:bg-blue-600 w-5/6 mx-auto px-3 py-2 rounded-md transition">
                                 <x-google-logo />
                                 <span class="ml-2 text-white text-md">Lanjutkan dengan Google</span>
                             </a>
@@ -37,8 +37,8 @@
                                 <input class="rounded-md h-8 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
                                     type="email" name="email" placeholder="Masukan email anda">
                             </div>
-                            <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-1 hover:bg-green-darkBg">Lanjut</button>
-                            <div class="text-center"><span>Sudah punya akun?</span> <a class="text-green-lightBg" href="{{ route('register') }}">masuk</a></div>
+                            <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-1 hover:bg-green-darkBg transition">Lanjut</button>
+                            <div class="text-center"><span>Sudah punya akun?</span> <a class="text-green-lightBg" href="{{ route('login') }}">masuk</a></div>
                         </div>
                     </div>
                 </form>
