@@ -1,56 +1,55 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+<x-main-layout titlePage="Laravel">
+    {{-- navbar --}}
+    <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
+        <nav class="text-white flex justify-between items-center px-6 font-bold" style="height: 8vh">
+            <span class="text-lg">Logo</span>
+            <a class="text-lg" href="{{ route('register') }}">Register</a>
+        </nav>
+    </div>
+    {{-- main content  --}}
+    <div class="font-poppins mt-6">
+        {{-- main container  --}}
+        <div class="grid grid-cols-12 pt-3 lg:pt-0 max-w-screen-2xl mx-auto h-screen">
+            {{-- picture lets play together  --}}
+            <div class="hidden lg:col-span-6 lg:flex justify-center items-center z-10">
+                <div><img class="ml-6" src="{{ asset('images/login.png') }}" alt=""></div>
             </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+            {{-- form login  --}}
+            <div class="col-span-12 lg:col-span-6 mx-auto pt-10 flex justify-center items-center z-10">
+                <form action="" method="POST">
+                    @csrf
+                    <div class="bg-white rounded-lg mx-4 pb-2 max-w-md min-w-min">
+                        <div>
+                            <img src="{{ asset('images/login_form.png') }}" alt="">
+                        </div>
+                        <div class="flex flex-col space-y-5">
+                            <div class="flex flex-col space-y-2 text-center font-bold text-xl pt-6">
+                                <h1>Selamat datang di</h1>
+                                <h1>Quiz Generator</h1>
+                            </div>
+                            <p class="lg:hidden text-justify text-sm w-5/6 mx-auto text-gray-400 ">Asah dan tingkatkan kemampuan kamu mengenal islam dengan mengikuti kuis !</p>
+                            <a href="" class="flex justify-center items-center bg-blue-500 hover:bg-blue-600 w-5/6 mx-auto px-3 py-2 rounded-md transition">
+                                <x-google-logo />
+                                <span class="ml-2 text-white text-md">Lanjutkan dengan Google</span>
+                            </a>
+                            <p class="text-center">atau</p>
+                            <div class="flex flex-col space-y-2 w-5/6 mx-auto">
+                                <label for="email">Login Melalu Email</label>
+                                <input class="rounded-md h-8 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
+                                    type="email" name="email" placeholder="Masukan email anda">
+                            </div>
+                            <div class="flex flex-col space-y-2 w-5/6 mx-auto">
+                                <label for="password">Password</label>
+                                <input class="rounded-md h-8 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
+                                    type="password" name="password">
+                                </div>
+                            <a href="" class="text-right w-5/6 mx-auto text-gray-400">Lupa password?</a>
+                            <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-1 hover:bg-green-darkBg transition">Lanjut</button>
+                            <div class="text-center"><span>Belum punya akun?</span> <a class="text-green-lightBg" href="{{ route('register') }}">Yuk Daftar</a></div>
+                        </div>
+                    </div>
+                </form>
             </div>
-
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600 font-poppins">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+        </div>
+    </div>
+</x-main-layout>
