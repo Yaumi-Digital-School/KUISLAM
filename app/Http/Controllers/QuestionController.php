@@ -9,18 +9,19 @@ class QuestionController extends Controller
 {
     public function index(){
         // Method ini benar, bisa juga gini :
-        // Question::get();
+        //Question::get();
         // method get() dan all() akan mengirim collection data, artinya ada lebih dari 1 row data bisa 2 row, 3 row dst....
         return Question::all();
     }
 
     public function create(request $request){
         // ini ada script yang lebih mudah
-        // $data = [
-        //     'nama_atribut' => 'vakue yang ingin diisi'
+        // $question = [
+        //     'question' => '$request->question;'
         // ]
+        // Question::create($question);
+
         // di php array di atas disebut array associative
-        // Question::create($data);
 
         // biasanya kalau abis create data kita redirect ke halaman tertentu
         // scriptnya gini : return redirect->route('nama.route');
@@ -35,16 +36,20 @@ class QuestionController extends Controller
 
         $question->timer = $request->timer;
         $question->save();
+
+        //return redirect->route('question.create');
+        return redirect()->route('question.create');
+
     }
 
     public function update(request $request, $id){
         // update juga sama dengan create
-        // $data = [
+        // $question = [
         //     'nama_atribut' => 'vakue yang ingin diisi'
         // ]
 
         // Question::where('nama_atribut', $id)->update($data);
-        // itu cara bacanya, update data dari tabel question ketika id = $id
+        // itu cara bacanya, update data dari tabel question ketika id = $i
 
         // biasanya kalau abis update data kita redirect ke halaman tertentu juga
         // scriptnya gini : return redirect->route('nama.route');
@@ -59,13 +64,15 @@ class QuestionController extends Controller
 
         $question->timer = $request->timer;
         $question->save();
+        return redirect()->route('question.update');
     }
 
     public function delete($id){
         // ini juga bisa scriptnya cuma ada yang lebih mudah
-        // Question::where('nama_atribut', $id)->delete();
+        Question::where('question', $id)->delete();
+        return redirect()->route('question.delete');
 
-        $question = Question::find($id);
-        $question->delete();
+        // $question = Question::find($id);
+        // $question->delete();
     }
 }
