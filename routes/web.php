@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomUserController;
@@ -56,10 +57,10 @@ Route::middleware('auth')->group(function () {
 
 // Hasil perubahan route
 
-Route::get('question','QuestionController@index');
-Route::post('question','QuestionController@create');
-Route::post('/question/{id}','QuestionController@update');
-Route::post('/question/{id}','QuestionController@delete');
+Route::get('question', [QuestionController::class, 'index'])->name('question.list');
+Route::post('question', [QuestionController::class, 'create'])->name('question.create');
+Route::post('/question/{id}', [QuestionController::class, 'update'])->name('question.update');
+Route::post('/question/{id}', [QuestionController::class, 'delete'])->name('question.delete');
 
 
 require __DIR__.'/auth.php';
