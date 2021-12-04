@@ -25,3 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('/topics', TopicController::class);
 Route::resource('/quizzes', QuizController::class);
 Route::post('/rooms/join', [RoomController::class, 'joinRoomWithCode'])->name('room.joincode');
+
+Route::get('question','QuestionController@index');
+Route::post('question','QuestionController@create');
+Route::put('/question/{id}','QuestionController@update');
+Route::delete('/question/{id}','QuestionController@delete');
+
+
