@@ -19,7 +19,12 @@
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
-    <body>
+    <body class="bg-green-lightBg relative min-h-screen overflow-y-scroll overflow-x-hidden">
         {{ $slot }}
+        {{-- ball stuff  --}}
+        <div class="bg-green-darkBg rounded-full fixed -left-48 -top-48" style="height: 35rem; width: 35rem"></div>
+        <div class="bg-green-darkBg rounded-full fixed -right-40 -bottom-20 flex justify-center items-center" style="height: 35rem; width: 35rem">
+            <div class="bg-green-lightBg rounded-full" style="height: 28rem; width: 28rem"></div>
+        </div>
     </body>
 </html>

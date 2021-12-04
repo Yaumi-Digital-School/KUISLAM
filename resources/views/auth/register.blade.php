@@ -7,9 +7,9 @@
         </nav>
     </div>
     {{-- main content  --}}
-    <div class="bg-green-lightBg font-poppins h-screen mt-6 relative overflow-hidden">
+    <div class="bg-green-lightBg font-poppins mt-6">
         {{-- main container  --}}
-        <div class="grid grid-cols-12 pt-3 lg:pt-0 max-w-screen-2xl mx-auto h-full ">
+        <div class="grid grid-cols-12 pt-3 lg:pt-0 max-w-screen-2xl mx-auto h-screen">
             {{-- picture lets play together  --}}
             <div class="hidden lg:col-span-6 lg:flex justify-center items-center z-10">
                 <div><img class="ml-6" src="{{ asset('images/login.png') }}" alt=""></div>
@@ -43,11 +43,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-        {{-- ball stuff  --}}
-        <div class="bg-green-darkBg rounded-full absolute -left-48 -top-48" style="height: 35rem; width: 35rem"></div>
-        <div class="bg-green-darkBg rounded-full absolute -right-40 -bottom-20 flex justify-center items-center" style="height: 35rem; width: 35rem">
-            <div class="bg-green-lightBg rounded-full" style="height: 28rem; width: 28rem"></div>
         </div>
     </div>
 </x-main-layout>

@@ -19,7 +19,7 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
-                ->name('register');
+                ->name('register'); 
 
 Route::post('/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');
