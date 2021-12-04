@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\LeaderboardController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomUserController;
@@ -27,8 +28,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
@@ -50,6 +49,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
         });
     });
+    Route::get('/profiles/detail', [ProfileController::class, 'detailAccount'])->name('profile.detailaccount');
+    Route::post('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.updateaccount');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
 });
