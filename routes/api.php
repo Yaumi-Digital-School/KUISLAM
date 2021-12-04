@@ -26,9 +26,12 @@ Route::resource('/topics', TopicController::class);
 Route::resource('/quizzes', QuizController::class);
 Route::post('/rooms/join', [RoomController::class, 'joinRoomWithCode'])->name('room.joincode');
 
-Route::get('question','QuestionController@index');
-Route::post('question','QuestionController@create');
-Route::put('/question/{id}','QuestionController@update');
-Route::delete('/question/{id}','QuestionController@delete');
+// Untuk Route jangan taro disini mbak, soalnya ini untuk bikin API, bisa sih cuma kita ga implementasi pakai API
+// Trus untuk scriptnya masih salah, ini laravel versi 5 kalau ga salah.
+// saya coba pindahin ke web.php
+// Route::get('question','QuestionController@index');
+// Route::post('question','QuestionController@create');
+// Route::put('/question/{id}','QuestionController@update');
+// Route::delete('/question/{id}','QuestionController@delete');
 
 

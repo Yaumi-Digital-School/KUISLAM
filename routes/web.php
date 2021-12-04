@@ -54,7 +54,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
 });
 
+// Hasil perubahan route
 
+Route::get('question','QuestionController@index');
+Route::post('question','QuestionController@create');
+Route::post('/question/{id}','QuestionController@update');
+Route::post('/question/{id}','QuestionController@delete');
 
 
 require __DIR__.'/auth.php';
