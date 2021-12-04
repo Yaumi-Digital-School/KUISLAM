@@ -17,7 +17,7 @@ class RoomController extends Controller
         /* Method ini untuk membuat Room */
         $code = Room::getCode();
 
-        $questionId = Question::getRandomQuestion($quizId);
+        $questionsId = Question::getRandomQuestion($quizId);
 
         $dataRoom = [
             'quiz_id' => Quiz::getQuizId($quizId)->id,
@@ -27,7 +27,7 @@ class RoomController extends Controller
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
-                'question_id' => $questionId[$i],
+                'question_id' => $questionsId[$i],
                 'room_id' => $room->id,
             ];
             RoomQuestion::create($dataRoomQuestion);
@@ -54,8 +54,8 @@ class RoomController extends Controller
             'is_host' => 0,
             'is_active' => 1
         ];
-        
         RoomUser::create($dataRoomUser);
+
         return redirect()->route('room.waiting', $room->code);
     }
 
@@ -82,7 +82,7 @@ class RoomController extends Controller
     public function waitingRoom($code, RoomUser $roomUser){
         /* Method ini dipanggil ketika Room berhasil dibuat */
         $isInRoom = RoomUser::isInRoom($code);
-        // dd($isInRoom);
+        
         if($isInRoom){
             $roomUser = RoomUser::getAllWaitingPlayer($code);
 
