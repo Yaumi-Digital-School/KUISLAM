@@ -48,4 +48,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(RoomUser::class);
     }
+
+    public static function generatePassword(){
+        // Available alpha caracters
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        // generate a pin based on 2 * 7 digits + a random character
+        $pin = mt_rand(1000000, 9999999)
+            . mt_rand(1000000, 9999999)
+            . $characters[rand(0, strlen($characters) - 1)];
+
+        // shuffle the result
+        return str_shuffle($pin);
+    }
 }

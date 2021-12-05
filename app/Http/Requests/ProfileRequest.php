@@ -28,14 +28,4 @@ class ProfileRequest extends FormRequest
             'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Nama Wajib Diisi!',
-            'name.string' => 'Nama Harus berupa Huruf!',
-            'avatar.required' => 'Avatar Wajib Diisi!',
-            'avatar.image' => 'Format avatar hanya : jpg,jpeg,png dan Ukuran file maksimal : 1024 Kb!',
-        ];
-    }
 }
