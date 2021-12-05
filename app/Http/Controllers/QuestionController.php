@@ -23,6 +23,7 @@ class QuestionController extends Controller
             'option_2' => '$request->option_2;',
             'option_3' => '$request->option_3;',
             'option_4' => '$request->option_4;',
+            'answer' => '$request->answer;',
 
             'timer' => '$request->timer;'
         ];
@@ -58,7 +59,7 @@ class QuestionController extends Controller
             'option_2' => '$request->option_2;',
             'option_3' => '$request->option_3;',
             'option_4' => '$request->option_4;',
-
+            'answer' => '$request->answer;',
             'timer' => '$request->timer;'
         ];
 
