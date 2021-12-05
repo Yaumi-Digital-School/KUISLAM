@@ -18,6 +18,10 @@ module.exports = {
                     lightBg: '#8ACC3B',
                     darkBg: '#81C530',
                     nav: '#6DAF2B'
+                },
+                gray: {
+                    nav: '#C4C4C4',
+                    darkBg: '#F8F8F8'
                 }
             },
         },

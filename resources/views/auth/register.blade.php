@@ -1,8 +1,8 @@
 <x-main-layout titlePage="Laravel">
     {{-- navbar --}}
     <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
-        <nav class="text-white flex justify-between items-center px-6 font-bold" style="height: 8vh">
-            <span class="text-lg">Logo</span>
+        <nav class="text-white flex justify-between items-center px-6 font-bold h-full">
+            <a href="{{ route('index') }}" class="bg-gray-400 text-gray-400 text-lg font-bold py-1 w-20">Logo</a>
             <a class="text-lg" href="{{ route('login') }}">Login</a>
         </nav>
     </div>
