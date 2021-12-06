@@ -21,12 +21,12 @@ class GoogleController extends Controller
     public function handleGoogleCallback(){
         try {
             $user = Socialite::driver('google')->user();
-            $findUser = User::where('google_id', $user->getId())->first();
+            $findGoogleId = User::where('google_id', $user->getId())->first();
             $findEmail = User::where('email', $user->getEmail())->where('google_id', Null)->first();
             
             /* Versi Google MENERIMA input data email yang telah terdaftar */
-            if($findUser){
-                Auth::login($findUser);
+            if($findGoogleId){
+                Auth::login($findGoogleId);
 
                 return redirect()->intended('dashboard');
             }else{
