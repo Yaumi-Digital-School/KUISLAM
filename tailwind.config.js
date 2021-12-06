@@ -21,9 +21,17 @@ module.exports = {
                 },
                 gray: {
                     nav: '#C4C4C4',
-                    darkBg: '#F8F8F8'
+                    darkBg: '#F8F8F8',
+                    lightBg: '#FBFBFB',
+                    input: 'rgba(196, 196, 196, 0.25)'
                 }
             },
+            screens: {
+                '3xl': '1600px'
+            },
+            boxShadow: {
+                profile: '0px 1px 1px rgba(0, 0, 0, 0.1)'
+            }
         },
     },
 

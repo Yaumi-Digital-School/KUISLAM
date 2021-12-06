@@ -1,6 +1,6 @@
 <x-main-layout titlePage="Laravel" themePage="white">
     {{-- navbar desktop--}}
-    <div class="bg-white md:bg-green-nav fixed w-full h-16 top-0 z-20 font-poppins border-b-2 border-gray-400 md:border-none">
+    <div class="bg-white md:bg-green-nav fixed w-full h-16 top-0 z-20 font-poppins border-b-2 border-gray-nav md:border-none">
         <nav class="text-white flex justify-between items-center px-8 h-full" >
             <div class="flex items-center space-x-10">
                 <a href="{{ route("index") }}" class="bg-gray-400 text-gray-400 text-lg font-bold py-1 w-20">Logo</a>
@@ -35,6 +35,98 @@
                 @endauth
             </div>
         </nav>
+    </div>
+    {{-- main content --}}
+    <div class="font-poppins mt-20 md:mt-28">
+        {{-- main container  --}}
+        <div class="max-w-screen-xl 3xl:max-w-screen-2xl mx-auto h-screen ">
+            <div class="px-4 md:px-0">
+                {{-- code enter and profile --}}
+                <div class="flex flex-col md:grid md:grid-cols-12 justify-between gap-x-20">
+                    {{-- text mau bermain game?  --}}
+                    <div class="flex md:hidden">
+                        <p class="z-10">Mau bermain game?</p>
+                    </div>
+                    {{-- kode game  --}}
+                    <div class="shadow-profile mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg col-span-7">
+                        <div class="bg-gray-input w-full md:w-5/6 p-4 rounded-lg">
+                            <form action="" class="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-6">
+                                <input type="text" 
+                                    class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    placeholder="Masukan kode game...">
+                                <button type="submit" 
+                                    class="bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition">
+                                    Gabung
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {{-- desktop  profile --}}
+                    <div class="shadow-profile mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
+                        <div class="flex flex-col items-center space-y-1">
+                            <div class="flex items-center h-10 w-10 ">
+                                <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                            </div>
+                            <div class="flex flex-col items-center">
+                                @auth
+                                    <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
+                                    <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
+                                        <a href="">Edit Profil</a>
+                                        <span>&#8226</span>
+                                        <a href="">Lihat Aktivitas</a>
+                                    </div>
+                                @endauth
+                                @guest
+                                    <p class="font-semibold text-lg">Kamu belum login!</p>
+                                    <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
+                                        <a href="{{ route('login') }}">Masuk</a>
+                                        <span>&#8226</span>
+                                        <a href="{{ route('register') }}">Daftar</a>
+                                    </div>
+                                @endguest
+                            </div>
+                        </div>
+                    </div>
+                    {{-- mobile  profile --}}
+                    <div class="shadow-profile mt-3 rounded-lg md:rounded-none md:m-0 z-10 py-3 flex md:hidden justify-center items-center bg-gray-lightBg col-span-5">
+                        <div class="flex flex-col items-center space-y-3 md:space-y-1 ">
+                            @auth
+                                <div class="flex items-center h-10 w-10 ">
+                                    <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
+                                    <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
+                                        <a href="">Edit Profil</a>
+                                        <span>&#8226</span>
+                                        <a href="">Lihat Aktivitas</a>
+                                    </div>
+                                </div>
+                            @endauth
+                            @guest
+                                <p>Mari kita mulai</p>
+                                <div class="flex space-x-3">
+                                    <a href="{{ route('login') }}"
+                                        class="bg-white font-semibold text-green-lightBg border-2 border-green-lightBg rounded-full py-1 px-6 hover:bg-gray-100 transition">
+                                        Masuk
+                                    </a>
+                                    <a  href="{{ route('register') }}"
+                                        class="bg-green-lightBg font-semibold text-white rounded-full py-1 px-6 hover:bg-green-darkBg transition flex items-center">
+                                        Daftar
+                                    </a>
+                                </div>
+                                <div class="text-center text-gray-nav">
+                                    <p class="text-sm">Ayo mainkan kuis setiap hari!</p>
+                                    <p class="text-sm">Tingkatkan pengetahuanmu mengenai Islam</p>
+                                </div>
+                            @endguest
+                        </div>
+                    </div>
+                </div>
+                {{-- swiper --}}
+                
+            </div>
+        </div>
     </div>
     {{-- navbar bottom  --}}
     <div class="bg-white md:hidden fixed w-full h-14 bottom-0 z-20 font-poppins border-t-2 border-gray-nav">

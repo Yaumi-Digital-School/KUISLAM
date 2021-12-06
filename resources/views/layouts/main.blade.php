@@ -20,9 +20,10 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body class="@if ($themePage == "white") bg-white @else bg-green-lightBg  @endif relative min-h-screen overflow-y-scroll overflow-x-hidden">
-        {{ $slot }}
-        {{-- ball stuff  --}}
         
+        {{ $slot }}
+        
+        {{-- ball stuff  --}}
         <div class=" @if ($themePage == "white") bg-gray-darkBg @else bg-green-darkBg @endif rounded-full fixed -left-48 -top-48" style="height: 35rem; width: 35rem"></div>
         <div class="@if ($themePage == "white") bg-gray-darkBg @else bg-green-darkBg @endif rounded-full fixed -right-40 -bottom-20 flex justify-center items-center" style="height: 35rem; width: 35rem">
             <div class="@if ($themePage == "white") bg-white @else bg-green-lightBg  @endif rounded-full" style="height: 28rem; width: 28rem"></div>
