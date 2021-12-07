@@ -21,6 +21,8 @@ module.exports = {
                 },
                 gray: {
                     nav: '#C4C4C4',
+                    card: '#F5F5F5',
+                    cardText: '#BEBEBE',
                     darkBg: '#F8F8F8',
                     lightBg: '#FBFBFB',
                     input: 'rgba(196, 196, 196, 0.25)'
