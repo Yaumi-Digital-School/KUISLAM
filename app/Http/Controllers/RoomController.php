@@ -20,10 +20,9 @@ class RoomController extends Controller
         user memasukkan link share untuk join ke room atau setelah
         user menginput data kode room pada field yang tersedia */
 
-        $room = Quiz::getQuizId($quizId);
+        $quiz = Quiz::getQuizId($quizId);
 
-        return '<h1>Ini page pre waiting room host</h1>';
-        // return view('v_pre-waitingroom-host', compact('room'));
+        return view('host.waiting-room', compact('quiz'));
     }
 
     public function makeRoom($quizId){
@@ -86,6 +85,7 @@ class RoomController extends Controller
         user menginput data kode room pada field yang tersedia */
 
         $room = Room::getRoomByCode($code);
+        // return 'Ini page wating player';
         return view('user.waiting-room', compact('room'));
     }
 
