@@ -28,14 +28,4 @@ class QuizRequest extends FormRequest
             'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'title.required' => 'Judul Wajib Diisi!',
-            'title.string' => 'Judul Harus berupa Huruf!',
-            'image.required' => 'Gambar Wajib Diisi!',
-            'image.image' => 'Format gambar hanya : jpg,jpeg,png dan Ukuran file maksimal : 1024 Kb!',
-        ];
-    }
 }

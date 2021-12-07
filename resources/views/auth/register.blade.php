@@ -27,17 +27,12 @@
                                 <h1>Quiz Generator</h1>
                             </div>
                             <p class="lg:hidden text-justify text-sm w-5/6 mx-auto text-gray-400 ">Asah dan tingkatkan kemampuan kamu mengenal islam dengan mengikuti kuis !</p>
-                            <a href="" class="flex justify-center items-center bg-blue-500 hover:bg-blue-600 w-5/6 mx-auto px-3 py-2 rounded-md transition">
+                            <a href="{{ route('auth.google') }}" class="flex justify-center items-center bg-blue-500 hover:bg-blue-600 w-5/6 mx-auto px-3 py-2 rounded-md transition">
                                 <x-google-logo />
                                 <span class="ml-2 text-white text-md">Lanjutkan dengan Google</span>
                             </a>
                             <p class="text-center">atau</p>
-                            <div class="flex flex-col space-y-2 w-5/6 mx-auto">
-                                <label for="email">Daftar dengan email</label>
-                                <input class="rounded-md h-8 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
-                                    type="email" name="email" placeholder="Masukan email anda">
-                            </div>
-                            <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-1 hover:bg-green-darkBg transition">Lanjut</button>
+                            <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-2 hover:bg-green-darkBg transition"><a href="{{ route('register_form') }}">Lanjutkan dengan email</a></button>
                             <div class="text-center"><span>Sudah punya akun?</span> <a class="text-green-lightBg" href="{{ route('login') }}">masuk</a></div>
                         </div>
                     </div>

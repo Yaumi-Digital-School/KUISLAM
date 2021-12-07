@@ -10,13 +10,10 @@ use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use phpDocumentor\Reflection\Types\Null_;
 
 class GoogleController extends Controller
 {
-    public function __construct(){
-        $this->User = new User();
-    }
-
     public function redirectToGoogle(){
         return Socialite::driver('google')->redirect();
     }
@@ -24,23 +21,25 @@ class GoogleController extends Controller
     public function handleGoogleCallback(){
         try {
             $user = Socialite::driver('google')->user();
-            $findUser = User::where('google_id', $user->getId())->first();
-            // dd($findUser);
+            $findGoogleId = User::where('google_id', $user->getId())->first();
+            $findEmail = User::where('email', $user->getEmail())->where('google_id', Null)->first();
+            
+            /* Versi Google MENERIMA input data email yang telah terdaftar */
+            if($findGoogleId){
+                Auth::login($findGoogleId);
 
-            if($findUser){
-                Auth::login($findUser);
                 return redirect()->intended('dashboard');
             }else{
-                // Available alpha caracters
-                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                if($findEmail){
+                    $newUser = User::where('email', $user->getEmail())->update([
+                        'google_id' => $user->getId(),
+                    ]);
+                    Auth::login($findEmail);
+    
+                    return redirect()->intended('dashboard');
+                }
 
-                // generate a pin based on 2 * 7 digits + a random character
-                $pin = mt_rand(1000000, 9999999)
-                    . mt_rand(1000000, 9999999)
-                    . $characters[rand(0, strlen($characters) - 1)];
-
-                // shuffle the result
-                $password = str_shuffle($pin);
+                $password = User::generatePassword();
 
                 $newUser = User::create([
                     'name' => $user->getName(),
@@ -48,18 +47,11 @@ class GoogleController extends Controller
                     'username' => $user->getEmail(),
                     'password' => Hash::make($password),
                     'avatar' => $user->getAvatar(),
-                    'role' => 'user',
                     'google_id' => $user->getId(),
                 ]);
-
                 Auth::login($newUser);
+
                 return redirect()->intended('dashboard');
-
-                // event(new Registered($newUser));
-
-                // Auth::login($newUser);
-
-                // return redirect(RouteServiceProvider::HOME);
             }
         } catch (\Throwable $th) {
             //throw $th;

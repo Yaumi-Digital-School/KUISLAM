@@ -21,8 +21,13 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
                 ->name('register'); 
 
-Route::post('/register', [RegisteredUserController::class, 'store'])
-                ->middleware('guest');
+Route::view('/register_form', 'auth.register-form')
+                ->middleware('guest')
+                ->name('register_form'); 
+
+Route::post('/register_form', [RegisteredUserController::class, 'store'])
+                ->middleware('guest')
+                ->name('register_post');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')

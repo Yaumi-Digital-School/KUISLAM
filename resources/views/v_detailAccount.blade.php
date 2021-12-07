@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Waiting Room') }}
+            {{ __('Leaderboard') }}
         </h2>
     </x-slot>
 
@@ -9,31 +9,27 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <h3>Code : {{ $room->code }}</h3>
-                    <h3>Judul Quiz : {{ $room->quiz->title }}</h3>
                     <table class="table-auto">
                         <thead>
                           <tr>
                             <th>NO.</th>
-                            <th>NAME</th>
-                            <th>Status</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Avatar</th>
                           </tr>
                         </thead>
                         <tbody>
                             @php
                                 $no = 1;
                             @endphp
-                            @foreach ($roomUser as $data)
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $data->user->name }}</td>
-                                    @if ($data->is_host === 1)
-                                        <td>Host</td>
-                                    @else
-                                        <td>Player</td>
-                                    @endif
-                                </tr>   
-                            @endforeach
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ Auth::user()->name }}</td>
+                                <td>{{ Auth::user()->email }}</td>
+                                <td>{{ Auth::user()->username }}</td>
+                                <td>{{ Auth::user()->avatar }}</td>
+                            </tr>
                         </tbody>
                       </table>
                     

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RoomUser extends Model
 {
@@ -16,13 +18,18 @@ class RoomUser extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
     public static function isInRoom($code){
         $room = Room::getRoomByCode($code);
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_active', true)->first();
     }
 
     public static function getAllWaitingPlayer($code){
-        $room = Room::where('code', $code)->first();
+        $room = Room::getRoomByCode($code);
         return RoomUser::where('room_id', $room->id)->get();
     }
 
