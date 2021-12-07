@@ -70,7 +70,7 @@ Route::middleware('auth')->group(function () {
 // Hasil perubahan route
 
 Route::get('/questions', [QuestionController::class, 'index'])->name('question.list');
-Route::post('/questions/create', [QuestionController::class, 'create'])->name('question.create');
+Route::post('/questions', [QuestionController::class, 'create'])->name('question.create');
 Route::post('/questions/{id}/update', [QuestionController::class, 'update'])->name('question.update');
 Route::post('/questions/{id}/delete', [QuestionController::class, 'delete'])->name('question.delete');
 

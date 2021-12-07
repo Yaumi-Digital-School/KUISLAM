@@ -14,18 +14,17 @@ class QuestionController extends Controller
         return Question::all();
     }
 
-    public function create(Request $request){
+    public function create(request $request){
         // ini ada script yang lebih mudah
         $question = [
-            'question' => '$request->question;',
-            'image' => '$request->image;',
-            'option_1' => '$request->option_1;',
-            'option_2' => '$request->option_2;',
-            'option_3' => '$request->option_3;',
-            'option_4' => '$request->option_4;',
-            'answer' => '$request->answer;',
-
-            'timer' => '$request->timer;'
+            'question' => $request->question,
+            'image' => $request->image,
+            'option_1' => $request->option_1,
+            'option_2' => $request->option_2,
+            'option_3' => $request->option_3,
+            'option_4' => $request->option_4,
+            'answer' => $request->answer,
+            'timer' => $request->timer
         ];
         Question::create($question);
 
@@ -53,14 +52,14 @@ class QuestionController extends Controller
     public function update(request $request, $id){
         // update juga sama dengan create
         $question = [
-            'question' => '$request->question;',
-            'image' => '$request->image;',
-            'option_1' => '$request->option_1;',
-            'option_2' => '$request->option_2;',
-            'option_3' => '$request->option_3;',
-            'option_4' => '$request->option_4;',
-            'answer' => '$request->answer;',
-            'timer' => '$request->timer;'
+            'question' => $request->question,
+            'image' => $request->image,
+            'option_1' => $request->option_1,
+            'option_2' => $request->option_2,
+            'option_3' => $request->option_3,
+            'option_4' => $request->option_4,
+            'answer' => $request->answer,
+            'timer' => $request->timer
         ];
 
         Question::where('id', $id)->update($question);
