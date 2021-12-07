@@ -9,12 +9,12 @@ class QuestionController extends Controller
 {
     public function index(){
         // Method ini benar, bisa juga gini :
-        Question::get();
+        //Question::get();
         // method get() dan all() akan mengirim collection data, artinya ada lebih dari 1 row data bisa 2 row, 3 row dst....
-        //return Question::all();
+        return Question::all();
     }
 
-    public function create(request $request){
+    public function create(Request $request){
         // ini ada script yang lebih mudah
         $question = [
             'question' => '$request->question;',
@@ -63,7 +63,7 @@ class QuestionController extends Controller
             'timer' => '$request->timer;'
         ];
 
-        Question::where('nama_atribut', $id)->update($question);
+        Question::where('id', $id)->update($question);
         // itu cara bacanya, update data dari tabel question ketika id = $id
 
         // biasanya kalau abis update data kita redirect ke halaman tertentu juga
@@ -85,7 +85,7 @@ class QuestionController extends Controller
 
     public function delete($id){
         // ini juga bisa scriptnya cuma ada yang lebih mudah
-        Question::where('question', $id)->delete();
+        Question::where('id', $id)->delete();
         return redirect()->route('dashboard');
 
         // $question = Question::find($id);
