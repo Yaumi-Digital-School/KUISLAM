@@ -86,9 +86,7 @@ class RoomController extends Controller
         user menginput data kode room pada field yang tersedia */
 
         $room = Room::getRoomByCode($code);
-
-        return '<h1>Ini page pre waiting room peserta</h1>';
-        // return view('v_pre-waitingroom', compact('room'));
+        return view('user.waiting-room', compact('room'));
     }
 
     public function enterRoom($code){
