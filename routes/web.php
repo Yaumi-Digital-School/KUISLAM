@@ -1,11 +1,8 @@
 <?php
 
 use App\Http\Controllers\LeaderboardController;
-<<<<<<< HEAD
 use App\Http\Controllers\QuestionController;
-=======
 use App\Http\Controllers\ProfileController;
->>>>>>> master
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomUserController;
