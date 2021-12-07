@@ -27,6 +27,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+    // testing
+    Route::get('/user/waiting-room', function () {
+        return view('user/waiting-room');
+    });
+
+    Route::get('/host/waiting-room', function () {
+        return view('host/waiting-room');
+    });
+
 Route::middleware('auth')->group(function () {
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
@@ -54,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profiles/detail', [ProfileController::class, 'detailAccount'])->name('profile.detail-account');
     Route::post('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.update-account');
 
-    Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.all-played-quiz');
+    Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
 });
 
 
