@@ -19,9 +19,9 @@ class LeaderboardController extends Controller
         // Leaderboard::where('user_id', $roomUser->user_id )->update([
         //     'point' => $currentPoint->point + $roomUser->point,
         // ]);
-            // dd($this->getCurrentPoint());
+
         $leaderboard = Leaderboard::getAllLeaderboard();
-        // dd($leaderboard);
+        
         return view('v_leaderboard', compact('leaderboard'));
     }    
 }

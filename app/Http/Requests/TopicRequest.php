@@ -27,12 +27,4 @@ class TopicRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'title.required' => 'Judul Wajib Diisi!',
-            'title.string' => 'Judul Harus berupa Huruf!',
-        ];
-    }
 }

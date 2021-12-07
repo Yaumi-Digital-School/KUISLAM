@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Models;
-use App\Models\Leaderboard;
+use App\Models\QuizUser;
 
+use App\Models\RoomUser;
+use App\Models\Leaderboard;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -47,5 +49,28 @@ class User extends Authenticatable
     public function roomusers()
     {
         return $this->hasMany(RoomUser::class);
+    }
+
+    public function quizusers()
+    {
+        return $this->hasMany(QuizUser::class);
+    }
+
+    public function userquestionrooms()
+    {
+        return $this->hasMany(UserQuestionRoom::class);
+    }
+
+    public static function generatePassword(){
+        // Available alpha caracters
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        // generate a pin based on 2 * 7 digits + a random character
+        $pin = mt_rand(1000000, 9999999)
+            . mt_rand(1000000, 9999999)
+            . $characters[rand(0, strlen($characters) - 1)];
+
+        // shuffle the result
+        return str_shuffle($pin);
     }
 }
