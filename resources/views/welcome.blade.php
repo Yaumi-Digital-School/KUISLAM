@@ -9,6 +9,22 @@
             /* .swiper-slide{
                 border-radius: 18px;
             } */
+            .swiper-button-prev:after,
+            .swiper-rtl .swiper-button-next:after {
+                content: '';
+            }
+            .swiper-button-next:after,
+            .swiper-rtl .swiper-button-next:after {
+                content: '';
+            }
+            .swiper-button-next{
+                position: absolute;
+                right: -4%;
+            }
+            .swiper-button-prev{
+                position: absolute;
+                left: -4%;
+            }
         </style>
     @endsection
     
@@ -108,10 +124,10 @@
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
                             <h1>Sejarah Nabi</h1>
                         </div>
-                        <div class="md:mx-4">
+                        <div class="md:mx-4 relative swiper-container">
                             <div class="swiper w-full h-64 md:h-72">
                                 <!-- Additional required wrapper -->
-                                <div class="swiper-wrapper ">
+                                <div class="swiper-wrapper">
                                     <!-- Slides -->
                                     @for ($j = 0; $j < 8; $j++)
                                         <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
@@ -126,8 +142,18 @@
                                     @endfor
                                 </div>
                                 <!-- If we need navigation buttons -->
-                                <div class="swiper-button-prev"></div>
-                                <div class="swiper-button-next"></div>
+                                <div class="xnext"></div>
+                                <div class="xprev"></div>
+                            </div>
+                            <div class="swiper-button-prev">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-left'></i>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-right'></i>
+                                </div>
                             </div>
                         </div>
                     @endfor
@@ -138,13 +164,21 @@
 
     @section('script')
         <script>
-             $( window ).on( "load", function() {
-                 const swiper = new Swiper('.swiper', {
-                     // Optional parameters
-                     slidesPerView: 2,
-                     spaceBetween: 15,
-                     // Navigation arrows
-                     breakpoints: {
+            $('.swiper-button-next').click(
+                function(e){
+                        $(this).parents('.swiper-container').find('.xnext').trigger('click');
+            });
+            $('.swiper-button-prev').click(
+                function(e){$(this).parents('.swiper-container').find('.xprev').trigger('click');
+            });
+            
+            $( window ).on( "load", function() {
+                const swiper = new Swiper('.swiper', {
+                    // Optional parameters
+                    slidesPerView: 2,
+                    spaceBetween: 15,
+                    // Navigation arrows
+                    breakpoints: {
                         768:{
                             slidesPerView: 3,
                             spaceBetween: 20,
@@ -161,13 +195,13 @@
                             slidesPerView: 5,
                             spaceBetween: 45,
                         }
-                     },
-                     navigation: {
-                         nextEl: '.swiper-button-next',
-                         prevEl: '.swiper-button-prev',
-                     },
-                 });
-             });
+                    },
+                    navigation: {
+                        nextEl: '.xnext',
+                        prevEl: '.xprev',
+                    },
+                });
+            });
         </script>
     @endsection
 </x-main-layout>
