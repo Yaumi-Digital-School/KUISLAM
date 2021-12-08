@@ -2,7 +2,7 @@
     {{-- button icon --}}
     <div class="flex justify-start mt-10 ml-8">
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">
-            <a href="#"><img src="{{asset('images/cross_icon.svg')}}"></a>
+            <a href="{{ route('dashboard') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
         </div>
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
             <a href="#"><img src="{{asset('images/fullscreen_icon.svg')}}"></a>
@@ -14,7 +14,7 @@
             <div class="sm:max-w-sm z-10 max-w-xs">
                 <div class="bg-green-nav px-8 py-8 rounded-t-lg">
                 {{-- generate quiz title --}}
-                    <h1 class="text-center text-2xl font-bold text-white">Sejarah Nabi Adam AS</h1>
+                    <h1 class="text-center text-2xl font-bold text-white">{{ $quiz->title }}</h1>
                 </div>
                 <div class="bg-white px-4 rounded-b-lg">
                     <h1 class="text-xl text-center py-4">Peraturan Permainan</h1>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             {{-- button --}}
-            <a herf="#" class="bg-green-nav my-8 rounded-md py-1 px-8 text-white font-bold text-2xl cursor-pointer hover:bg-green-darkBg z-10">CREATE ROOM</a>
+            <a href="{{ route('room.make', $quiz->id) }}" class="bg-green-nav my-8 rounded-md py-1 px-8 text-white font-bold text-2xl cursor-pointer hover:bg-green-darkBg z-10">CREATE ROOM</a>
         </div>
     </div>
 </x-main>
