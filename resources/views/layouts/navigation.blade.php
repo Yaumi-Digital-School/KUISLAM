@@ -1,6 +1,6 @@
 {{-- navbar desktop--}}
 <div class="bg-white md:bg-green-nav fixed w-full h-16 top-0 z-20 font-poppins border-b-2 border-gray-nav md:border-none">
-    <nav class="text-white flex justify-between items-center px-8 h-full" >
+    <nav class="text-white flex justify-center md:justify-between items-center px-8 h-full" >
         <div class="flex items-center space-x-10">
             <a href="{{ route("index") }}" class="bg-gray-400 text-gray-400 text-lg font-bold py-1 w-20">Logo</a>
             <div class="hidden md:flex space-x-8 font-medium">
@@ -10,23 +10,8 @@
             </div>
         </div>
         <div class="hidden md:flex justify-end w-4/12 space-x-8 items-center">
-            {{-- input  --}}
-            {{-- <div class="relative text-gray-400 w-full">
-                <form action="" method="POST">
-                    <span class="absolute inset-y-0 right-0 flex items-center">
-                      <button type="submit" class="p-1 text-green-lightBg focus:outline-none focus:shadow-outline">
-                        <svg class="w-8 h-8" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M32.2916 29.1666H30.6457L30.0624 28.6041C32.5624 25.6875 33.8541 21.7083 33.1457 17.4791C32.1666 11.6875 27.3332 7.06246 21.4999 6.35413C12.6874 5.27079 5.27073 12.6875 6.35407 21.5C7.0624 27.3333 11.6874 32.1666 17.4791 33.1458C21.7082 33.8541 25.6874 32.5625 28.6041 30.0625L29.1666 30.6458V32.2916L38.0207 41.1458C38.8749 42 40.2707 42 41.1249 41.1458C41.9791 40.2916 41.9791 38.8958 41.1249 38.0416L32.2916 29.1666ZM19.7916 29.1666C14.6041 29.1666 10.4166 24.9791 10.4166 19.7916C10.4166 14.6041 14.6041 10.4166 19.7916 10.4166C24.9791 10.4166 29.1666 14.6041 29.1666 19.7916C29.1666 24.9791 24.9791 29.1666 19.7916 29.1666Z" fill="#8ACC3B"/>
-                        </svg>
-                      </button>
-                    </span>
-                    <input type="search" class="placeholder-gray-400 placeholder-font-bold rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50" placeholder="Search Quiz" autocomplete="off">
-                </form>
-            </div> --}}
             @guest
-                <div class="flex items-center">
-                    <img src="{{ asset('/images/burger.png') }}" alt="burger icon">
-                </div>
+                <a class="bg-green-lightBg py-1 px-3" href="{{ route('login') }}">Masuk</a>
             @endguest
             @auth
                 <div class="flex items-center h-12 w-12 ">

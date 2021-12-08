@@ -32,8 +32,11 @@ module.exports = {
                 '3xl': '1600px'
             },
             boxShadow: {
-                profile: '0px 1px 1px rgba(0, 0, 0, 0.1)'
-            }
+                profile: '0px 4px 4px rgba(0, 0, 0, 0.25)'
+            },
+            dropShadow: {
+                profile: '0 1px 1px rgba(0, 0, 0, 0.1)',
+              }
         },
     },
 

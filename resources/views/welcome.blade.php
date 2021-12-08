@@ -2,13 +2,6 @@
     {{-- additional style  --}}
     @section('style')
         <style>
-            /* .swiper {
-                width: 100%;
-                height: 300px;
-            } */
-            /* .swiper-slide{
-                border-radius: 18px;
-            } */
             .swiper-button-prev:after,
             .swiper-rtl .swiper-button-next:after {
                 content: '';
@@ -43,9 +36,9 @@
                         <p class="z-10">Mau bermain game?</p>
                     </div>
                     {{-- kode game  --}}
-                    <div class="shadow-profile mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg col-span-7">
-                        <div class="bg-gray-input w-full md:w-5/6 p-4 rounded-lg">
-                            <form action="" class="flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-6">
+                    <div class="md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg col-span-7">
+                        <div class="bg-gray-input w-full md:w-5/6 p-4 rounded-sm">
+                            <form action="" class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
                                 <input type="text" 
                                     class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     placeholder="Masukan kode game...">
@@ -57,7 +50,7 @@
                         </div>
                     </div>
                     {{-- desktop  profile --}}
-                    <div class="shadow-profile mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
+                    <div class="shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-1">
                             <div class="flex items-center h-10 w-10 ">
                                 <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
@@ -83,7 +76,7 @@
                         </div>
                     </div>
                     {{-- mobile  profile --}}
-                    <div class="shadow-profile mt-3 rounded-lg md:rounded-none md:m-0 z-10 py-3 flex md:hidden justify-center items-center bg-gray-lightBg col-span-5">
+                    <div style="border: 1px solid #F8F8F8;" class="drop-shadow-profile mt-3 rounded-lg md:rounded-none md:m-0 z-10 py-3 flex md:hidden justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-3 md:space-y-1 ">
                             @auth
                                 <div class="flex items-center h-10 w-10 ">

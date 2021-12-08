@@ -1,9 +1,12 @@
 <x-main-layout titlePage="Laravel">
     {{-- navbar --}}
     <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
-        <nav class="text-white flex justify-between items-center px-6 font-bold h-full">
+        <nav class="text-white flex space-x-16 md:justify-between items-center px-6 font-bold h-full">
+            <a href="{{ route('index') }}" class="text-4xl flex items-center text-white">
+                <i class='bx bx-chevron-left'></i>
+            </a>
             <a href="{{ route('index') }}" class="bg-gray-400 text-gray-400 text-lg font-bold py-1 w-20">Logo</a>
-            <a class="text-lg" href="{{ route('register') }}">Register</a>
+            <a class="hidden md:block bg-green-lightBg py-1 px-3" href="{{ route('register') }}">Daftar</a>
         </nav>
     </div>
     {{-- main content  --}}
@@ -12,7 +15,9 @@
         <div class="grid grid-cols-12 pt-3 lg:pt-0 max-w-screen-2xl mx-auto h-screen">
             {{-- picture lets play together  --}}
             <div class="hidden lg:col-span-6 lg:flex justify-center items-center z-10">
-                <div><img class="ml-6" src="{{ asset('images/login.png') }}" alt=""></div>
+                <div>
+                    <img style="height: 30rem" class="mx-20" src="{{ asset('images/login.png') }}" alt="image lets play together">
+                </div>
             </div>
             {{-- form login  --}}
             <div class="col-span-12 lg:col-span-6 mx-auto  @if ($errors->any()) mt-6 @endif md:mb-10 pt-10 flex justify-center items-center z-10">
