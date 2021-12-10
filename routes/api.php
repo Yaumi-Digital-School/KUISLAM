@@ -25,3 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('/topics', TopicController::class);
 Route::resource('/quizzes', QuizController::class);
 Route::post('/rooms/join', [RoomController::class, 'joinRoomWithCode'])->name('room.joincode');
+
+// Untuk Route jangan taro disini mbak, soalnya ini untuk bikin API, bisa sih cuma kita ga implementasi pakai API
+// Trus untuk scriptnya masih salah, ini laravel versi 5 kalau ga salah.
+// saya coba pindahin ke web.php
+// Route::get('question', [QuestionController::class, 'index'])->name('question.list');
+// Route::post('question', [QuestionController::class, 'create'])->name('question.create');
+// Route::post('/question/{id}', [QuestionController::class, 'update'])->name('question.update');
+// Route::post('/question/{id}', [QuestionController::class, 'delete'])->name('question.delete');
+
+

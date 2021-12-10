@@ -13,9 +13,11 @@ class MainLayout extends Component
      */
 
     public $titlePage;
-    public function __construct($titlePage)
+    public $themePage;
+    public function __construct($titlePage, $themePage="green")
     {
         $this->titlePage = $titlePage;
+        $this->themePage = $themePage;
     }
 
     public function render()

@@ -14,17 +14,27 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
+        <link rel='stylesheet' href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css'>
+        <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        @yield('style')
+    </head>
+    <body class="@if ($themePage == "white") bg-white @else bg-green-lightBg  @endif relative min-h-screen overflow-y-scroll overflow-x-hidden">
+        
+        {{ $slot }}
+        
+        {{-- ball stuff  --}}
+        <div class=" @if ($themePage == "white") bg-gray-darkBg @else bg-green-darkBg @endif rounded-full fixed -left-48 -top-48" style="height: 35rem; width: 35rem"></div>
+        <div class="@if ($themePage == "white") bg-gray-darkBg @else bg-green-darkBg @endif rounded-full fixed -right-40 -bottom-20 flex justify-center items-center" style="height: 35rem; width: 35rem">
+            <div class="@if ($themePage == "white") bg-white @else bg-green-lightBg  @endif rounded-full" style="height: 28rem; width: 28rem"></div>
+        </div>
 
         <!-- Scripts -->
+        <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+        </script>
         <script src="{{ asset('js/app.js') }}" defer></script>
-    </head>
-    <body class="bg-green-lightBg relative min-h-screen overflow-y-scroll overflow-x-hidden">
-        {{ $slot }}
-        {{-- ball stuff  --}}
-        <div class="bg-green-darkBg rounded-full fixed -left-48 -top-48" style="height: 35rem; width: 35rem"></div>
-        <div class="bg-green-darkBg rounded-full fixed -right-40 -bottom-20 flex justify-center items-center" style="height: 35rem; width: 35rem">
-            <div class="bg-green-lightBg rounded-full" style="height: 28rem; width: 28rem"></div>
-        </div>
+        @yield('script')
     </body>
 </html>
