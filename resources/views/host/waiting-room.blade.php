@@ -5,13 +5,13 @@
             <a href="{{ route('dashboard') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
         </div>
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
-            <a href="#"><img src="{{asset('images/fullscreen_icon.svg')}}"></a>
+            <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
         </div>
     </div>
     {{-- quiz card --}}
     <div class="font-poppins mt-16 ">
         <div class="flex flex-col mx-auto justify-center items-center  pt-3 max-w-md">
-            <div class="sm:max-w-sm z-10 max-w-xs">
+            <div class="sm:max-w-sm z-10 w-3/4">
                 <div class="bg-green-nav px-8 py-8 rounded-t-lg">
                 {{-- generate quiz title --}}
                     <h1 class="text-center text-2xl font-bold text-white">{{ $quiz->title }}</h1>
@@ -32,4 +32,29 @@
             <a href="{{ route('room.make', $quiz->id) }}" class="bg-green-nav my-8 rounded-md py-1 px-8 text-white font-bold text-2xl cursor-pointer hover:bg-green-darkBg z-10">CREATE ROOM</a>
         </div>
     </div>
+    @section('script')
+        <script>
+            const body = document.documentElement;
+            const btn_fullscreen = document.getElementById('fullscreen');
+            
+            function getFullscreenElement() {
+                return document.fullscreenElement
+                    || document.msFullscreenElement
+                    || document.mozFullscreenElement
+                    || document.webkitFullscreenElement;
+            }
+
+            btn_fullscreen.addEventListener("click", ()=>{
+                toggleFullscreen();
+            });
+
+            function toggleFullscreen() {
+                if(getFullscreenElement()) {
+                    document.exitFullscreen();
+                } else {
+                    body.requestFullscreen().catch(console.log);
+                }
+            }
+        </script>
+    @endsection
 </x-main>
