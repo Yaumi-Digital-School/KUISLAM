@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
     // testing
     Route::get('/user/waiting-room', function () {
@@ -37,7 +37,7 @@ Route::get('/dashboard', function () {
         return view('host/waiting-room');
     });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
     Route::resource('/topics', TopicController::class);

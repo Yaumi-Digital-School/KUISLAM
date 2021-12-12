@@ -10,7 +10,7 @@
     <div class="bg-green-lightBg font-poppins mt-6">
         {{-- main container  --}}
         <div class="flex flex-col justify-center items-center pt-3 lg:pt-0 max-w-screen-2xl mx-auto h-screen ">
-            <form action="{{ route('register_post') }}" method="POST" class="z-10">
+            <form action="{{ route('register.post') }}" method="POST" class="z-10">
                 @csrf
                 {{-- @if ($errors->any())
                     {{ dd($errors->any()) }}

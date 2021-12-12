@@ -26,4 +26,18 @@ class RoomQuestion extends Model
         $room = Room::getRoomByCode($code);
         return RoomQuestion::where('room_id', $room->id)->delete();
     }
+
+    public static function autoIncrement()
+    {
+        // Start a loop
+        for ($i = 0; $i <= 10; $i++) {
+            // Yield the current value of $i
+            yield $i;
+            // If $i is equal to 10, that must mean the start of a new loop
+            if($i == 10) {
+                // Reset $i to 0 to start over.
+                $i = 0;
+            }
+        }
+    }
 }

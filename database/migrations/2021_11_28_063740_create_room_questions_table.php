@@ -17,6 +17,7 @@ class CreateRoomQuestionsTable extends Migration
             $table->id();
             $table->foreignId('question_id')->constrained();
             $table->foreignId('room_id')->constrained();
+            $table->integer('order');
             $table->timestamps();
         });
     }
