@@ -14,8 +14,8 @@ class UserQuestionRoomFactory extends Factory
     public function definition()
     {
         return [
-            'room_id' => rand(1, 10),
-            'question_id' => rand(1, 10),
+            'room_id' => rand(1, 3),
+            'question_id' => rand(1, 20),
             'point' => $this->faker->randomNumber(4, true),
             'answer_option' => $this->faker->randomElement(['option_1', 'option_2', 'option_3', 'option_4']),
             'is_correct' => $this->faker->boolean(),

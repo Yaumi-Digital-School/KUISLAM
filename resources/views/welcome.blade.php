@@ -52,9 +52,11 @@
                     {{-- desktop  profile --}}
                     <div class="shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-1">
+                            @auth
                             <div class="flex items-center h-10 w-10 ">
-                                <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
                             </div>
+                            @endauth
                             <div class="flex flex-col items-center">
                                 @auth
                                     <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>

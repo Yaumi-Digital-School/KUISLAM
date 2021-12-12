@@ -14,7 +14,7 @@ class RoomUserFactory extends Factory
     public function definition()
     {
         return [
-            'room_id' => rand(1, 10),
+            'room_id' => rand(1, 3),
             'rank' => $this->faker->numberBetween(1, 4),
             'points' => $this->faker->randomNumber(4, true),
             'is_host' => $this->faker->boolean(),

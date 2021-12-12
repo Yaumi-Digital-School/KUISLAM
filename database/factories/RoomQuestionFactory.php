@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Room;
 use App\Models\Question;
+use App\Models\RoomQuestion;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RoomQuestionFactory extends Factory
@@ -16,6 +18,8 @@ class RoomQuestionFactory extends Factory
     {
         return [
             'question_id' => rand(1, 10),
+            'room_id' => rand(1, 3),
+            'order' => rand(1, 10),
         ];
-    }
+    }    
 }

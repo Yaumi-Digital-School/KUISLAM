@@ -16,6 +16,7 @@ class QuizFactory extends Factory
         return [
             'title' => $this->faker->words(3, true),
             'image' => $this->faker->words(3, true) .'.jpg',
+            'description' => $this->faker->sentence(25),
         ];
     }
 }

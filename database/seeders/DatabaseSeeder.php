@@ -34,11 +34,10 @@ class DatabaseSeeder extends Seeder
             ->has(Quiz::factory()->count(10))
             ->create();
 
-        Question::factory()->count(10)->create();
-        Room::factory(10)
-            ->has(RoomQuestion::factory()->count(1))
-            ->create();
-
+        Question::factory()->count(20)->create();
+        Room::factory(3)->create();
+        RoomQuestion::factory(3)->create();
+        
         User::factory(4)
             ->has(Leaderboard::factory()->count(1))
             ->has(QuizUser::factory()->count(4))

@@ -21,13 +21,13 @@ Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
                 ->name('register'); 
 
-Route::view('/register_form', 'auth.register-form')
+Route::get('/register/form', [RegisteredUserController::class, 'registerForm'])
                 ->middleware('guest')
-                ->name('register_form'); 
+                ->name('register.form'); 
 
-Route::post('/register_form', [RegisteredUserController::class, 'store'])
+Route::post('/register/form', [RegisteredUserController::class, 'store'])
                 ->middleware('guest')
-                ->name('register_post');
+                ->name('register.post');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
                 ->middleware('guest')
