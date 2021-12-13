@@ -38,8 +38,9 @@
                     {{-- kode game  --}}
                     <div class="md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg col-span-7">
                         <div class="bg-gray-input w-full md:w-5/6 p-4 rounded-sm">
-                            <form action="" class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
-                                <input type="text" 
+                            <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
+                                @csrf
+                                <input type="text" name="code"
                                     class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                     placeholder="Masukan kode game...">
                                 <button type="submit" 
@@ -47,23 +48,31 @@
                                     Gabung
                                 </button>
                             </form>
+                            @error('code')
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            @enderror 
                         </div>
                     </div>
                     {{-- desktop  profile --}}
                     <div class="shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-1">
                             @auth
-                            <div class="flex items-center h-10 w-10 ">
-                                <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
-                            </div>
+                                <div class="flex items-center h-10 w-10 ">
+                                    <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                </div>
                             @endauth
+                            @guest
+                                <div class="flex items-center h-10 w-10 ">
+                                    <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                </div>
+                            @endguest
                             <div class="flex flex-col items-center">
                                 @auth
                                     <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
-                                        <a href="">Edit Profil</a>
+                                        <a href="{{  route('profile.detail-account') }}">Edit Profil</a>
                                         <span>&#8226</span>
-                                        <a href="">Lihat Aktivitas</a>
+                                        <a href="{{  route('roomuser.getallplayedquiz') }}">Lihat Aktivitas</a>
                                     </div>
                                 @endauth
                                 @guest

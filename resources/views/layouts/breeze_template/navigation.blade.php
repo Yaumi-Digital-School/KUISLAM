@@ -17,8 +17,8 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('leaderboard.index')" :active="request()->routeIs('leaderboard.index')">
-                        {{ __('Leaderboard') }}
+                    <x-nav-link :href="route('profile.detail-account')" :active="request()->routeIs('profile.detail-account')">
+                        {{ __('Account') }}
                     </x-nav-link>
                 </div>
             </div>

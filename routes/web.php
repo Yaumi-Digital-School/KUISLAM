@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ProfileController;
@@ -20,13 +21,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
     // testing
     Route::get('/user/waiting-room', function () {
@@ -37,7 +34,10 @@ Route::get('/dashboard', function () {
         return view('host/waiting-room');
     });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    
+
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
 
     Route::resource('/topics', TopicController::class);
@@ -53,16 +53,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         Route::prefix('/{room}')->group(function () {
+            Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
             Route::get('/player/prewaiting', [RoomController::class, 'preWaitingPlayer'])->name('room.pre-waiting-player');
             Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
             Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+
+            Route::get('/{order}', [RoomController::class, 'viewQuiz'])->name('room.view-quiz');
         });
     });
 
     Route::get('/profiles/detail', [ProfileController::class, 'detailAccount'])->name('profile.detail-account');
     Route::post('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.update-account');
+    Route::post('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
 });

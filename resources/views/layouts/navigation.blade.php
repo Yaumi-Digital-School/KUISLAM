@@ -5,8 +5,8 @@
             <a href="{{ route("index") }}" class="bg-gray-400 text-gray-400 text-lg font-bold py-1 w-20">Logo</a>
             <div class="hidden md:flex space-x-8 font-medium">
                 <a class="py-0.5" href="{{ route("index") }}" @if (request()->routeIs("index")) style="border-bottom: 3px solid white" @endif>Home</a>
-                <a class="py-0.5 " href="" @if (request()->routeIs("discover")) style="border-bottom: 3px solid white" @endif>Discover</a>
-                <a class="py-0.5 " href="" @if (request()->routeIs("activity")) style="border-bottom: 3px solid white" @endif>Activity</a>
+                <a class="py-0.5 " href="{{ route("discover") }}" @if (request()->routeIs("discover")) style="border-bottom: 3px solid white" @endif>Discover</a>
+                <a class="py-0.5 " href="{{ route("roomuser.getallplayedquiz") }}" @if (request()->routeIs("activity")) style="border-bottom: 3px solid white" @endif>Activity</a>
             </div>
         </div>
         <div class="hidden md:flex justify-end w-4/12 space-x-8 items-center">
@@ -14,9 +14,15 @@
                 <a class="bg-green-lightBg py-1 px-3" href="{{ route('login') }}">Masuk</a>
             @endguest
             @auth
-                <div class="flex items-center h-12 w-12 ">
-                    <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
-                </div>
+                @if(Auth::user()->avatar)
+                    <div class="flex items-center h-12 w-12 ">
+                        <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                    </div>
+                @else
+                    <div class="flex items-center h-12 w-12 ">
+                        <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                    </div>
+                @endif
             @endauth
         </div>
     </nav>
