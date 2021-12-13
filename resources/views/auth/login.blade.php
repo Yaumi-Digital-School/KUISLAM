@@ -54,7 +54,7 @@
                                     <span class="text-red-400 text-sm">{{ $message }}</span>
                                 @enderror 
                             </div>
-                            <a href="" class="text-right w-5/6 mx-auto text-gray-400">Lupa password?</a>
+                            <a href="{{ route('password.request') }}" class="text-right w-5/6 mx-auto text-gray-400">Lupa password?</a>
                             <button class="w-5/6 bg-green-lightBg mx-auto text-white rounded-md py-1 hover:bg-green-darkBg transition">Lanjut</button>
                             <div class="text-center"><span>Belum punya akun?</span> <a class="text-green-lightBg" href="{{ route('register') }}">Yuk Daftar</a></div>
                         </div>

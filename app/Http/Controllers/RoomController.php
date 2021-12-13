@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Auth;
 class RoomController extends Controller
 {
     public function preWaitingHost($quizId){
-        /* Method ini untuk membuat Room */
-        /* Pre-Waiting room - peserta calon moderator */
-        /* Jika merujuk ke desain method ini akan di panggil ketika 
-        user memasukkan link share untuk join ke room atau setelah
-        user menginput data kode room pada field yang tersedia */
+        /* 
+            Method ini untuk membuat Room.
+            Pre-Waiting room - peserta calon moderator.
+            Jika merujuk ke desain method ini akan di panggil ketika 
+            user memasukkan link share untuk join ke room atau setelah
+            user menginput data kode room pada field yang tersedia.
+        */
 
         $quiz = Quiz::getQuizId($quizId);
 
@@ -26,27 +28,20 @@ class RoomController extends Controller
     }
 
     public function makeRoom($quizId){
-        /* Method ini untuk membuat Room */
-        /* Pre-Waiting room - peserta calon moderator */
-        /* Jika merujuk ke desain method ini akan di panggil ketika user menekan tombol create room */
+        /* 
+            Method ini untuk membuat Room
+            Pre-Waiting room - peserta calon moderator 
+            Jika merujuk ke desain method ini akan di panggil ketika user menekan tombol 
+            create room.
+        */
 
         $code = Room::getCode();
-
-        $questionsId = Question::getRandomQuestion($quizId);
 
         $dataRoom = [
             'quiz_id' => Quiz::getQuizId($quizId)->id,
             'code' => $code,
         ];        
         $room = Room::create($dataRoom);
-
-        for($i = 0; $i < 10; $i++){
-            $dataRoomQuestion = [
-                'question_id' => $questionsId[$i],
-                'room_id' => $room->id,
-            ];
-            RoomQuestion::create($dataRoomQuestion);
-        }
 
         $dataRoomUser = [
             'user_id' => Auth::user()->id,
@@ -59,8 +54,70 @@ class RoomController extends Controller
         return redirect()->route('room.waiting', $room->code);
     }
 
+    public function startRoom($code){
+        /* 
+            Method ini untuk memulai Room
+            Waiting room - peserta calon moderator 
+            Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
+            START
+        */
+
+        $room = Room::getRoomByCode($code);
+        
+        $quizId = $room->quiz_id;
+
+        $questionsId = Question::getRandomQuestion($quizId);
+        dd($quizId);
+
+        for($i = 0; $i < 10; $i++){
+            $dataRoomQuestion = [
+                'question_id' => $questionsId[$i],
+                'room_id' => $room->id,
+                'order' => $i+1,
+            ];
+            RoomQuestion::create($dataRoomQuestion);
+        }
+
+        return redirect()->route('room.view-quiz', [
+            'code' => $code, 
+            'order' => 1
+        ]);
+    }
+
+    public function viewQuiz($code, $order){
+        /* 
+            Method ini untuk memulai Room
+            Waiting room - peserta calon moderator 
+            Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
+            START
+        */
+
+        $room = Room::getRoomByCode($code);
+        
+        $quizId = $room->quiz_id;
+
+        $questionsId = Question::getRandomQuestion($quizId);
+        dd($quizId);
+
+        for($i = 0; $i < 10; $i++){
+            $dataRoomQuestion = [
+                'question_id' => $questionsId[$i],
+                'room_id' => $room->id,
+                'order' => $i+1,
+            ];
+            RoomQuestion::create($dataRoomQuestion);
+        }
+
+        return redirect()->route('room.view-quiz', [
+            'code' => $code, 
+            'order' => $order+1
+        ]);
+    }
+
     public function joinRoomWithLink($code){  
-        /* Method ini dipanggil ketika User memasukkan link kedalam URL */
+        /* 
+            Method ini dipanggil ketika User memasukkan link kedalam URL 
+        */
 
         $room = Room::getRoomByCode($code);
 
@@ -68,11 +125,19 @@ class RoomController extends Controller
     }
 
     public function joinRoomWithCode(Request $request){  
-        /* Method ini dipanggil ketika USER menginput CODE Room */
-        /* Jika merujuk ke desain method ini akan di panggil ketika 
-        user menekan tombol Gabung setelah menginput data kode room */
+        /* 
+            Method ini dipanggil ketika USER menginput CODE Room
+            Jika merujuk ke desain method ini akan di panggil ketika 
+            user menekan tombol Gabung setelah menginput data kode room 
+        */
 
+        $request->validate([
+            'code' => ['required', 'integer', 'digits:6']
+        ]);
         $room = Room::getRoomByCode($request->code);
+        if(!$room){
+            return redirect()->back()->withErrors(['code' => 'Invalid code!']);
+        }
 
         return redirect()->route('room.pre-waiting-player', $room->code);
     }
