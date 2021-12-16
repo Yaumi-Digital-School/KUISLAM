@@ -17,7 +17,13 @@ class HomeController extends Controller
     }
 
     public function discover(){
-        $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title');
+        $search = Request()->query('search');
+
+        if($search){
+            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
+        }else{
+            $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title');
+        }
 
         return view('discover', compact('quizzes'));
     }

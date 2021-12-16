@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     public function detailAccount(){
-        return view('v_detailAccount');
+        return view('detail-account');
     }
 
     public function updateAccount(ProfileRequest $request){
@@ -24,6 +24,7 @@ class ProfileController extends Controller
 
             $dataUser = [
                 'name' => $request->name,
+                'username' => $request->username,
                 'avatar' => $avatarFile,
             ];
             User::where('id', Auth::user()->id)->update($dataUser);
@@ -32,6 +33,7 @@ class ProfileController extends Controller
             // Jika tidak ingin ganti Avatar
             $dataUser = [
                 'name' => $request->name,
+                'username' => $request->username,
             ];
             User::where('id', Auth::user()->id)->update($dataUser);
         }
@@ -52,7 +54,7 @@ class ProfileController extends Controller
             $data = [
                 'password' => Hash::make($request->password),
             ];
-            Auth::user()->update($data);
+            User::where('id', Auth::user()->id)->update($data);
 
             return back()->with('success', 'Success change your password');
         }else{

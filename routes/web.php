@@ -1,14 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LeaderboardController;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\RoomUserController;
 use App\Http\Controllers\TopicController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\RoomUserController;
+use App\Http\Controllers\LeaderboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,9 +37,8 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     
-
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
-
+    
     Route::resource('/topics', TopicController::class);
     
     Route::resource('/quizzes', QuizController::class);   
@@ -65,8 +64,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/profiles/detail', [ProfileController::class, 'detailAccount'])->name('profile.detail-account');
-    Route::post('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.update-account');
-    Route::post('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
+    Route::put('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.update-account');
+    Route::put('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
 });
@@ -77,6 +76,5 @@ Route::get('/questions', [QuestionController::class, 'index'])->name('question.l
 Route::post('/questions', [QuestionController::class, 'create'])->name('question.create');
 Route::post('/questions/{id}/update', [QuestionController::class, 'update'])->name('question.update');
 Route::post('/questions/{id}/delete', [QuestionController::class, 'delete'])->name('question.delete');
-
 
 require __DIR__.'/auth.php';
