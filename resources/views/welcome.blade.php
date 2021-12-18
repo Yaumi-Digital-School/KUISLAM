@@ -21,14 +21,14 @@
         {{-- main container  --}}
         <div class="max-w-screen-xl 3xl:max-w-screen-2xl mx-auto h-screen ">
             <div class="px-4 xl:px-0 pb-20">
+                {{-- text mau bermain game?  --}}
+                <div class="flex md:hidden">
+                    <p class="z-10">Mau bermain game?</p>
+                </div>
                 {{-- code enter and profile --}}
-                <div class="flex flex-col md:flex-row justify-between gap-x-20">
-                    {{-- text mau bermain game?  --}}
-                    <div class="flex md:hidden">
-                        <p class="z-10">Mau bermain game?</p>
-                    </div>
+                <div class="flex flex-col md:flex-row justify-between md:space-x-8">
                     {{-- kode game  --}}
-                    <div class="w-full md:w-4/6 md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg">
+                    <div class="w-full mr-20 md:w-4/6 md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg">
                         <div class="bg-gray-input w-full md:w-5/6 px-4 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
                             <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col">
                                 @csrf
@@ -129,11 +129,22 @@
                             <h1>{{ $topic_name }}</h1>
                         </div>
                         <div class="md:mx-4 relative swiper-container">
-                            <div class="swiper w-full h-64 md:h-72">
+                            @auth
+                                <div class="swiper w-full h-64 md:h-80">
+                            @endauth
+                            @guest
+                                <div class="swiper w-full h-64 md:h-72">
+                            @endguest
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
-                                    @foreach($quiz as $data)    
+                                    @foreach($quiz as $data)
+                                        @php
+                                            $description = $data->description;
+                                            if(strlen($description) > 30)
+                                                $description = substr($description, 0, 30);
+                                            $description .= " ...";
+                                        @endphp    
                                         {{-- red 0% akurasi --}}
                                         <a class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
@@ -141,8 +152,8 @@
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <h1 class="font-bold">Nama Quiz</h1>
-                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
+                                                    <h1 class="font-bold">{{ $data->title }}</h1>
+                                                    <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                                 </div>
                                                 @auth
                                                     <div class="bg-red-redMain text-white rounded-lg mb-1">
@@ -151,43 +162,6 @@
                                                 @endauth
                                             </div>
                                         </a>
-                                        {{-- yellow 50% akurasi --}}
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
-                                            </div>
-                                            <div class="h-2/5 flex flex-col space-y-1 p-1">
-                                                <h1>{{ $data->title }}</h1>
-                                                <span class="text-sm text-gray-cardText">{{ $data->description }}</span>
-                                            <div class="flex flex-col justify-between h-2/5">
-                                                <div class="flex flex-col space-y-1 p-1">
-                                                    <h1 class="font-bold">Nama Quiz</h1>
-                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
-                                                </div>
-                                                @auth
-                                                    <div class="bg-yellow-yellowMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">50% akurasi</span> 
-                                                    </div>
-                                                @endauth
-                                            </div>
-                                        </div>
-                                        {{-- green 100% akurasi  --}}
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
-                                            </div>
-                                            <div class="flex flex-col justify-between h-2/5">
-                                                <div class="flex flex-col space-y-1 p-1">
-                                                    <h1 class="font-bold">Nama Quiz</h1>
-                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
-                                                </div>
-                                                @auth
-                                                    <div class="bg-green-greenMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">100% akurasi</span> 
-                                                    </div>
-                                                @endauth
-                                            </div>
-                                        </div>
                                     @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->
