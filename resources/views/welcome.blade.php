@@ -10,19 +10,11 @@
             .swiper-rtl .swiper-button-next:after {
                 content: '';
             }
-            .swiper-button-next{
-                position: absolute;
-                right: -4%;
-            }
-            .swiper-button-prev{
-                position: absolute;
-                left: -4%;
-            }
         </style>
     @endsection
     
     {{-- navbar  --}}
-    @include('layouts.navigation')
+    @include('layouts.navigation', ['themePage' => 'white'])
 
     {{-- main content --}}
     <div class="font-poppins mt-20 md:mt-28">
@@ -30,31 +22,33 @@
         <div class="max-w-screen-xl 3xl:max-w-screen-2xl mx-auto h-screen ">
             <div class="px-4 xl:px-0 pb-20">
                 {{-- code enter and profile --}}
-                <div class="flex flex-col md:grid md:grid-cols-12 justify-between gap-x-20">
+                <div class="flex flex-col md:flex-row justify-between gap-x-20">
                     {{-- text mau bermain game?  --}}
                     <div class="flex md:hidden">
                         <p class="z-10">Mau bermain game?</p>
                     </div>
                     {{-- kode game  --}}
-                    <div class="md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg col-span-7">
-                        <div class="bg-gray-input w-full md:w-5/6 p-4 rounded-sm">
-                            <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
+                    <div class="w-full md:w-4/6 md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg">
+                        <div class="bg-gray-input w-full md:w-5/6 px-4 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
+                            <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col">
                                 @csrf
-                                <input type="text" name="code"
-                                    class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                    placeholder="Masukan kode game...">
-                                <button type="submit" 
-                                    class="bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition">
-                                    Gabung
-                                </button>
+                                <div class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
+                                    <input type="text" name="code"
+                                        class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                        placeholder="Masukan kode game...">
+                                    <button type="submit" 
+                                        class="bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition">
+                                        Gabung
+                                    </button>
+                                </div>
+                                @error('code')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror 
                             </form>
-                            @error('code')
-                                <span class="text-red-400 text-sm">{{ $message }}</span>
-                            @enderror 
                         </div>
                     </div>
                     {{-- desktop  profile --}}
-                    <div class="shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
+                    <div class="w-full md:w-2/6 shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg">
                         <div class="flex flex-col items-center space-y-1">
                             @auth
                                 @if(!Auth::user()->avatar)
@@ -76,17 +70,17 @@
                                 @auth
                                     <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
-                                        <a href="{{  route('profile.detail-account') }}">Edit Profil</a>
+                                        <a href="{{  route('profile.detail-account') }}" class="hover:underline">Edit Profil</a>
                                         <span>&#8226</span>
-                                        <a href="{{  route('roomuser.getallplayedquiz') }}">Lihat Aktivitas</a>
+                                        <a href="{{  route('roomuser.getallplayedquiz') }}" class="hover:underline">Lihat Aktivitas</a>
                                     </div>
                                 @endauth
                                 @guest
                                     <p class="font-semibold text-lg">Kamu belum login!</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
-                                        <a href="{{ route('login') }}">Masuk</a>
+                                        <a href="{{ route('login') }}" class="hover:underline">Masuk</a>
                                         <span>&#8226</span>
-                                        <a href="{{ route('register') }}">Daftar</a>
+                                        <a href="{{ route('register') }}" class="hover:underline">Daftar</a>
                                     </div>
                                 @endguest
                             </div>
@@ -139,7 +133,25 @@
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
-                                    @foreach($quiz as $data)
+                                    @foreach($quiz as $data)    
+                                        {{-- red 0% akurasi --}}
+                                        <a class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
+                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                            </div>
+                                            <div class="flex flex-col justify-between h-2/5">
+                                                <div class="flex flex-col space-y-1 p-1">
+                                                    <h1 class="font-bold">Nama Quiz</h1>
+                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
+                                                </div>
+                                                @auth
+                                                    <div class="bg-red-redMain text-white rounded-lg mb-1">
+                                                        <span class="ml-4">0% akurasi</span> 
+                                                    </div>
+                                                @endauth
+                                            </div>
+                                        </a>
+                                        {{-- yellow 50% akurasi --}}
                                         <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
                                                 <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
@@ -147,22 +159,47 @@
                                             <div class="h-2/5 flex flex-col space-y-1 p-1">
                                                 <h1>{{ $data->title }}</h1>
                                                 <span class="text-sm text-gray-cardText">{{ $data->description }}</span>
+                                            <div class="flex flex-col justify-between h-2/5">
+                                                <div class="flex flex-col space-y-1 p-1">
+                                                    <h1 class="font-bold">Nama Quiz</h1>
+                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
+                                                </div>
+                                                @auth
+                                                    <div class="bg-yellow-yellowMain text-white rounded-lg mb-1">
+                                                        <span class="ml-4">50% akurasi</span> 
+                                                    </div>
+                                                @endauth
+                                            </div>
+                                        </div>
+                                        {{-- green 100% akurasi  --}}
+                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
+                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                            </div>
+                                            <div class="flex flex-col justify-between h-2/5">
+                                                <div class="flex flex-col space-y-1 p-1">
+                                                    <h1 class="font-bold">Nama Quiz</h1>
+                                                    <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
+                                                </div>
+                                                @auth
+                                                    <div class="bg-green-greenMain text-white rounded-lg mb-1">
+                                                        <span class="ml-4">100% akurasi</span> 
+                                                    </div>
+                                                @endauth
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->
-                                <div class="xnext"></div>
-                                <div class="xprev"></div>
-                            </div>
-                            <div class="swiper-button-prev">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-left'></i>
+                                <div class="swiper-button-prev">
+                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                        <i class='bx bx-chevron-left'></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="swiper-button-next">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-right'></i>
+                                <div class="swiper-button-next">
+                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                        <i class='bx bx-chevron-right'></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -174,14 +211,6 @@
 
     @section('script')
         <script>
-            $('.swiper-button-next').click(
-                function(e){
-                        $(this).parents('.swiper-container').find('.xnext').trigger('click');
-            });
-            $('.swiper-button-prev').click(
-                function(e){$(this).parents('.swiper-container').find('.xprev').trigger('click');
-            });
-            
             $( window ).on( "load", function() {
                 const swiper = new Swiper('.swiper', {
                     // Optional parameters
@@ -207,8 +236,8 @@
                         }
                     },
                     navigation: {
-                        nextEl: '.xnext',
-                        prevEl: '.xprev',
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
                     },
                 });
             });

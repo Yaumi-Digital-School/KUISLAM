@@ -14,6 +14,7 @@ use App\Http\Controllers\import\UserImportController;
 use App\Http\Controllers\import\QuestionImportController;
 use App\Http\Controllers\import\QuizImportController;
 use App\Http\Controllers\import\TopicImportController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
+
     
     /*
      *  Route untuk Admin 
@@ -90,6 +92,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/questions', [QuestionImportController::class, 'show'])->name('import.show.questions');
             Route::post('/questions', [QuestionImportController::class, 'store'])->name('import.store.questions');
         });
+    });
+    Route::get("/logout", function(){
+        Auth::logout();
+        return redirect()->route('index');
     });
 });
 
