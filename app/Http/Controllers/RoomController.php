@@ -40,7 +40,7 @@ class RoomController extends Controller
         $dataRoom = [
             'quiz_id' => Quiz::getQuizId($quizId)->id,
             'code' => $code,
-        ];        
+        ];
         $room = Room::create($dataRoom);
 
         $dataRoomUser = [
@@ -48,7 +48,7 @@ class RoomController extends Controller
             'room_id' => $room->id,
             'is_host' => 1,
             'is_active' => 1
-        ];        
+        ]; 
         RoomUser::create($dataRoomUser);
 
         return redirect()->route('room.waiting', $room->code);
@@ -67,7 +67,6 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $questionsId = Question::getRandomQuestion($quizId);
-        dd($quizId);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
@@ -97,7 +96,6 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $questionsId = Question::getRandomQuestion($quizId);
-        dd($quizId);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
@@ -134,9 +132,11 @@ class RoomController extends Controller
         $request->validate([
             'code' => ['required', 'integer', 'digits:6']
         ]);
+
         $room = Room::getRoomByCode($request->code);
+
         if(!$room){
-            return redirect()->back()->withErrors(['code' => 'Invalid code!']);
+            return back()->withErrors(['code' => 'Invalid code!']);
         }
 
         return redirect()->route('room.pre-waiting-player', $room->code);

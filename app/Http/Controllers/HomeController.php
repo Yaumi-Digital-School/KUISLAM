@@ -13,7 +13,9 @@ class HomeController extends Controller
     }
 
     public function index(){
-        return view('welcome');
+        $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title');
+
+        return view('welcome', compact('quizzes'));
     }
 
     public function discover(){

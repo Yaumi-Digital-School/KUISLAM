@@ -10,6 +10,11 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\RoomUserController;
 use App\Http\Controllers\LeaderboardController;
 
+use App\Http\Controllers\import\UserImportController;
+use App\Http\Controllers\import\QuestionImportController;
+use App\Http\Controllers\import\QuizImportController;
+use App\Http\Controllers\import\TopicImportController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,11 +42,7 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
     
-    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');
-    
-    Route::resource('/topics', TopicController::class);
-    
-    Route::resource('/quizzes', QuizController::class);   
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');  
     
     Route::prefix('/rooms')->group(function () {
         Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
@@ -68,6 +69,28 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
+    
+    /*
+     *  Route untuk Admin 
+     */ 
+    Route::prefix('/admin')->group(function () {
+        Route::resource('/topics', TopicController::class);
+        Route::resource('/quizzes', QuizController::class); 
+    
+        Route::prefix('/import')->group(function () {
+            Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
+            Route::post('/users', [UserImportController::class, 'store'])->name('import.store.users');
+    
+            Route::get('/topics', [TopicImportController::class, 'show'])->name('import.show.topics');
+            Route::post('/topics', [TopicImportController::class, 'store'])->name('import.store.topics');
+    
+            Route::get('/quizzes', [QuizImportController::class, 'show'])->name('import.show.quizzes');
+            Route::post('/quizzes', [QuizImportController::class, 'store'])->name('import.store.quizzes');
+    
+            Route::get('/questions', [QuestionImportController::class, 'show'])->name('import.show.questions');
+            Route::post('/questions', [QuestionImportController::class, 'store'])->name('import.store.questions');
+        });
+    });
 });
 
 // Hasil perubahan route

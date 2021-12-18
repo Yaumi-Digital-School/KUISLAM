@@ -57,9 +57,15 @@
                     <div class="shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-1">
                             @auth
-                                <div class="flex items-center h-10 w-10 ">
-                                    <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
-                                </div>
+                                @if(!Auth::user()->avatar)
+                                    <div class="flex items-center h-10 w-10 ">
+                                        <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                    </div>
+                                @else
+                                    <div class="flex items-center h-10 w-10 ">
+                                        <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                    </div>
+                                @endif
                             @endauth
                             @guest
                                 <div class="flex items-center h-10 w-10 ">
@@ -124,26 +130,26 @@
                 </div>
                 {{-- swiper --}}
                 <div class="mt-3 md:mt-10 flex flex-col space-y-3 md:space-y-6">
-                    @for ($i = 0; $i < 2; $i++)
+                    @foreach($quizzes as $topic_name => $quiz)
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
-                            <h1>Sejarah Nabi</h1>
+                            <h1>{{ $topic_name }}</h1>
                         </div>
                         <div class="md:mx-4 relative swiper-container">
                             <div class="swiper w-full h-64 md:h-72">
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
-                                    @for ($j = 0; $j < 8; $j++)
+                                    @foreach($quiz as $data)
                                         <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
                                                 <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
                                             </div>
                                             <div class="h-2/5 flex flex-col space-y-1 p-1">
-                                                <h1>Nama Quiz</h1>
-                                                <span class="text-sm text-gray-cardText">Deskripsi Quiz</span>
+                                                <h1>{{ $data->title }}</h1>
+                                                <span class="text-sm text-gray-cardText">{{ $data->description }}</span>
                                             </div>
                                         </div>
-                                    @endfor
+                                    @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->
                                 <div class="xnext"></div>
@@ -160,7 +166,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
             </div>
         </div>
