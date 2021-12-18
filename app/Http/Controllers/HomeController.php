@@ -17,9 +17,9 @@ class HomeController extends Controller
         $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title'); 
         if(Auth::check()){
             // ganti data nya ya kalo dia udah login
-            return view('welcome', ['quizzes' => $quizzes]);
+            return view('welcome', compact('quizzes'));
         }
-        return view('welcome', ['quizzes' => $quizzes]);
+        return view('welcome', compact('quizzes'));
     }
 
     public function discover(){

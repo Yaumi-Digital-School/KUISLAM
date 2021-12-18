@@ -22,7 +22,7 @@
     @endsection
     
     {{-- navbar  --}}
-    @include('layouts.navigation')
+    @include('layouts.navigation', ['themePage' => 'white'])
     {{-- main content  --}}
     <div class="bg-green-lightBg font-poppins mt-6">
         {{-- main container  --}}
@@ -53,7 +53,7 @@
             </form>
             <br>
             <br>
-            @if(!Auth::user()->google_id)
+            @if(!Auth::user()->google_id || !Auth::user()->facebook_id)
                 <form action="{{ route('profile.change-password') }}" method="POST" class="z-10">
                     @csrf
                     @method('PUT')

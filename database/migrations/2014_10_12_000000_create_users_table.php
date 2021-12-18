@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('username')->unique();
             $table->string('google_id')->nullable();
+            $table->string('facebook_id')->nullable();
             $table->string('password');
             $table->string('avatar')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');

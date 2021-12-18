@@ -9,13 +9,19 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\LoginController;
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])
                 ->name('auth.google');
 
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])
                 ->name('auth.googlecallback');
+
+Route::get('auth/facebook', [LoginController::class, 'redirectToFacebook'])
+                ->name('auth.facebook');
+
+Route::get('auth/facebook/callback', [LoginController::class, 'handleFacebookCallback'])
+                ->name('auth.facebookcallback');               
 
 Route::get('/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')

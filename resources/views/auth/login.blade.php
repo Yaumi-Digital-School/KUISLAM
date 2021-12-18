@@ -39,6 +39,11 @@
                                 <x-google-logo />
                                 <span class="ml-2 text-white text-md">Lanjutkan dengan Google</span>
                             </a>
+
+                            <a href="{{ route('auth.facebook') }}" class="flex justify-center items-center bg-blue-500 hover:bg-blue-600 w-5/6 mx-auto px-3 py-2 rounded-md transition">
+                                <x-google-logo />
+                                <span class="ml-2 text-white text-md">Lanjutkan dengan Facebook</span>
+                            </a>
                             <p class="text-center">atau</p>
                             <div class="flex flex-col space-y-2 w-5/6 mx-auto">
                                 <label for="email">Login Melalu Email</label>

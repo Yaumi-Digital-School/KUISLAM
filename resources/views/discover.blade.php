@@ -63,15 +63,17 @@
                                 <div class="swiper-wrapper">
                                 <!-- Slides -->
                                     @foreach($quiz as $data)
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
-                                            </div>
-                                            <div class="h-2/5 flex flex-col space-y-1 p-1">
+                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                        <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
+                                            <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                        </div>
+                                        <div class="h-2/5 flex flex-col space-y-1 p-1">
+                                            <a href="{{ route('room.pre-waiting-host', $data->id) }}">
                                                 <h1>{{ $data->title }}</h1>
                                                 <span class="text-sm text-gray-cardText">{{ $data->description }}</span>
-                                            </div>
+                                            </a>
                                         </div>
+                                    </div>
                                     @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->
