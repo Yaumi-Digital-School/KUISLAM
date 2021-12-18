@@ -8,6 +8,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomUserController;
 use App\Http\Controllers\TopicController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,6 +70,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profiles/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     Route::get('/activity/done', [RoomUserController::class, 'getAllPlayedQuiz'])->name('roomuser.getallplayedquiz');
+
+    Route::get("/logout", function(){
+        Auth::logout();
+        return redirect()->route('index');
+    });
 });
 
 // Hasil perubahan route
@@ -77,6 +83,5 @@ Route::get('/questions', [QuestionController::class, 'index'])->name('question.l
 Route::post('/questions', [QuestionController::class, 'create'])->name('question.create');
 Route::post('/questions/{id}/update', [QuestionController::class, 'update'])->name('question.update');
 Route::post('/questions/{id}/delete', [QuestionController::class, 'delete'])->name('question.delete');
-
 
 require __DIR__.'/auth.php';

@@ -22,7 +22,7 @@
     @endsection
     
     {{-- navbar  --}}
-    @include('layouts.navigation')
+    @include('layouts.navigation', ['themePage' => 'white'])
 
     {{-- main content --}}
     <div class="font-poppins mt-20 md:mt-28">

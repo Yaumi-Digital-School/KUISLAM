@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Quiz;
 use App\Models\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,12 @@ class HomeController extends Controller
     }
 
     public function index(){
-        return view('welcome');
+        $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title'); 
+        if(Auth::check()){
+            // ganti data nya ya kalo dia udah login
+            return view('welcome', ['quizzes' => $quizzes]);
+        }
+        return view('welcome', ['quizzes' => $quizzes]);
     }
 
     public function discover(){

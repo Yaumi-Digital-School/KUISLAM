@@ -2,9 +2,21 @@
 <div class="bg-white md:bg-green-nav fixed w-full h-16 top-0 z-20 font-poppins border-b-2 border-gray-nav md:border-none">
     <nav class="text-white flex justify-center md:justify-between items-center px-8 h-full" >
         <div class="flex items-center space-x-10">
-            <a href="{{ route("index") }}" >
-                <img src="{{ asset('./images/logo.png') }}" alt="logo">
-            </a>
+            @if ($themePage == "white")
+                <a href="{{ route("index") }}" class="block md:hidden">
+                    <img src="{{ asset('./images/logo_green.png') }}" alt="logo">
+                </a>
+                <a href="{{ route("index") }}" class="hidden md:block">
+                    <img src="{{ asset('./images/logo.png') }}" alt="logo">
+                </a>
+            @elseif($themePage == "green")
+                <a href="{{ route("index") }}" class="hidden md:block">
+                    <img src="{{ asset('./images/logo_green.png') }}" alt="logo">
+                </a>
+                <a href="{{ route("index") }}" class="block md:hidden">
+                    <img src="{{ asset('./images/logo.png') }}" alt="logo">
+                </a>
+            @endif
             <div class="hidden md:flex space-x-8 font-medium">
                 <a class="py-0.5" href="{{ route("index") }}" @if (request()->routeIs("index")) style="border-bottom: 3px solid white" @endif>Home</a>
                 <a class="py-0.5 " href="{{ route("discover") }}" @if (request()->routeIs("discover")) style="border-bottom: 3px solid white" @endif>Discover</a>
