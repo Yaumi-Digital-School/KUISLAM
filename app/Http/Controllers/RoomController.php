@@ -24,7 +24,7 @@ class RoomController extends Controller
 
         $quiz = Quiz::getQuizId($quizId);
 
-        return view('host.waiting-room', compact('quiz'));
+        return view('host.prewaiting-room', compact('quiz'));
     }
 
     public function makeRoom($quizId){
@@ -151,7 +151,7 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         // return 'Ini page wating player';
-        return view('user.waiting-room', compact('room'));
+        return view('user.prewaiting-room', compact('room'));
     }
 
     public function enterRoom($code){

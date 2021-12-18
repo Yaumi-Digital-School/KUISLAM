@@ -9,28 +9,35 @@
         </div>
     </div>
     {{-- quiz card --}}
-    <div class="font-poppins mt-16 ">
-        <div class="flex flex-col mx-auto justify-center items-center  pt-3 max-w-md">
-            <div class="sm:max-w-sm z-10 w-3/4">
+    <div class="font-poppins mt-6 mb-10 ">
+        <div class="flex flex-col mx-auto justify-center items-center  pt-3 max-w-md ">
+            <div class="sm:max-w-lg z-10 mx-8 shadow-profile">
                 <div class="bg-green-nav px-8 py-8 rounded-t-lg">
                 {{-- generate quiz title --}}
-                    <h1 class="text-center text-2xl font-bold text-white">{{ $quiz->title }}</h1>
+                    <h1 class="text-center text-2xl font-bold text-white">Sejarah Nabi Adam AS</h1>
                 </div>
-                <div class="bg-white px-4 rounded-b-lg">
-                    <h1 class="text-xl text-center py-4">Peraturan Permainan</h1>
-                    <hr class="border-green-nav">
-                    <ul class="text-left flex flex-col space-y-2 py-4 px-2">
-                        <li>1. Pilih satu jawaban di setiap pertanyaan</li>
-                        <li>2. Peserta dengan jawaban benar akan mendapat poin</li>
-                        <li>3. Peserta dengan jawaban tercepat akan mendapatkan poin yang lebih banyak</li>
-                        <li>4. Meski jawaban salah, peserta dapat lanjut bermain ke pertanyaan berikutnya</li>
-                        <li>5. Di akhir sesi akan ditampilkan Leaderboard akumulasi poin jawaban benar</li>
-                    </ul>
+                <div class="bg-white px-6 py-6 rounded-b-lg">
+                    <h1 class="text-xl text-green-nav pb-1 font-bold ">Room Code</h1>
+                    <div class="border border-green-nav text-center py-2">
+                        <h1 class="text-3xl">12323</h1>
+                    </div>
+                    <h1 class="text-xl text-green-nav pt-6 pb-1 font-bold">Share Link</h1>
+                    <div class="border border-green-nav text-center py-2 flex justify-evenly items-center px-1">
+                        <h1 class="text-3xl ">quiz.com/12323</h1>
+                        <a href="#" class=""><img src="{{asset('images/copy_vector.svg')}}" alt=""></a>
+                    </div>
+                    {{-- button --}}
+                    <div class="flex justify-around mt-10 mb-2">
+                        <a href="#" class="bg-green-nav text-white text-2xl px-7 py-1 rounded-sm font-semibold">MULAI</a>
+                        <a href="#" class="border border-green-nav text-green-nav px-7 py-1 text-2xl rounded-sm font-semibold">BATAL</a>
+                    </div>
                 </div>
             </div>
-            {{-- button --}}
-            <a href="{{ route('room.make', $quiz->id) }}" class="bg-green-nav my-8 rounded-md py-1 px-8 text-white font-bold text-2xl cursor-pointer hover:bg-green-darkBg z-10">CREATE ROOM</a>
         </div>
+    </div>
+    {{-- user card --}}
+    <div class="w-11/12 mx-auto bg-white">
+    <h1 class="z-10">tes</h1>
     </div>
     @section('script')
         <script>

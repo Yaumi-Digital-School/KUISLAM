@@ -39,6 +39,13 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/host/waiting-room', function () {
         return view('host/waiting-room');
     });
+    Route::get('/user/prewaiting-room', function () {
+        return view('user/prewaiting-room');
+    });
+
+    Route::get('/host/prewaiting-room', function () {
+        return view('host/prewaiting-room');
+    });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
