@@ -10,14 +10,6 @@
             .swiper-rtl .swiper-button-next:after {
                 content: '';
             }
-            .swiper-button-next{
-                position: absolute;
-                right: -4%;
-            }
-            .swiper-button-prev{
-                position: absolute;
-                left: -4%;
-            }
         </style>
     @endsection
     
@@ -146,17 +138,15 @@
                                     @endfor
                                 </div>
                                 <!-- If we need navigation buttons -->
-                                <div class="xnext"></div>
-                                <div class="xprev"></div>
-                            </div>
-                            <div class="swiper-button-prev">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-left'></i>
+                                <div class="swiper-button-prev">
+                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                        <i class='bx bx-chevron-left'></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="swiper-button-next">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-right'></i>
+                                <div class="swiper-button-next">
+                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                        <i class='bx bx-chevron-right'></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -168,14 +158,6 @@
 
     @section('script')
         <script>
-            $('.swiper-button-next').click(
-                function(e){
-                        $(this).parents('.swiper-container').find('.xnext').trigger('click');
-            });
-            $('.swiper-button-prev').click(
-                function(e){$(this).parents('.swiper-container').find('.xprev').trigger('click');
-            });
-            
             $( window ).on( "load", function() {
                 const swiper = new Swiper('.swiper', {
                     // Optional parameters
@@ -201,8 +183,8 @@
                         }
                     },
                     navigation: {
-                        nextEl: '.xnext',
-                        prevEl: '.xprev',
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
                     },
                 });
             });
