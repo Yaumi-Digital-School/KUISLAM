@@ -25,19 +25,18 @@
             {{-- search and topic list --}}
             <div class="z-10 relative flex flex-col md:flex-row justify-between space-y-4 mb-8 bg-gray-lightBg md:shadow-profile rounded-lg md:px-8 md:pt-4 lg:pt-2 md:h-24">
                {{-- search quiz based on topic  --}}
-                <form action="{{ route('room.join-code') }}" method="POST" class="z-10 md:w-2/5 flex flex-col md:flex-row space-y-4">
-                    @csrf
-                    {{-- input code game --}}
+                <form action="{{ route('discover') }}" method="GET" class="z-10 md:w-2/5 flex flex-col md:flex-row space-y-4">
+                    {{-- input title quiz --}}
                     <div class="relative w-full">
                         <span class="absolute top-1.5 left-0  flex items-center pl-2">
                             <button type="submit" class="p-1 focus:outline-none focus:shadow-outline text-gray-400">
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-5 h-5 "><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </button>
                         </span>
-                        <input type="text" name="code"
+                        <input type="text" name="search"
                             class="rounded-md h-10 lg:h-12 w-full pl-10 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="Masukan kode game...">
-                        @error('code')
+                            placeholder="Masukan Judul Quiz...">
+                        @error('title')
                             <span class="text-red-400 text-sm">{{ $message }}</span>
                         @enderror 
                     </div>
@@ -50,11 +49,11 @@
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Slides -->
-                                @for ($i = 0; $i < 4; $i++)
-                                    <a class="swiper-slide flex flex-col border-2 border-red-redMain text-red-redMain font-semibold justify-center items-center rounded">
-                                        Sejarah Nabi
+                                @foreach($topics as $topic)
+                                    <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="swiper-slide flex flex-col border-2 border-red-redMain text-red-redMain font-semibold justify-center items-center rounded">
+                                        {{ $topic->title }}
                                     </a>
-                                @endfor
+                                @endforeach
                             </div>
                         </div>
                     </div>

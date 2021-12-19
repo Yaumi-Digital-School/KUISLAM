@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TopicFactory extends Factory
@@ -13,8 +14,10 @@ class TopicFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->words(3, true);
         return [
-            'title' => $this->faker->words(3, true),
+            'title' => $title,
+            'slug' => Str::slug($title, '-'),
         ];
     }
 }
