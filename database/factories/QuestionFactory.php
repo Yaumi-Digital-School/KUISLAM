@@ -14,7 +14,7 @@ class QuestionFactory extends Factory
     public function definition()
     {
         return [
-            'quiz_id' => rand(1, 10),
+            'quiz_id' => rand(1, 3),
             'question' => $this->faker->sentence(15),
             'option_1' => $this->faker->sentence(5),
             'option_2' => $this->faker->sentence(5),

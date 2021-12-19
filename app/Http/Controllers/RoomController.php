@@ -67,6 +67,7 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $questionsId = Question::getRandomQuestion($quizId);
+        dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
@@ -118,7 +119,7 @@ class RoomController extends Controller
         */
 
         $room = Room::getRoomByCode($code);
-
+        
         return redirect()->route('room.pre-waiting-player', $room->code);
     }
 
@@ -187,6 +188,8 @@ class RoomController extends Controller
 
         $roomUser = RoomUser::getAllWaitingPlayer($code);
         $room = Room::getRoomByCode($code);
+        // dd($room);
+        
         if($host){
             return view('host.waiting-room', compact('roomUser', 'room'));
         }elseif ($player){
