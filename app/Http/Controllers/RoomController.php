@@ -187,7 +187,7 @@ class RoomController extends Controller
             $roomUser = RoomUser::getAllWaitingPlayer($code);
             $room = Room::getRoomByCode($code);
             
-            return view('v_waitingroom', compact('roomUser', 'room'));
+            return view('user.waiting-room', compact('roomUser', 'room'));
         }else{
             return redirect()->route('dashboard');
         }        
