@@ -9,17 +9,17 @@
         </div>
     </div>
     {{-- quiz card --}}
-    <div class="font-poppins mt-16 ">
+    <div class="font-poppins mt-6 mb-10 ">
         <div class="flex flex-col mx-auto justify-center items-center  pt-3 max-w-md">
-            <div class="sm:max-w-sm z-10 w-3/4">
+            <div class="sm:max-w-lg z-10 mx-8">
                 <div class="bg-green-nav px-8 py-8 rounded-t-lg">
                 {{-- generate quiz title --}}
                     <h1 class="text-center text-2xl font-bold text-white">{{ $quiz->title }}</h1>
                 </div>
-                <div class="bg-white px-4 rounded-b-lg">
+                <div class="bg-white px-2 rounded-b-lg">
                     <h1 class="text-xl text-center py-4">Peraturan Permainan</h1>
                     <hr class="border-green-nav">
-                    <ul class="text-left flex flex-col space-y-2 py-4 px-2">
+                    <ul class="text-left flex flex-col space-y-2 py-4 px-1">
                         <li>1. Pilih satu jawaban di setiap pertanyaan</li>
                         <li>2. Peserta dengan jawaban benar akan mendapat poin</li>
                         <li>3. Peserta dengan jawaban tercepat akan mendapatkan poin yang lebih banyak</li>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             {{-- button --}}
-            <a href="{{ route('room.make', $quiz->slug) }}" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center">CREATE ROOM</a>
+            <a href="{{ route('room.make', $quiz->slug) }}" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center shadow-profile">BUAT RUANGAN</a>
         </div>
     </div>
     @section('script')
