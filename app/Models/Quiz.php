@@ -34,8 +34,21 @@ class Quiz extends Model
         return $this->hasMany(QuizUser::class);
     }
 
+    public static function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
+
     public static function getQuizId($quizId){
         return Quiz::where('id', $quizId)->first();
+    }
+
+    public static function getQuizSlug($slug){
+        return Quiz::where('slug', $slug)->first();
     }
     
     public static function getAllQuiz(){
