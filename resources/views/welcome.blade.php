@@ -146,7 +146,7 @@
                                             $description .= " ...";
                                         @endphp    
                                         {{-- red 0% akurasi --}}
-                                        <a class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                        <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
                                                 <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
                                             </div>
