@@ -31,7 +31,7 @@
                 </div>
             </div>
             {{-- button --}}
-            <a href="#" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center  shadow-profile">IKUT</a>
+            <a href="{{ route('room.waiting', $room->code) }}" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center  shadow-profile">IKUT</a>
         </div>
     </div>
 

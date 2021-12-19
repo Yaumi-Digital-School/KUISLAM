@@ -182,15 +182,16 @@ class RoomController extends Controller
         /* Waiting room - peserta */
 
         $isInRoom = RoomUser::isInRoom($code);
-        
-        if($isInRoom){
-            $roomUser = RoomUser::getAllWaitingPlayer($code);
-            $room = Room::getRoomByCode($code);
-            
+        $host = RoomUser::isHost($code);
+        $player = RoomUser::isPlayer($code);
+
+        $roomUser = RoomUser::getAllWaitingPlayer($code);
+        $room = Room::getRoomByCode($code);
+        if($host){
+            return view('host.waiting-room', compact('roomUser', 'room'));
+        }elseif ($player){
             return view('user.waiting-room', compact('roomUser', 'room'));
-        }else{
-            return redirect()->route('index');
-        }        
+        }       
     }
 
     public function exitRoom($code){
