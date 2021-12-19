@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('/rooms')->group(function () {
         Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
         
-        Route::prefix('/{quiz}')->group(function () {
+        Route::prefix('/{quiz:slug}')->group(function () {
             Route::get('/host/prewaiting', [RoomController::class, 'preWaitingHost'])->name('room.pre-waiting-host');
             Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
         });

@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="flex flex-col justify-between h-2/5">
                                         <div class="flex flex-col space-y-1 p-1">
-                                            <a href="{{ route('room.pre-waiting-host', $data->id) }}" class="font-bold">{{ $data->title }}</a>
+                                            <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">{{ $data->title }}</a>
                                             <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                         </div>
                                         @auth

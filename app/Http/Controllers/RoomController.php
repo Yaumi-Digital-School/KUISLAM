@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
-    public function preWaitingHost($quizId){
+    public function preWaitingHost($slug){
         /* 
             Method ini untuk membuat Room.
             Pre-Waiting room - peserta calon moderator.
@@ -22,12 +22,12 @@ class RoomController extends Controller
             user menginput data kode room pada field yang tersedia.
         */
 
-        $quiz = Quiz::getQuizId($quizId);
+        $quiz = Quiz::getQuizSlug($slug);
 
-        return view('host.waiting-room', compact('quiz'));
+        return view('host.prewaiting-room', compact('quiz'));
     }
 
-    public function makeRoom($quizId){
+    public function makeRoom($slug){
         /* 
             Method ini untuk membuat Room
             Pre-Waiting room - peserta calon moderator 
@@ -38,7 +38,7 @@ class RoomController extends Controller
         $code = Room::getCode();
 
         $dataRoom = [
-            'quiz_id' => Quiz::getQuizId($quizId)->id,
+            'quiz_id' => Quiz::getQuizSlug($slug)->id,
             'code' => $code,
         ];
         $room = Room::create($dataRoom);
@@ -151,7 +151,7 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         // return 'Ini page wating player';
-        return view('user.waiting-room', compact('room'));
+        return view('user.prewaiting-room', compact('room'));
     }
 
     public function enterRoom($code){
@@ -189,7 +189,7 @@ class RoomController extends Controller
             
             return view('v_waitingroom', compact('roomUser', 'room'));
         }else{
-            return redirect()->route('dashboard');
+            return redirect()->route('index');
         }        
     }
 
