@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserJoinedRoom;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
@@ -171,7 +172,9 @@ class RoomController extends Controller
                 'is_active' => 1
             ];
             RoomUser::create($dataRoomUser);
-    
+            
+            UserJoinedRoom::dispatch('user has joined', $room, Auth::user()->name);
+
             return redirect()->route('room.waiting', $room->code);      
         }else{
             return redirect()->route('dashboard');

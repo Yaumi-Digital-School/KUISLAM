@@ -43,18 +43,36 @@
         </div>
     </div>
     {{-- user card container--}}
-    <div class="w-11/12 mx-auto flex justify-between flex-wrap z-10">
+    <div id="card-user-container" class="w-11/12 mx-auto flex justify-between flex-wrap z-10">
         {{-- user card --}}
         @foreach($roomUser as $data)
             <div class="bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto">
-                <div  class="flex items-center h-16 w-16 mr-2">
+                <div class="flex items-center h-16 w-16 mr-2">
                     <img src="{{asset('images/default_profpic.png')}}" class="rounded-full">
                 </div>
-                    <h1 class="text-green-nav text-xl font-bold">{{ $data->user->name }}</h1>
+                <h1 class="text-green-nav text-xl font-bold">{{ $data->user->name }}</h1>
             </div>      
         @endforeach
     </div>
     @section('script')
+        <script src="/js/app.js"></script>
+        <script>
+            const room_id = "{{$room->id}}";
+            window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
+                $( document ).ready(function(){
+                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto");                    
+                    $newUserImageDiv = $("<div></div>").addClass("flex items-center h-16 w-16 mr-2");
+                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full");
+                    $newUserName = $("<div></div>").addClass("text-green-nav text-xl font-bold").html(data.user_name);
+
+                    $newUserImageDiv.append($newUserImage);
+                    $newUserDiv.append($newUserImageDiv);
+                    $newUserDiv.append($newUserName);
+
+                    $("#card-user-container").prepend($newUserDiv);
+                });
+            });
+        </script>
         <script>
             const body = document.documentElement;
             const btn_fullscreen = document.getElementById('fullscreen');
