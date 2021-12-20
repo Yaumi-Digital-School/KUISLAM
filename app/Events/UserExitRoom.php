@@ -16,18 +16,18 @@ class UserExitRoom implements shouldBroadcast
 
     public $message;
     public $room;
-    public $user_name;
+    public $user_data;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message, $room, $user_name)
+    public function __construct($message, $room, $user_data)
     {
         $this->message = $message;
         $this->room = $room;
-        $this->user_name = $user_name;
+        $this->user_data = $user_data;
     }
 
     /**

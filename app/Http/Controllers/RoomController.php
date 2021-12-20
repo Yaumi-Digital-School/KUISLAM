@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserExitRoom;
 use App\Events\UserJoinedRoom;
 use App\Models\Quiz;
 use App\Models\Room;
@@ -173,7 +174,7 @@ class RoomController extends Controller
             ];
             RoomUser::create($dataRoomUser);
             
-            UserJoinedRoom::dispatch('user has joined', $room, Auth::user()->name);
+            UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
 
             return redirect()->route('room.waiting', $room->code);      
         }else{
@@ -220,9 +221,9 @@ class RoomController extends Controller
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
-            UserJoinedRoom::dispatch('user has exit', $room, Auth::user()->name);
+            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
             RoomUser::deleteRoomUserByUserId($code);
-            
+
             return redirect()->route('index');
         }
     }
