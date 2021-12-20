@@ -74,6 +74,18 @@
             });
         </script>
         <script>
+            const room_id = "{{$room->id}}";
+            window.Echo.channel(`exit-room-${room_id}`).listen("UserExitRoom", (data) => {
+                $( document ).ready(function(){
+                    // Hapus card
+                    $newUserDiv = $("#bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto").remove();                    
+                    $newUserImageDiv = $("#flex items-center h-16 w-16 mr-2").remove();
+                    $newUserImage = $("#rounded-full").remove();
+                    $newUserName = $("$text-green-nav text-xl font-bold").remove();
+                });
+            });
+        </script>
+        <script>
             const body = document.documentElement;
             const btn_fullscreen = document.getElementById('fullscreen');
             

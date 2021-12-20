@@ -26,8 +26,8 @@ class HomeController extends Controller
         $search = Request()->query('search');
         $selectedTopic = Request()->query('topic');
 
-        $topic = Topic::where('slug', $selectedTopic)->limit(3)->first();
-        $topics = Topic::all();
+        $topic = Topic::where('title', $selectedTopic)->first();
+        $topics = Topic::limit(4)->get();
         
         if($search){
             $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
