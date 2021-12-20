@@ -207,12 +207,12 @@ class RoomController extends Controller
             RoomQuestion::deleteRoomQuestion($code);
             Room::deleteRoomByCode($code);
 
-            return redirect()->route('dashboard');
+            return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
             RoomUser::deleteRoomUserByUserId();
             
-            return redirect()->route('dashboard');
+            return redirect()->route('index');
         }
     }
 }

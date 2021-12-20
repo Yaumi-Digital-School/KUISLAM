@@ -85,11 +85,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('/admin')->group(function () {
         Route::resource('/topics', TopicController::class);
         Route::resource('/quizzes', QuizController::class); 
+        Route::resource('/questions', QuestionController::class);
     
         Route::prefix('/import')->group(function () {
             Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
             Route::post('/users', [UserImportController::class, 'store'])->name('import.store.users');
-    
+            Route::get('/{user}/role/change', [UserImportController::class, 'change'])->name('import.change.users');
+
             Route::get('/topics', [TopicImportController::class, 'show'])->name('import.show.topics');
             Route::post('/topics', [TopicImportController::class, 'store'])->name('import.store.topics');
     
@@ -100,17 +102,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/questions', [QuestionImportController::class, 'store'])->name('import.store.questions');
         });
     });
-    Route::get("/logout", function(){
+    
+    Route::get('/logout', function(){
         Auth::logout();
         return redirect()->route('index');
     });
 });
 
-// Hasil perubahan route
-
-Route::get('/questions', [QuestionController::class, 'index'])->name('question.list');
-Route::post('/questions', [QuestionController::class, 'create'])->name('question.create');
-Route::post('/questions/{id}/update', [QuestionController::class, 'update'])->name('question.update');
-Route::post('/questions/{id}/delete', [QuestionController::class, 'delete'])->name('question.delete');
 
 require __DIR__.'/auth.php';

@@ -146,13 +146,13 @@
                                             $description .= " ...";
                                         @endphp    
                                         {{-- red 0% akurasi --}}
-                                        <a class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
                                                 <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <h1 class="font-bold">{{ $data->title }}</h1>
+                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">{{ $data->title }}</a>
                                                     <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                                 </div>
                                                 @auth
@@ -161,7 +161,7 @@
                                                     </div>
                                                 @endauth
                                             </div>
-                                        </a>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->

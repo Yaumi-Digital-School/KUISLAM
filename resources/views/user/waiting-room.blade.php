@@ -11,7 +11,7 @@
         </div>
         <div class="bg-white w-20 rounded flex px-2 items-center justify-between z-10">
             {{-- Number of player --}}
-            <h1 class="text-2xl font-bold text-green-nav">10</h1>
+            <h1 class="text-2xl font-bold text-green-nav">{{ $roomUser->count() }}</h1>
             <img src="{{asset('images/player_icon.svg')}}">
         </div>
     </div>

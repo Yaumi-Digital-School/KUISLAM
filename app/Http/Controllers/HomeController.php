@@ -26,7 +26,7 @@ class HomeController extends Controller
         $search = Request()->query('search');
         $selectedTopic = Request()->query('topic');
 
-        $topic = Topic::where('slug', $selectedTopic)->first();
+        $topic = Topic::where('slug', $selectedTopic)->limit(3)->first();
         $topics = Topic::all();
         
         if($search){

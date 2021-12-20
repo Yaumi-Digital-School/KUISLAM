@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TopicRequest;
 use App\Models\Topic;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\TopicRequest;
 
 class TopicController extends Controller
 {    
@@ -16,9 +17,8 @@ class TopicController extends Controller
     public function index(Topic $topic){
         // route : topics (GET)
         // route name : topics.index
-        $topic = Topic::getAllTopic();
-        // return view('v_topics', compact('topic'));
-        return '<h1> ini halaman untuk list topic</h1>';
+        $topics = Topic::latest()->paginate(10);
+        return view('admin.import.topics.topics', compact('topics'));
     }
 
     /**
@@ -29,7 +29,7 @@ class TopicController extends Controller
     public function create(){
         // route : topics/create (GET)
         // route name : topics.create
-        return '<h1> ini halaman berisi FORM untuk CREATE topic</h1>';
+        return view('admin.import.topics.topics-create');;
     }
 
     /**
@@ -40,11 +40,17 @@ class TopicController extends Controller
      */
     public function store(TopicRequest $request){
         // route : topics (POST)
-        // route name : topics.create
+        // route name : topics.store
+
+        $title =  $request->title;
+
+        dd($title);
         $data = [
-            'title' => $request->title,
+            'title' => $title,
+            'slug' => Str::slug($title, '-'),
         ];
         Topic::create($data);
+
         return redirect()->route('topics.index');
     }
 
