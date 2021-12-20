@@ -2,21 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Models\Question;
 
 class QuestionController extends Controller
 {
-    public function index(){
-        // Method ini benar, bisa juga gini :
-        //Question::get();
-        // method get() dan all() akan mengirim collection data, artinya ada lebih dari 1 row data bisa 2 row, 3 row dst....
-        return Question::all();
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        // route : questions (GET)
+        // route name : questions.index
+        $questions = Question::getAllQuestion();
+        // return view('v_questions', compact('questions'));
     }
 
-    public function create(request $request){
-        // ini ada script yang lebih mudah
-        $question = [
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        // route : questions/create (GET)
+        // route name : questions.create
+        
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // route : questions (POST)
+        // route name : questions.create
+        $dataQuestion = [
             'question' => $request->question,
             'image' => $request->image,
             'option_1' => $request->option_1,
@@ -26,32 +52,47 @@ class QuestionController extends Controller
             'answer' => $request->answer,
             'timer' => $request->timer
         ];
-        Question::create($question);
-
-        // di php array di atas disebut array associative
-
-        // biasanya kalau abis create data kita redirect ke halaman tertentu
-        // scriptnya gini : return redirect->route('nama.route');
-
-        // $question = new Question;
-        // $question->question =$request->question;
-        // $question->image = $request->image;
-        // $question->option1 = $request->option1;
-        // $question->option2 = $request->option2;
-        // $question->option3 = $request->option3;
-        // $question->option4 = $request->option4;
-
-        // $question->timer = $request->timer;
-        // $question->save();
-
-        //return redirect->route('question');
-        return redirect()->route('dashboard');
-
+        Question::create($dataQuestion);
+        return redirect()->route('questions.index');
     }
 
-    public function update(request $request, $id){
-        // update juga sama dengan create
-        $question = [
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        // route : questions/{question} (GET)
+        // route name : questions.show
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        // route : questions/{question}/edit (GET)
+        // route name : questions.edit
+        return '<h1> ini halaman berisi FORM untuk EDIT question dengan id = ' . $id . '</h1>';
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        // route : questions/{question} (PUT)
+        // route name : questions.update
+        $dataQuestion = [
             'question' => $request->question,
             'image' => $request->image,
             'option_1' => $request->option_1,
@@ -61,33 +102,21 @@ class QuestionController extends Controller
             'answer' => $request->answer,
             'timer' => $request->timer
         ];
-
-        Question::where('id', $id)->update($question);
-        // itu cara bacanya, update data dari tabel question ketika id = $id
-
-        // biasanya kalau abis update data kita redirect ke halaman tertentu juga
-        // scriptnya gini : return redirect->route('nama.route');
-
-        // $question = Question::find($id);
-        // $question->nama = $request->$question;
-        // $question->image = $request->image;
-        // $question->option1 = $request->option1;
-        // $question->option2 = $request->option2;
-        // $question->option3 = $request->option3;
-        // $question->option4 = $request->option4;
-
-        // $question->timer = $request->timer;
-        // $question->save();
-
-        return redirect()->route('dashboard');
+        Question::updateQuestion($id, $dataQuestion);
+        return redirect()->route('questions.index');
     }
 
-    public function delete($id){
-        // ini juga bisa scriptnya cuma ada yang lebih mudah
-        Question::where('id', $id)->delete();
-        return redirect()->route('dashboard');
-
-        // $question = Question::find($id);
-        // $question->delete();
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        // route : questions/{question} (DELETE)
+        // route name : questions.destroy
+        Question::deleteQuestion($id);
+        return redirect()->route('questions.index');
     }
 }

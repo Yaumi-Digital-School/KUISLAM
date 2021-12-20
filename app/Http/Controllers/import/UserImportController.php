@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserImportController extends Controller
 {
     public function show(){
-        $users = User::latest()->paginate(10);
+        $users = User::where('role', 'user')->latest()->paginate(10);
         return view('admin.import.users.users', compact('users'));
     }
     
@@ -21,5 +21,14 @@ class UserImportController extends Controller
         Excel::import(new UsersImport, $file);
 
         return back()->with('success', 'Berhasil!');
+    }
+
+    public function change($userId){ 
+        $dataUser = [
+            'role' => 'admin',
+        ];
+        User::where('id', $userId)->update($dataUser);
+
+        return redirect()->route('import.show.users')->with('success', 'Berhasil!');
     }
 }

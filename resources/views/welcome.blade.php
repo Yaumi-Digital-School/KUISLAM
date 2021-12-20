@@ -152,7 +152,7 @@
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <h1 class="font-bold">{{ $data->title }}</h1>
+                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">{{ $data->title }}</a>
                                                     <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                                 </div>
                                                 @auth
@@ -161,7 +161,7 @@
                                                     </div>
                                                 @endauth
                                             </div>
-                                        </a>
+                                        </div>
                                     @endforeach
                                 </div>
                                 <!-- If we need navigation buttons -->

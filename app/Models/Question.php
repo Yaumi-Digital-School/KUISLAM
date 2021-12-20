@@ -37,4 +37,20 @@ class Question extends Model
         shuffle($numbers);
         return array_slice($numbers, 0, 10);
     }
+
+    public static function getAllQuestion(){
+        return Question::all()->sortBy('title');
+    }
+
+    public static function getOneQuestion($id){
+        return Question::where('id', $id)->first();
+    }
+
+    public static function updateQuestion($id, $data){
+        return Question::where('id', $id)->update($data);
+    }
+
+    public static function deleteQuestion($id){
+        return Question::where('id', $id)->delete();
+    }
 }

@@ -2,7 +2,7 @@
     {{-- button icon --}}
     <div class="flex justify-start mt-10 ml-8">
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">
-            <a href="{{ route('dashboard') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
+            <a href="{{ route('index') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
         </div>
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
             <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>

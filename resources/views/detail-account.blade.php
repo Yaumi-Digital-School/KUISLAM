@@ -53,7 +53,7 @@
             </form>
             <br>
             <br>
-            @if(!Auth::user()->google_id || !Auth::user()->facebook_id)
+            @if(Auth::user()->google_id == NULL|| !Auth::user()->facebook_id == NULL)
                 <form action="{{ route('profile.change-password') }}" method="POST" class="z-10">
                     @csrf
                     @method('PUT')
