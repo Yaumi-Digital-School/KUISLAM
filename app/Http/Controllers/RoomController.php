@@ -209,6 +209,7 @@ class RoomController extends Controller
     public function exitRoom($code){
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
+        $room = Room::getRoomByCode($code);
 
         if($host){
             /* Method ini dipanggil ketika room Master / moderator keluar */
@@ -219,6 +220,7 @@ class RoomController extends Controller
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
+            UserJoinedRoom::dispatch('user has exit', $room, Auth::user()->name);
             RoomUser::deleteRoomUserByUserId($code);
             
             return redirect()->route('index');

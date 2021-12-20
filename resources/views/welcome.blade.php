@@ -141,19 +141,21 @@
                                     @foreach($quiz as $data)
                                         @php
                                             $description = $data->description;
-                                            if(strlen($description) > 30)
-                                                $description = substr($description, 0, 30);
+                                            if(strlen($description) > 60)
+                                                $description = substr($description, 0, 60);
                                             $description .= " ...";
                                         @endphp    
                                         {{-- red 0% akurasi --}}
-                                        <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
                                             <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
                                                 <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">{{ $data->title }}</a>
-                                                    <span class="text-sm text-gray-cardText">{{ $description }}</span>
+                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">
+                                                        <h3 class="text-sm text-black-cardText">{{ $data->title }}</h3>
+                                                        <span class="text-sm text-gray-cardText">{{ $description }}</span>
+                                                    </a>
                                                 </div>
                                                 @auth
                                                     <div class="bg-red-redMain text-white rounded-lg mb-1">
