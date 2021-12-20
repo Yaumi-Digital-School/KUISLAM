@@ -188,8 +188,14 @@ class RoomController extends Controller
 
         $roomUser = RoomUser::getAllWaitingPlayer($code);
         $room = Room::getRoomByCode($code);
-        // dd($room);
         
+        /* 
+            Yang tidak terdaftar dalam suatu room tidak bisa masuk
+        */
+        if(!$isInRoom){
+            return redirect()->route('index');     
+        }
+
         if($host){
             return view('host.waiting-room', compact('roomUser', 'room'));
         }elseif ($player){
@@ -210,7 +216,7 @@ class RoomController extends Controller
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
-            RoomUser::deleteRoomUserByUserId();
+            RoomUser::deleteRoomUserByUserId($code);
             
             return redirect()->route('index');
         }

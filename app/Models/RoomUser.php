@@ -25,6 +25,7 @@ class RoomUser extends Model
 
     public static function isInRoom($code){
         $room = Room::getRoomByCode($code);
+        // dd($room);  
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_active', true)->first();
     }
 
@@ -38,8 +39,8 @@ class RoomUser extends Model
         return RoomUser::where('room_id', $room->id)->delete();
     }
 
-    public static function deleteRoomUserByUserId(){
-        $room = Room::getRoomById(Auth::user()->id);
+    public static function deleteRoomUserByUserId($code){
+        $room = Room::getRoomByCode($code);
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->delete();
     }
 
@@ -50,6 +51,6 @@ class RoomUser extends Model
 
     public static function isPlayer($code){
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('is_active', 1)->get();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('is_active', 1)->first();
     }
 }

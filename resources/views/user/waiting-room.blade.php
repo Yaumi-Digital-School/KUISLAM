@@ -3,7 +3,7 @@
     <div class="flex justify-between mt-10 mx-8">
         <div class="flex justify-start">
             <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">
-                <a href="{{ route('index') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
+                <a href="{{ route('room.exit', $room->code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
             </div>
             <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
                 <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
