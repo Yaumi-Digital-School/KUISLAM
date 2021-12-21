@@ -186,19 +186,27 @@ class RoomController extends Controller
         /* Method ini dipanggil ketika Room berhasil dibuat */
         /* Waiting room - peserta */
 
+        /* 
+            Kalau data Room tidak ada akan redirect ke home
+        */
+        $room = Room::getRoomByCode($code);
+        if(!$room){
+            return redirect()->route('index');     
+        }
+        
+        /* 
+            Yang tidak terdaftar dalam suatu room tidak bisa masuk
+        */
         $isInRoom = RoomUser::isInRoom($code);
+        if(!$isInRoom){
+            return redirect()->route('index');     
+        }
+
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
 
         $roomUser = RoomUser::getAllWaitingPlayer($code);
         $room = Room::getRoomByCode($code);
-        
-        /* 
-            Yang tidak terdaftar dalam suatu room tidak bisa masuk
-        */
-        if(!$isInRoom){
-            return redirect()->route('index');     
-        }
 
         if($host){
             return view('host.waiting-room', compact('roomUser', 'room'));
