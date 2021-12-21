@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class RoomQuestion extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function room()
     {

@@ -11,12 +11,7 @@ class UserQuestionRoom extends Model
 {
     use HasFactory;
     
-    protected $fillable = [
-        'point',
-        'answer_option',
-        'created_at',
-        'updated_at',
-    ];
+    protected $guarded = ['id'];
 
     protected $hidden = [
         'password',

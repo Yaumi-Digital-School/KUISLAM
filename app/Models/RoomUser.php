@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class RoomUser extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function user()
     {
@@ -25,8 +25,7 @@ class RoomUser extends Model
 
     public static function isInRoom($code){
         $room = Room::getRoomByCode($code);
-        // dd($room);  
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_active', true)->first();
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('is_active', true)->first();
     }
 
     public static function getAllWaitingPlayer($code){

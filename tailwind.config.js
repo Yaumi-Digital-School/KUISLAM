@@ -34,6 +34,9 @@ module.exports = {
                 red: {
                     redMain: "#FF6368",
                 },
+                blue: {
+                    blueMain: "#2F83F9",
+                },
             },
             screens: {
                 "3xl": "1600px",

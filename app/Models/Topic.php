@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Topic extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function quizzes()
     {

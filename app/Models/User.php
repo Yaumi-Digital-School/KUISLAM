@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var string[]
      */
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
