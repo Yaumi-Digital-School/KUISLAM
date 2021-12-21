@@ -69,7 +69,7 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $questionsId = Question::getRandomQuestion($quizId);
-        dd($questionsId);
+        // dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
@@ -80,39 +80,22 @@ class RoomController extends Controller
             RoomQuestion::create($dataRoomQuestion);
         }
 
-        return redirect()->route('room.view-quiz', [
-            'code' => $code, 
+        return redirect()->route('room.view-question', [
+            'room' => $code, 
             'order' => 1
         ]);
     }
 
-    public function viewQuiz($code, $order){
+    public function viewQuestion($code, $order){
         /* 
             Method ini untuk memulai Room
             Waiting room - peserta calon moderator 
             Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
             START
         */
-
         $room = Room::getRoomByCode($code);
-        
-        $quizId = $room->quiz_id;
-
-        $questionsId = Question::getRandomQuestion($quizId);
-
-        for($i = 0; $i < 10; $i++){
-            $dataRoomQuestion = [
-                'question_id' => $questionsId[$i],
-                'room_id' => $room->id,
-                'order' => $i+1,
-            ];
-            RoomQuestion::create($dataRoomQuestion);
-        }
-
-        return redirect()->route('room.view-quiz', [
-            'code' => $code, 
-            'order' => $order+1
-        ]);
+        $roomQuestion = RoomQuestion::where('room_id', $room->id)->where('order', $order)->first();
+        return view('quiz', compact('roomQuestion'));
     }
 
     public function joinRoomWithLink($code){  

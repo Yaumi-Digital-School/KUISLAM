@@ -52,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
         });
 
-        Route::prefix('/{room}')->group(function () {
+        Route::prefix('/{room:code}')->group(function () {
             Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
@@ -60,7 +60,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
             Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
 
-            Route::get('/{order}', [RoomController::class, 'viewQuiz'])->name('room.view-quiz');
+            Route::prefix('/{order}')->group(function () {
+                Route::get('/question', [RoomController::class, 'viewQuestion'])->name('room.view-question');
+                Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
+            });
         });
     });
 
