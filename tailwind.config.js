@@ -19,6 +19,7 @@ module.exports = {
                     darkBg: "#81C530",
                     nav: "#6DAF2B",
                     greenMain: "#52D876",
+                    podium: "#52D876",
                 },
                 gray: {
                     nav: "#C4C4C4",
@@ -33,6 +34,9 @@ module.exports = {
                 },
                 red: {
                     redMain: "#FF6368",
+                },
+                orange: {
+                    podium: "#FFB436",
                 },
             },
             screens: {

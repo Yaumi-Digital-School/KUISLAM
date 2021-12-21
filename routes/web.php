@@ -32,19 +32,8 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 
 
     // testing
-    Route::get('/user/waiting-room', function () {
-        return view('user/waiting-room');
-    });
-
-    Route::get('/host/waiting-room', function () {
-        return view('host/waiting-room');
-    });
-    Route::get('/user/prewaiting-room', function () {
-        return view('user/prewaiting-room');
-    });
-
-    Route::get('/host/prewaiting-room', function () {
-        return view('host/prewaiting-room');
+    Route::get('/leaderboard', function () {
+        return view('leaderboard');
     });
 
 Route::middleware(['auth'])->group(function () {
