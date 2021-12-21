@@ -11,7 +11,7 @@
         </div>
         <div class="bg-white w-20 rounded flex px-2 items-center justify-between z-10">
             {{-- Number of player --}}
-            <h1 class="text-2xl font-bold text-green-nav">{{ $roomUser->count() }}</h1>
+            <h1 id="player-count" class="text-2xl font-bold text-green-nav">{{ $roomUser->count() }}</h1>
             <img src="{{asset('images/player_icon.svg')}}">
         </div>
     </div>
@@ -46,7 +46,7 @@
     <div id="card-user-container" class="w-11/12 mx-auto flex justify-between flex-wrap z-10">
         {{-- user card --}}
         @foreach($roomUser as $data)
-            <div class="bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto">
+            <div id="user-{{ $data->user_id }}" class="bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto">
                 <div class="flex items-center h-16 w-16 mr-2">
                     <img src="{{asset('images/default_profpic.png')}}" class="rounded-full">
                 </div>
@@ -56,23 +56,42 @@
     </div>
     @section('script')
         <script src="/js/app.js"></script>
+        {{-- join room  --}}
         <script>
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
                 $( document ).ready(function(){
                     $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto");                    
+                    $newUserDiv.attr("id", `user-${data.user_data.id}`);
                     $newUserImageDiv = $("<div></div>").addClass("flex items-center h-16 w-16 mr-2");
                     $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full");
-                    $newUserName = $("<div></div>").addClass("text-green-nav text-xl font-bold").html(data.user_name);
+                    $newUserName = $("<div></div>").addClass("text-green-nav text-xl font-bold").html(data.user_data.name);
 
                     $newUserImageDiv.append($newUserImage);
                     $newUserDiv.append($newUserImageDiv);
                     $newUserDiv.append($newUserName);
 
                     $("#card-user-container").prepend($newUserDiv);
+                    
+                    let playerCount = $("#player-count").text();
+                    playerCount = parseInt(playerCount) + 1;
+                    $("#player-count").html(playerCount);
                 });
             });
         </script>
+        {{-- exit room  --}}
+        <script>
+            window.Echo.channel(`exit-room-${room_id}`).listen("UserExitRoom", (data) => {
+                $( document ).ready(function(){
+                    let playerCount = $("#player-count").text();
+                    playerCount = parseInt(playerCount) - 1;
+                    $("#player-count").html(playerCount);
+
+                    $(`#user-${data.user_data.id}`).remove();
+                });
+            });
+        </script>
+        {{-- fullscreen  --}}
         <script>
             const body = document.documentElement;
             const btn_fullscreen = document.getElementById('fullscreen');

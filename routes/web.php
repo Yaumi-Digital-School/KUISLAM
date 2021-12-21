@@ -32,19 +32,11 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 
 
     // testing
-    Route::get('/user/waiting-room', function () {
-        return view('user/waiting-room');
+    Route::get('/leaderboard', function () {
+        return view('leaderboard');
     });
-
-    Route::get('/host/waiting-room', function () {
-        return view('host/waiting-room');
-    });
-    Route::get('/user/prewaiting-room', function () {
-        return view('user/prewaiting-room');
-    });
-
-    Route::get('/host/prewaiting-room', function () {
-        return view('host/prewaiting-room');
+    Route::get('/test/quiz', function () {
+        return view('quiz');
     });
 
 Route::middleware(['auth'])->group(function () {
@@ -60,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
         });
 
-        Route::prefix('/{room}')->group(function () {
+        Route::prefix('/{room:code}')->group(function () {
             Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
@@ -68,7 +60,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
             Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
 
-            Route::get('/{order}', [RoomController::class, 'viewQuiz'])->name('room.view-quiz');
+            Route::prefix('/{order}')->group(function () {
+                Route::get('/question', [RoomController::class, 'viewQuestion'])->name('room.view-question');
+                Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
+            });
         });
     });
 

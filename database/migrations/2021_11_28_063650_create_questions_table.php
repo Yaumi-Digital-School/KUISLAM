@@ -23,7 +23,7 @@ class CreateQuestionsTable extends Migration
             $table->text('option_3');
             $table->text('option_4');
             $table->enum('answer', ['option_1', 'option_2', 'option_3', 'option_4'])->nullable();
-            $table->time('timer');
+            $table->integer('timer');
             $table->timestamps();
         });
     }

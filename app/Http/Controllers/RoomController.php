@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserExitRoom;
 use App\Events\UserJoinedRoom;
 use App\Models\Quiz;
 use App\Models\Room;
@@ -68,7 +69,7 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $questionsId = Question::getRandomQuestion($quizId);
-        dd($questionsId);
+        // dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
@@ -79,39 +80,22 @@ class RoomController extends Controller
             RoomQuestion::create($dataRoomQuestion);
         }
 
-        return redirect()->route('room.view-quiz', [
-            'code' => $code, 
+        return redirect()->route('room.view-question', [
+            'room' => $code, 
             'order' => 1
         ]);
     }
 
-    public function viewQuiz($code, $order){
+    public function viewQuestion($code, $order){
         /* 
             Method ini untuk memulai Room
             Waiting room - peserta calon moderator 
             Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
             START
         */
-
         $room = Room::getRoomByCode($code);
-        
-        $quizId = $room->quiz_id;
-
-        $questionsId = Question::getRandomQuestion($quizId);
-
-        for($i = 0; $i < 10; $i++){
-            $dataRoomQuestion = [
-                'question_id' => $questionsId[$i],
-                'room_id' => $room->id,
-                'order' => $i+1,
-            ];
-            RoomQuestion::create($dataRoomQuestion);
-        }
-
-        return redirect()->route('room.view-quiz', [
-            'code' => $code, 
-            'order' => $order+1
-        ]);
+        $roomQuestion = RoomQuestion::where('room_id', $room->id)->where('order', $order)->first();
+        return view('quiz', compact('roomQuestion'));
     }
 
     public function joinRoomWithLink($code){  
@@ -173,7 +157,7 @@ class RoomController extends Controller
             ];
             RoomUser::create($dataRoomUser);
             
-            UserJoinedRoom::dispatch('user has joined', $room, Auth::user()->name);
+            UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
 
             return redirect()->route('room.waiting', $room->code);      
         }else{
@@ -185,19 +169,27 @@ class RoomController extends Controller
         /* Method ini dipanggil ketika Room berhasil dibuat */
         /* Waiting room - peserta */
 
+        /* 
+            Kalau data Room tidak ada akan redirect ke home
+        */
+        $room = Room::getRoomByCode($code);
+        if(!$room){
+            return redirect()->route('index');     
+        }
+        
+        /* 
+            Yang tidak terdaftar dalam suatu room tidak bisa masuk
+        */
         $isInRoom = RoomUser::isInRoom($code);
+        if(!$isInRoom){
+            return redirect()->route('index');     
+        }
+
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
 
         $roomUser = RoomUser::getAllWaitingPlayer($code);
         $room = Room::getRoomByCode($code);
-        
-        /* 
-            Yang tidak terdaftar dalam suatu room tidak bisa masuk
-        */
-        if(!$isInRoom){
-            return redirect()->route('index');     
-        }
 
         if($host){
             return view('host.waiting-room', compact('roomUser', 'room'));
@@ -209,6 +201,7 @@ class RoomController extends Controller
     public function exitRoom($code){
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
+        $room = Room::getRoomByCode($code);
 
         if($host){
             /* Method ini dipanggil ketika room Master / moderator keluar */
@@ -219,8 +212,9 @@ class RoomController extends Controller
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
+            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
             RoomUser::deleteRoomUserByUserId($code);
-            
+
             return redirect()->route('index');
         }
     }
