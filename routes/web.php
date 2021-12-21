@@ -46,6 +46,9 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/host/prewaiting-room', function () {
         return view('host/prewaiting-room');
     });
+    Route::get('/test/quiz', function () {
+        return view('quiz');
+    });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
