@@ -52,4 +52,8 @@ class RoomUser extends Model
         $room = Room::getRoomByCode($code);
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('is_active', 1)->first();
     }
+
+    public static function getPlayerCurrentPoint($roomId){
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->first();
+    }
 }
