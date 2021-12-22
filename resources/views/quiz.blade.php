@@ -67,7 +67,7 @@
         <div data-option="option_4" id="option_4" class="options ring-yellow-200 cursor-pointer rounded-md flex space-x-2 bg-yellow-yellowMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
             <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}.</span> 
         </div>
-        {{-- <input class="col-span-12" id="answer" type="text" name="answer" value=""> --}}
+        {{-- <input class="col-span-12" id="answer" type="text" name="answer_option" value=""> --}}
     </form>
     @section('script')
     <script>    
