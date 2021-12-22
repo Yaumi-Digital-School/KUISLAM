@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,18 +18,18 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        // $user = User::find($userId);
-        // if ($request->user()->role == 'admin'){
-        //     return redirect('/admin/import/users');
-        // } else {
-        //     return redirect('/');
-        // }
-        // return $next($request);
-
-        if (Auth::user() &&  Auth::user()->admin == 1) {
-            return $next($request);
+        $user = User::find();
+        if ($request->user()->role == 'admin'){
+            return redirect('/admin');
+        } else {
+            return redirect('/');
         }
+        return $next($request);
 
-        return redirect('/');
+        // if (Auth::user() &&  Auth::user()->admin == 1) {
+        //     return $next($request);
+        // }
+
+        // return redirect('/');
     }
 }
