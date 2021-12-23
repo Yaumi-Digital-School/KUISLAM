@@ -56,7 +56,7 @@
     </div>
     @section('script')
         <script src="/js/app.js"></script>
-        {{-- join room  --}}
+        {{-- listen join room  --}}
         <script>
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
@@ -79,7 +79,7 @@
                 });
             });
         </script>
-        {{-- exit room  --}}
+        {{-- listen exit room  --}}
         <script>
             window.Echo.channel(`exit-room-${room_id}`).listen("UserExitRoom", (data) => {
                 $( document ).ready(function(){

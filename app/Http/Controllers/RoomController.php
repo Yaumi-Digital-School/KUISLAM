@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
@@ -85,6 +86,8 @@ class RoomController extends Controller
             RoomQuestion::create($dataRoomQuestion);
         }
 
+        HostStartQuiz::dispatch($code);
+
         return redirect()->route('question.view', [
             'room' => $code, 
             'order' => 1
@@ -97,8 +100,8 @@ class RoomController extends Controller
         */
         $room = Room::getRoomByCode($code);
         $roomQuestion = RoomQuestion::where('room_id', $room->id)->where('order', $order)->first();
-     
-        return view('quiz', compact('roomQuestion'));
+        
+        return view('quiz', compact('code', 'roomQuestion', 'order'));
     }
 
     public function joinRoomWithLink($code){  
@@ -221,16 +224,21 @@ class RoomController extends Controller
         }
     }
 
-    public function handleQuestion(Request $request, $code, $order){
-        $room = Room::getRoomById($code);
+    public function handleQuestion(Request $request){
+        $code = $request->code;
+        $order = $request->order;
+        // $room = Room::getRoomById($code); (salah method)
+        $room = Room::getRoomByCode($code);
         
         $questionId = RoomQuestion::getQuestionId($room->id, $order);
+        // dd($questionId);
 
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->point;
 
         if($questionId->answer === $request->answer_option){
             // If answer correct
-            $point = ($questionId->timer/$questionId->timer) * 1000;
+            // $point = ($questionId->timer/$questionId->timer) * 1000; (salah, gaada timer di $questionId)
+            $point =  1000;
             
             $dataUserQuestionRoom = [
                 'user_id' => Auth::user()->id,
@@ -241,8 +249,8 @@ class RoomController extends Controller
                 'answer_option' => $request->answer_option,
                 'is_correct' => true,
             ];
-            UserQuestionRoom::create($dataUserQuestionRoom);
-
+            UserQuestionRoom::create($dataUserQuestionRoom); //error juga disini
+            
             $dataRank = UserQuestionRoom::getRank($room->id, $order);
             for($i = 0; $i < count($dataRank); $i++){
                 if($dataRank[$i]->user_id === Auth::user()->id){
