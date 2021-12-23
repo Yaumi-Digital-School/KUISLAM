@@ -73,9 +73,9 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        // if($countPlayer < 2){
-        //     return back();
-        // }
+        if($countPlayer < 2){
+            return back();
+        }
 
         $questionsId = Question::getRandomQuestion($quizId);
 
@@ -87,6 +87,11 @@ class RoomController extends Controller
             ];
             RoomQuestion::create($dataRoomQuestion);
         }
+
+        $dataRoomUser = [
+            'status' => 'ongoing',
+        ];
+        RoomUser::updateOngoingRoomUser($code, $dataRoomUser);
 
         HostStartQuiz::dispatch($code);
 
@@ -137,13 +142,16 @@ class RoomController extends Controller
 
     public function preWaitingPlayer($code){
         /* Method ini dipanggil ketika Room berhasil dibuat */
-        /* Pre-Waiting room - peserta */
+        /* Pre-Waiting room - player */
         /* Jika merujuk ke desain method ini akan di panggil ketika 
         user memasukkan link share untuk join ke room atau setelah
         user menginput data kode room pada field yang tersedia */
 
         $room = Room::getRoomByCode($code);
-        // return 'Ini page wating player';
+        if(!$room){
+            return redirect()->route('index');
+        }
+
         return view('user.prewaiting-room', compact('room'));
     }
 
@@ -155,21 +163,21 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         
-        if($room){
-            $dataRoomUser = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'is_host' => 0,
-                'status' => 'waiting'
-            ];
-            RoomUser::create($dataRoomUser);
-            
-            UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
-
-            return redirect()->route('room.waiting', $room->code);      
-        }else{
-            return redirect()->route('dashboard');
+        if(!$room){
+            return redirect()->route('index'); 
         }
+        
+        $dataRoomUser = [
+            'user_id' => Auth::user()->id,
+            'room_id' => $room->id,
+            'is_host' => 0,
+            'status' => 'waiting'
+        ];
+        RoomUser::create($dataRoomUser);
+        
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+
+        return redirect()->route('room.waiting', $room->code);   
     }
 
     public function waitingRoom($code){
@@ -227,23 +235,18 @@ class RoomController extends Controller
     }
 
     public function handleAnswer(Request $request, $code, $order){
-        dd($request->all());
-        $room = Room::getRoomByCode($code);
-        
+        $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
 
-
-        $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->point;
-
-        if($questionId->answer === $request->answer_option){
+        if($questionId->question->answer === $request->answer_option){
             // If answer correct
-            // $point = ($questionId->timer/$questionId->timer) * 1000; (salah, gaada timer di $questionId)
-            $point =  1000;
+            $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
             
             $dataUserQuestionRoom = [
                 'user_id' => Auth::user()->id,
                 'room_id' => $room->id,
-                'question_id' => $questionId,
+                'question_id' => $questionId->id,
                 'order' => $order,
                 'point' => $currentPoint + $point,
                 'answer_option' => $request->answer_option,
@@ -253,62 +256,43 @@ class RoomController extends Controller
 
             $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
 
-                        
-            if($order == 1){
-                $dataRoomUser = [
-                    'user_id' => Auth::user()->id,
-                    'room_id' => $room->id,
-                    'rank' => $rank,
-                    'point' => $point,
-                ];
-                RoomUser::create($dataRoomUser);
-            }
-
             $dataRoomUser = [
                 'rank' => $rank,
-                'point' => $currentPoint + $point,
+                'points' => $currentPoint + $point,
             ];
-            RoomUser::updateRoomUser($code, $dataRoomUser);   
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }else{
             // If answer wrong
             $dataUserQuestionRoom = [
                 'user_id' => Auth::user()->id,
                 'room_id' => $room->id,
+                'question_id' => $questionId->id,
+                'order' => $order,
                 'point' => $currentPoint + 0,
+                'answer_option' => $request->answer_option,
                 'is_correct' => false,
-                'answer_option' => $request->answer_option
             ];
-            UserQuestionRoom::create($dataUserQuestionRoom);    
+            UserQuestionRoom::create($dataUserQuestionRoom);
 
             $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
 
-            if($order == 1){
-                $dataRoomUser = [
-                    'user_id' => Auth::user()->id,
-                    'room_id' => $room->id,
-                    'rank' => $rank,
-                    'point' => 0,
-                ];
-                RoomUser::create($dataRoomUser);
-            }
-
             $dataRoomUser = [
                 'rank' => $rank,
-                'point' => $currentPoint + 0,
+                'points' => $currentPoint + 0,
             ];
-            RoomUser::updateRoomUser($code, $dataRoomUser);   
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }
 
         if($order == 10){
             $dataRoomUser = [
                 'status' => 'done',
             ];
-            RoomUser::where('room_id', $room->id)->update($dataRoomUser);
+            RoomUser::updateDoneRoomUser($code, $dataRoomUser);
         }
 
         return redirect()->route('question.leaderboard', [
             'room' => $code, 
-            'order' => 1
+            'order' => $order
         ]);
     }
 

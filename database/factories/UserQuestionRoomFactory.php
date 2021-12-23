@@ -19,7 +19,7 @@ class UserQuestionRoomFactory extends Factory
             'order' => rand(1, 10),
             'point' => $this->faker->randomNumber(4, true),
             'answer_option' => $this->faker->randomElement(['option_1', 'option_2', 'option_3', 'option_4']),
-            'status' => $this->faker->randomElement(['waiting', 'ongoing', 'done']),
+            'is_correct' => $this->faker->boolean(),
         ];
     }
 }

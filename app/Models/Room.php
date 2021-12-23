@@ -36,7 +36,7 @@ class Room extends Model
     }
 
     public static function getCode(){
-        return mt_rand(000000, 999999);
+        return mt_rand(100000, 999999);
     }
 
     public static function getRoomById($roomId){

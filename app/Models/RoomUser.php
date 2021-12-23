@@ -40,10 +40,22 @@ class RoomUser extends Model
         return RoomUser::where('user_id', Auth::user()->id)->where('status', 'done')->get();
     }
 
-    public static function updateRoomUser($code, $dataRoomUser){
+    public static function updateOngoingRoomUser($code, $dataRoomUser){
         // update data in room_users table
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->update($dataRoomUser);
+        return RoomUser::where('room_id', $room->id)->where('status', 'waiting')->update($dataRoomUser);
+    }
+
+    public static function updateDoneRoomUser($code, $dataRoomUser){
+        // update data in room_users table
+        $room = Room::getRoomByCode($code);
+        return RoomUser::where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
+    }
+
+    public static function updateRoomUserByUserId($code, $dataRoomUser){
+        // update data in room_users table by user_id
+        $room = Room::getRoomByCode($code);
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
     }
 
     public static function deleteRoomUserByCode($code){
@@ -77,6 +89,6 @@ class RoomUser extends Model
 
     public static function getTop5Rank($roomId){
         // get top 5 rank
-        return RoomUser::where('room_id', $roomId)->limit(5)->get()->SortBy('rank');
+        return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->limit(5)->get()->SortByDesc('points');
     }
 }

@@ -21,7 +21,7 @@ class CreateUserQuestionRoomsTable extends Migration
             $table->integer('order');
             $table->integer('point')->default(0);
             $table->char('answer_option', 8)->default(null);
-            $table->enum('status', ['waiting', 'ongoing', 'done']);
+            $table->boolean('is_correct');
             $table->timestamps();
         });
     }
