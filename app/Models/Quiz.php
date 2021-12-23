@@ -54,6 +54,10 @@ class Quiz extends Model
     public static function getAllQuiz(){
         return Quiz::all()->sortBy('title');
     }
+
+    public static function getQuizGroupByTitle(){
+        return Quiz::with('topic')->latest()->get()->groupBy('topic.title');
+    }
     
     public static function getOneQuiz($id){
         return Quiz::findOrfail($id);

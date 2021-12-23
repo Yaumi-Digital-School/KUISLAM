@@ -28,7 +28,7 @@ class Question extends Model
         return $this->hasMany(UserQuestionRoom::class);
     }
 
-    protected static function getTotalQuestions($quizId){
+    public static function getTotalQuestions($quizId){
         return Question::where('quiz_id', $quizId)->get()->count();
     }
 

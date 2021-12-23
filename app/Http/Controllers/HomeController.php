@@ -14,7 +14,7 @@ class HomeController extends Controller
     }
 
     public function index(){
-        $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title'); 
+        $quizzes = Quiz::getQuizGroupByTitle(); 
         if(Auth::check()){
             // ganti data nya ya kalo dia udah login
             return view('welcome', compact('quizzes'));
@@ -30,11 +30,11 @@ class HomeController extends Controller
         $topics = Topic::limit(4)->get();
         
         if($search){
-            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
+            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->getQuizGroupByTitle();
         }elseif($selectedTopic){
-            $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->with('topic')->latest()->get()->groupBy('topic.title');
+            $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->getQuizGroupByTitle();
         }else{
-            $quizzes = Quiz::with('topic')->latest()->get()->groupBy('topic.title');
+            $quizzes = Quiz::getQuizGroupByTitle();
         }
 
         return view('discover', compact('quizzes', 'topics'));
