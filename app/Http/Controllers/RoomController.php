@@ -319,6 +319,19 @@ class RoomController extends Controller
         ]);
     }
 
+    public function leaderboard($code, $order){
+        $room = Room::getRoomByCode($code);
+        $roomUser = RoomUser::getRank($room->id);
+
+        if($order == 10){
+            $final = true;
+            return view('leaderboard', compact('roomUser', 'final', 'order'));
+        }
+
+        $final = false;
+        return view('leaderboard', compact('roomUser', 'final', 'order'));
+    }
+
     // public function test($code, $order){
     //     $room = Room::getRoomByCode($code);
     //     $data = UserQuestionRoom::getRank($room->id, $order);

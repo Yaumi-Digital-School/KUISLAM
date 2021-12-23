@@ -56,4 +56,8 @@ class RoomUser extends Model
     public static function getPlayerCurrentPoint($roomId){
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->first();
     }
+
+    public static function getRank($roomId){
+        return RoomUser::where('room_id', $roomId)->limit(5)->get()->SortBy('rank');
+    }
 }
