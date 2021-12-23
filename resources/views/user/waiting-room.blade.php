@@ -60,7 +60,7 @@
 
     @section('script')
         <script src="/js/app.js"></script>
-        {{-- join room  --}}
+        {{-- listen join room  --}}
         <script>
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
@@ -83,8 +83,8 @@
                 });
             });
         </script>
-        {{-- exit room  --}}
-        <script>
+        {{-- listen exit room  --}}
+        <script>     
             window.Echo.channel(`exit-room-${room_id}`).listen("UserExitRoom", (data) => {
                 $( document ).ready(function(){
                     let playerCount = $("#player-count").text();
@@ -93,6 +93,16 @@
 
                     $(`#user-${data.user_data.id}`).remove();
                 });
+            });
+        </script>
+        {{-- listen host start quiz  --}}
+        <script>
+            const room_code = "{{$room->code}}";
+            const order = "1";
+            window.Echo.channel(`start-quiz-${room_code}`).listen("HostStartQuiz", (data) =>{
+                let url = "{{ route('question.view', ['room' => ':room', 'order' => '1']) }}";
+                url = url.replace(':room', room_code);
+                window.location.href = url;
             });
         </script>
         {{-- fullscreen --}}

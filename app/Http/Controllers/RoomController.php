@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
@@ -84,6 +85,8 @@ class RoomController extends Controller
             ];
             RoomQuestion::create($dataRoomQuestion);
         }
+
+        HostStartQuiz::dispatch($code);
 
         return redirect()->route('question.view', [
             'room' => $code, 
@@ -222,15 +225,17 @@ class RoomController extends Controller
     }
 
     public function handleAnswer(Request $request, $code, $order){
-        $room = Room::getRoomById($code);
+        $room = Room::getRoomByCode($code);
         
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+
 
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->point;
 
         if($questionId->answer === $request->answer_option){
             // If answer correct
-            $point = ($questionId->timer/$questionId->timer) * 1000;
+            // $point = ($questionId->timer/$questionId->timer) * 1000; (salah, gaada timer di $questionId)
+            $point =  1000;
             
             $dataUserQuestionRoom = [
                 'user_id' => Auth::user()->id,
@@ -244,6 +249,7 @@ class RoomController extends Controller
             UserQuestionRoom::create($dataUserQuestionRoom);
 
             $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
                         
             if($order == 1){
                 $dataRoomUser = [
