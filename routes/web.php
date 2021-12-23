@@ -58,9 +58,10 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/question')->group(function () {
                 Route::get('/{order}', [RoomController::class, 'viewQuestion'])->name('question.view');
-                Route::post('/{order}', [RoomController::class, 'handleQuestion'])->name('question.handle');
+                Route::post('/{order}', [RoomController::class, 'handleAnswer'])->name('question.handle');
                 Route::get('/{order}/leaderboard', [RoomController::class, 'leaderboard'])->name('question.leaderboard');
 
+                // for testing
                 // Route::get('/{order}/test', [RoomController::class, 'test'])->name('question.test');
             });
 

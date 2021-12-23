@@ -15,11 +15,6 @@ class UserQuestionRoom extends Model
     
     protected $guarded = ['id'];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
     public function question()
     {
         return $this->belongsTo(Question::class);
@@ -35,7 +30,16 @@ class UserQuestionRoom extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function getRank($roomId, $order){
+    public static function getSortByDescRank($roomId, $order){
         return UserQuestionRoom::where('room_id', $roomId)->where('order', $order)->get()->SortByDesc('point');
+    }
+
+    public static function getAuthUserRank($roomId, $order){
+        $dataRank = UserQuestionRoom::getSortByDescRank($roomId, $order);
+        for($i = 0; $i < count($dataRank); $i++){
+            if($dataRank[$i]->user_id === Auth::user()->id){
+                return $i + 1;
+            }
+        }
     }
 }

@@ -27,7 +27,7 @@ class RoomQuestion extends Model
         return RoomQuestion::where('room_id', $room->id)->delete();
     }
 
-    public static function getQuestionId($roomId, $order){
+    public static function getQuestionByRoomIdAndOrder($roomId, $order){
         return RoomQuestion::where('room_id', $roomId)->where('order', $order)->first();
     }
 

@@ -50,7 +50,7 @@ class RoomController extends Controller
             'user_id' => Auth::user()->id,
             'room_id' => $room->id,
             'is_host' => 1,
-            'is_active' => 1
+            'status' => 'waiting'
         ]; 
         RoomUser::create($dataRoomUser);
 
@@ -96,7 +96,7 @@ class RoomController extends Controller
             Method ini untuk menampilkan Pertanyaan
         */
         $room = Room::getRoomByCode($code);
-        $roomQuestion = RoomQuestion::where('room_id', $room->id)->where('order', $order)->first();
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
      
         return view('quiz', compact('roomQuestion'));
     }
@@ -155,7 +155,7 @@ class RoomController extends Controller
                 'user_id' => Auth::user()->id,
                 'room_id' => $room->id,
                 'is_host' => 0,
-                'is_active' => 1
+                'status' => 'waiting'
             ];
             RoomUser::create($dataRoomUser);
             
@@ -221,10 +221,10 @@ class RoomController extends Controller
         }
     }
 
-    public function handleQuestion(Request $request, $code, $order){
+    public function handleAnswer(Request $request, $code, $order){
         $room = Room::getRoomById($code);
         
-        $questionId = RoomQuestion::getQuestionId($room->id, $order);
+        $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
 
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->point;
 
@@ -243,14 +243,9 @@ class RoomController extends Controller
             ];
             UserQuestionRoom::create($dataUserQuestionRoom);
 
-            $dataRank = UserQuestionRoom::getRank($room->id, $order);
-            for($i = 0; $i < count($dataRank); $i++){
-                if($dataRank[$i]->user_id === Auth::user()->id){
-                    $rank = $i + 1;
-                }
-            }
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
                         
-            if($order === 1){
+            if($order == 1){
                 $dataRoomUser = [
                     'user_id' => Auth::user()->id,
                     'room_id' => $room->id,
@@ -264,7 +259,7 @@ class RoomController extends Controller
                 'rank' => $rank,
                 'point' => $currentPoint + $point,
             ];
-            RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->update($dataRoomUser);   
+            RoomUser::updateRoomUser($code, $dataRoomUser);   
         }else{
             // If answer wrong
             $dataUserQuestionRoom = [
@@ -276,14 +271,9 @@ class RoomController extends Controller
             ];
             UserQuestionRoom::create($dataUserQuestionRoom);    
 
-            $dataRank = UserQuestionRoom::getRank($room->id, $order);
-            for($i = 0; $i < count($dataRank); $i++){
-                if($dataRank[$i]->user_id === Auth::user()->id){
-                    $rank = $i + 1;
-                }
-            }
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
 
-            if($order === 1){
+            if($order == 1){
                 $dataRoomUser = [
                     'user_id' => Auth::user()->id,
                     'room_id' => $room->id,
@@ -297,20 +287,14 @@ class RoomController extends Controller
                 'rank' => $rank,
                 'point' => $currentPoint + 0,
             ];
-            RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->update($dataRoomUser);   
+            RoomUser::updateRoomUser($code, $dataRoomUser);   
         }
 
-        if($order === 10){
+        if($order == 10){
             $dataRoomUser = [
-                'is_active' => false,
+                'status' => 'done',
             ];
             RoomUser::where('room_id', $room->id)->update($dataRoomUser);
-
-            return redirect()->route('question.leaderboard', [
-                'room' => $code, 
-                'order' => 1,
-                'final' => true,
-            ]);
         }
 
         return redirect()->route('question.leaderboard', [
@@ -321,11 +305,15 @@ class RoomController extends Controller
 
     public function leaderboard($code, $order){
         $room = Room::getRoomByCode($code);
-        $roomUser = RoomUser::getRank($room->id);
+        $roomUser = RoomUser::getTop5Rank($room->id);
 
-        if($order == 10){
+        $countQuestion = Question::getTotalQuestions($room->quiz_id);
+
+        if($order == $countQuestion){
             $final = true;
             return view('leaderboard', compact('roomUser', 'final', 'order'));
+        }elseif($order > $countQuestion || $order < 1){
+            return back();
         }
 
         $final = false;
@@ -334,14 +322,7 @@ class RoomController extends Controller
 
     // public function test($code, $order){
     //     $room = Room::getRoomByCode($code);
-    //     $data = UserQuestionRoom::getRank($room->id, $order);
-    //     // dd($data);
-    //     $collection = collect([]);
-
-    //     for($i = 0; $i < count($data); $i++){
-    //         $collection->push($data[$i]->user_id);
-    //     }
-
-    //     dd($collection);
+    //     $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+    //     dd($rank);
     // }
 }

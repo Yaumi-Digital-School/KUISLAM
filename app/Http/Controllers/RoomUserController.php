@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomUserController extends Controller
 {
-    public function getAllPlayedQuiz(Room $room){
-        $room = RoomUser::where('user_id', Auth::user()->id)->where('is_active', false)->get();
+    public function getAllPlayedQuiz(){
+        $room = RoomUser::getAllDoneQuiz();
         // dd($room);
         return view('v_AllPlayedQuiz', compact('room'));
     }
