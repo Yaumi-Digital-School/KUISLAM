@@ -40,12 +40,14 @@ class RoomController extends Controller
         */
 
         $code = Room::getCode();
-
+        $slugId = Quiz::getQuizSlug($slug);
+        
         $dataRoom = [
-            'quiz_id' => Quiz::getQuizSlug($slug)->id,
+            'quiz_id' => $slugId->id,
             'code' => $code,
         ];
         $room = Room::create($dataRoom);
+        // dd($room);
 
         $dataRoomUser = [
             'user_id' => Auth::user()->id,
@@ -71,9 +73,9 @@ class RoomController extends Controller
         $quizId = $room->quiz_id;
 
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        if($countPlayer < 2){
-            return back();
-        }
+        // if($countPlayer < 2){
+        //     return back();
+        // }
 
         $questionsId = Question::getRandomQuestion($quizId);
 
@@ -101,7 +103,7 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
      
-        return view('quiz', compact('roomQuestion'));
+        return view('quiz', compact('roomQuestion', 'code', 'order'));
     }
 
     public function joinRoomWithLink($code){  
@@ -225,6 +227,7 @@ class RoomController extends Controller
     }
 
     public function handleAnswer(Request $request, $code, $order){
+        dd($request->all());
         $room = Room::getRoomByCode($code);
         
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);

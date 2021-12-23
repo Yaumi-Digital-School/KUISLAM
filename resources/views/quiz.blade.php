@@ -67,8 +67,6 @@
             <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}.</span> 
         </div>
         <input class="col-span-3 " id="answer" type="text" name="answer_option" value="">
-        <input type="hidden" name="code" value="{{ $code }}">
-        <input type="hidden" name="order" value="{{ $order }}">
         <input type="hidden" name="timer" value="60">
         <button  type="submit" class="col-span-3 relative z-20 text-white bg-black">HEHEHE</button>
     </form>

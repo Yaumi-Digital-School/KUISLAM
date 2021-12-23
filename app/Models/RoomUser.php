@@ -26,7 +26,7 @@ class RoomUser extends Model
     public static function isInRoom($code){
         // Check if user is in a room
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('is_active', true)->first();
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'waiting')->first();
     }
 
     public static function getAllWaitingPlayer($code){
@@ -61,13 +61,13 @@ class RoomUser extends Model
     public static function isHost($code){
         // check if user is host
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->where('is_active', 1)->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->where('status', 'waiting')->first();
     }
 
     public static function isPlayer($code){
         // check if user is player
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('is_active', 1)->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('status', 'waiting')->first();
     }
 
     public static function getPlayerCurrentPoint($roomId){

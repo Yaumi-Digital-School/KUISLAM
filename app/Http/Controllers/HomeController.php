@@ -30,9 +30,9 @@ class HomeController extends Controller
         $topics = Topic::limit(4)->get();
         
         if($search){
-            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->getQuizGroupByTitle();
+            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
         }elseif($selectedTopic){
-            $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->getQuizGroupByTitle();
+            $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->with('topic')->latest()->get()->groupBy('topic.title');
         }else{
             $quizzes = Quiz::getQuizGroupByTitle();
         }
