@@ -109,9 +109,11 @@ class RoomController extends Controller
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        $accessableOrder = $savedDataOrder->order + 1;
+        if($savedDataOrder){
+            $accessableOrder = $savedDataOrder->order + 1;
+        }
 
-        if(intval($order) != $accessableOrder){
+        if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
             // User can't move to another order by changing the question order on URL
             return back();
         }
@@ -246,7 +248,6 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
-        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
 
         if($questionId->question->answer === $request->answer_option){
             // If answer correct
@@ -292,18 +293,6 @@ class RoomController extends Controller
             RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }
 
-        if(intval($order) === $totalQuestion){
-            $dataRoomUser = [
-                'status' => 'done',
-            ];
-            RoomUser::updateDoneRoomUser($code, $dataRoomUser);
-        }
-
-        // return redirect()->route('question.leaderboard', [
-        //     'room' => $code, 
-        //     'order' => $order
-        // ]);
-
         return response()->json([
             'room' => $code,
             'order' => $order
@@ -315,11 +304,10 @@ class RoomController extends Controller
         $roomUser = RoomUser::getTop5Rank($room->id);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        // dd($savedDataOrder, intval($order) < $savedDataOrder->order);
 
         if(intval($order) === $totalQuestion){
             $final = true;
-            return view('leaderboard', compact('roomUser', 'final', 'order'));
+            return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
         }elseif(intval($order) != $savedDataOrder->order){
             // User can't move to another order by changing the question order on URL
             return back();
@@ -327,6 +315,14 @@ class RoomController extends Controller
 
         $final = false;
         return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
+    }
+
+    public function exitGame($code){
+        $dataRoomUser = [
+            'status' => 'done',
+        ];
+        RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+        return redirect()->route('index');
     }
 
     // public function test($code, $order){

@@ -48,10 +48,12 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
         });
 
+        
         Route::prefix('/{room:code}')->group(function () {
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
             Route::get('/player/prewaiting', [RoomController::class, 'preWaitingPlayer'])->name('room.pre-waiting-player');
+            Route::get('/exit-game', [RoomController::class, 'exitGame'])->name('game.exit');
 
             // Route::middleware(['waiting'])->group(function () {
                 Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
