@@ -49,12 +49,15 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('/{room:code}')->group(function () {
-            Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
             Route::get('/player/prewaiting', [RoomController::class, 'preWaitingPlayer'])->name('room.pre-waiting-player');
-            Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
-            Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+
+            // Route::middleware(['waiting'])->group(function () {
+                Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
+                Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
+                Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+            // });
 
             Route::prefix('/question')->group(function () {
                 Route::get('/{order}', [RoomController::class, 'viewQuestion'])->name('question.view');
