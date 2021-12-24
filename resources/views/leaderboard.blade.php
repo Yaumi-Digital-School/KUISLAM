@@ -114,4 +114,22 @@
             @endif
         </div>
     @endforeach
+
+    @section('script')
+        <script>
+            const room_code = '{{$code}}';
+            let order = '{{$order}}';
+            const final = '{{$final}}';
+            order = parseInt(order);
+            console.log(order)
+            if(!final){
+                setTimeout(() => {
+                    let url = "{{ route('question.view', ['room' => ':room', 'order' => ':order']) }}";
+                    url = url.replace(':room', room_code);
+                    url = url.replace(':order', order+1);
+                    window.location.href = url;
+                }, 5000);
+            }
+        </script>
+    @endsection
 </x-main>

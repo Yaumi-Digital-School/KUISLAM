@@ -299,8 +299,13 @@ class RoomController extends Controller
             RoomUser::updateDoneRoomUser($code, $dataRoomUser);
         }
 
-        return redirect()->route('question.leaderboard', [
-            'room' => $code, 
+        // return redirect()->route('question.leaderboard', [
+        //     'room' => $code, 
+        //     'order' => $order
+        // ]);
+
+        return response()->json([
+            'room' => $code,
             'order' => $order
         ]);
     }
@@ -321,7 +326,7 @@ class RoomController extends Controller
         }
 
         $final = false;
-        return view('leaderboard', compact('roomUser', 'final', 'order'));
+        return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
     }
 
     // public function test($code, $order){
