@@ -7,10 +7,12 @@
     @elseif($final === true)
         {{-- Button Close if it's Final Leaderboard --}}
         <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 ml-12 realtive">
+            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 mb-8 ml-12 realtive">
                 <a href="{{ route('index') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
             </div>
         </div>
+        <h1 class="text-5xl text-white font-poppins font-bold text-center sm:z-10 hidden sm:block sm:relative pb-8">LEADERBOARD</h1>
+        <h1 class="text-3xl text-white font-poppins font-semibold text-center z-10 sm:hidden relative pb-8">FINAL LEADERBOARD</h1>
     @endif
     
     {{-- Rank --}}
