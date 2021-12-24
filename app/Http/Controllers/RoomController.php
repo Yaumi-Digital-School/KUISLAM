@@ -107,6 +107,14 @@ class RoomController extends Controller
         */
         $room = Room::getRoomByCode($code);
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        $accessableOrder = $savedDataOrder->order + 1;
+
+        if(intval($order) != $accessableOrder){
+            // User can't move to another order by changing the question order on URL
+            return back();
+        }
      
         return view('quiz', compact('roomQuestion', 'code', 'order'));
     }
@@ -238,6 +246,7 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
 
         if($questionId->question->answer === $request->answer_option){
             // If answer correct
@@ -283,7 +292,7 @@ class RoomController extends Controller
             RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }
 
-        if($order == 10){
+        if(intval($order) === $totalQuestion){
             $dataRoomUser = [
                 'status' => 'done',
             ];
@@ -299,13 +308,15 @@ class RoomController extends Controller
     public function leaderboard($code, $order){
         $room = Room::getRoomByCode($code);
         $roomUser = RoomUser::getTop5Rank($room->id);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        // dd($savedDataOrder, intval($order) < $savedDataOrder->order);
 
-        $countQuestion = Question::getTotalQuestions($room->quiz_id);
-
-        if($order == $countQuestion){
+        if(intval($order) === $totalQuestion){
             $final = true;
             return view('leaderboard', compact('roomUser', 'final', 'order'));
-        }elseif($order > $countQuestion || $order < 1){
+        }elseif(intval($order) != $savedDataOrder->order){
+            // User can't move to another order by changing the question order on URL
             return back();
         }
 
