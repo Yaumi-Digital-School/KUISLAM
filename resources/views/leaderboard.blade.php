@@ -7,22 +7,24 @@
     @elseif($final === true)
         {{-- Button Close if it's Final Leaderboard --}}
         <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 ml-12 realtive">
+            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 mb-8 ml-12 realtive">
                 <a href="{{ route('game.exit', $code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
             </div>
         </div>
+        <h1 class="text-5xl text-white font-poppins font-bold text-center sm:z-10 hidden sm:block sm:relative pb-8">LEADERBOARD</h1>
+        <h1 class="text-3xl text-white font-poppins font-semibold text-center z-10 sm:hidden relative pb-8">FINAL LEADERBOARD</h1>
     @endif
     
     {{-- Rank --}}
     @foreach($roomUser as $data)
-        <div class="grid grid-cols-4 sm:gap-4 gap-y-4 gap-x-2 grid-flow-row z-10 relative sm:px-12 px-4 rounded-full items-center">
+        <div class="grid grid-cols-4 gap-x-2 grid-flow-row z-10 relative sm:px-12 px-4 rounded-full items-center">
             {{-- 1st --}}
             {{-- Medal --}}
             @if($data->rank === 1)
             <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/1st_medal.svg')}}"> 
             </div>
-            <div class="col-start-2 col-end-4 bg-orange-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
+            <div class="col-start-2 col-end-4 bg-orange-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
                     @if(!$data->user->avatar)
@@ -42,10 +44,10 @@
             {{-- 2nd --}}
             {{-- Medal --}}
             @elseif($data->rank === 2)
-            <div class="flex justify-end row-start-2">
+            <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/2nd_medal.svg')}}"> 
             </div>
-            <div class="col-start-2 col-end-4 bg-blue-600 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
+            <div class="col-start-2 col-end-4 bg-blue-600 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
                     @if(!$data->user->avatar)
@@ -65,10 +67,10 @@
             {{-- 3rd --}}
             {{-- Medal --}}
             @elseif($data->rank === 3)
-            <div class="flex justify-end row-start-3">
+            <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/3rd_medal.svg')}}"> 
             </div>
-            <div class="col-start-2 col-end-4 bg-green-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
+            <div class="col-start-2 col-end-4 bg-green-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
                     @if(!$data->user->avatar)
@@ -90,7 +92,7 @@
                 <div class="sm:flex sm:justify-end hidden row-start-{{ $data->rank}} col-end-2">
                     <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20 row-start-{{ $data->rank}}" src="{{asset('images/4th_medal.svg')}}"> 
                 </div>
-                <div class="px-12 sm:px-0 row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4">
+                <div class="px-12 sm:px-0 row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 mb-4">
                     <div class="row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 bg-gray-100 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
                         {{-- User Info --}}
                         <div class="flex items-center">
@@ -112,7 +114,6 @@
             @endif
         </div>
     @endforeach
-
     @section('script')
         <script>
             const room_code = '{{$code}}';
