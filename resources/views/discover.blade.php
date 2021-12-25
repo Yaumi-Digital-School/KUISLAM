@@ -50,7 +50,7 @@
                             <div class="swiper-wrapper">
                                 <!-- Slides -->
                                 @foreach($topics as $topic)
-                                    <a href="{{ route('discover') }}?topic={{ $topic->title }}" class="swiper-slide flex flex-col border-2 border-red-redMain text-red-redMain font-semibold justify-center items-center rounded">
+                                    <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="swiper-slide flex flex-col border-2 border-red-redMain text-red-redMain font-semibold justify-center items-center rounded">
                                         {{ $topic->title }}
                                     </a>
                                 @endforeach
