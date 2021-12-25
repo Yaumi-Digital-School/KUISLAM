@@ -333,6 +333,7 @@ class RoomController extends Controller
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentTime = Carbon::now();
+        $timeLeaderboard = 15;
 
         if(intval($order) === $totalQuestion){
             $final = true;
@@ -343,7 +344,7 @@ class RoomController extends Controller
         }
 
         $final = false;
-        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_end) - $timeLeaderboard) - strtotime($currentTime);
 
         return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
     }
