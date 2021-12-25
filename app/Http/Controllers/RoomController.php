@@ -48,7 +48,6 @@ class RoomController extends Controller
             'code' => $code,
         ];
         $room = Room::create($dataRoom);
-        // dd($room);
 
         $dataRoomUser = [
             'user_id' => Auth::user()->id,
@@ -74,13 +73,15 @@ class RoomController extends Controller
         $currentTime = Carbon::now();
         $leaderboardTime = 15;
 
+        // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
+        // if total player < 2
         if($countPlayer < 2){
             return back();
         }
 
+        // get random question
         $questionsId = Question::getRandomQuestion($quizId);
-        // dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
             
@@ -90,18 +91,20 @@ class RoomController extends Controller
                 'order' => $i+1,
             ];
             $roomQuestion = RoomQuestion::create($dataRoomQuestion);
+
+            $tempRoomQuestion = RoomQuestion::where('room_id', $room->id)->get();
             $getTimer = $roomQuestion->question->timer;
             
-            if($i == 0){
+            if($roomQuestion->order == 1){
                 $timeStartDate = $currentTime->toDateTimeString();
                 $timeEndInt = strtotime($currentTime) + $getTimer + $leaderboardTime;
-            }else{
-                $timeStartDate = $roomQuestion->time_end;
-                $timeEndInt = strtotime($roomQuestion->time_start) + $getTimer + $leaderboardTime;
+                $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
+            }elseif($roomQuestion->order > 1){
+                $timeStartDate = $tempRoomQuestion[$i-1]->time_end;
+                $timeEndInt = strtotime($tempRoomQuestion[$i-1]->time_end) + $getTimer + $leaderboardTime;
+                $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
             }
             
-            $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
-            // dd($timeEndInt, $timeStartDate, $timeEndDate);
             RoomQuestion::where('room_id', $room->id)->where('order', $i+1)->update([
                 'time_start' => $timeStartDate,
                 'time_end' => $timeEndDate,
@@ -129,16 +132,20 @@ class RoomController extends Controller
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        $currentTime = Carbon::now();
+        
         if($savedDataOrder){
             $accessableOrder = $savedDataOrder->order + 1;
         }
-
+        
         if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
             // User can't move to another order by changing the question order on URL
             return back();
         }
-     
-        return view('quiz', compact('roomQuestion', 'code', 'order'));
+        
+        $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+        
+        return view('quiz', compact('roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
     public function joinRoomWithLink($code){  
@@ -324,6 +331,8 @@ class RoomController extends Controller
         $roomUser = RoomUser::getTop5Rank($room->id);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentTime = Carbon::now();
 
         if(intval($order) === $totalQuestion){
             $final = true;
@@ -334,7 +343,9 @@ class RoomController extends Controller
         }
 
         $final = false;
-        return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
+        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+
+        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
     }
 
     public function exitGame($code){

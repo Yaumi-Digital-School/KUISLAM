@@ -13,7 +13,7 @@
         {{-- timer  --}}
         <div class="hidden md:block">
             <p class=" relative z-10 text-green-nav font-bold text-3xl">
-                00:<span class="timer">{{ $roomQuestion->question->timer }}</span> 
+                00:<span class="timer">{{ $timeLeftForQuestion }}</span> 
             </p>
         </div>
         {{-- points and rank  --}}
@@ -38,7 +38,7 @@
     {{-- timer mobile  --}}
     <div class="mt-10 mb-6 flex items-center justify-center md:hidden">
         <p class=" relative z-10 text-green-nav font-bold text-2xl md:text-3xl">
-            00:<span class="timer">{{ $roomQuestion->question->timer }}</span> 
+            00:<span class="timer">{{ $timeLeftForQuestion }}</span> 
         </p>
     </div> 
     {{-- question text --}}
