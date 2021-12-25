@@ -20,6 +20,8 @@ class RoomQuestionFactory extends Factory
             'question_id' => rand(1, 10),
             'room_id' => rand(1, 3),
             'order' => rand(1, 10),
+            'time_start' =>$this->faker->dateTime(),
+            'time_end' => $this->faker->dateTime(),
         ];
     }    
 }

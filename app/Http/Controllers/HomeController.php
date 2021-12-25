@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Quiz;
 use App\Models\Topic;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ class HomeController extends Controller
     }
 
     public function index(){
+        $currentTime = Carbon::now();
+        dd(strtotime($currentTime), $currentTime->toDateTimeString());
         $quizzes = Quiz::getQuizGroupByTitle(); 
         if(Auth::check()){
             // ganti data nya ya kalo dia udah login
@@ -26,7 +29,7 @@ class HomeController extends Controller
         $search = Request()->query('search');
         $selectedTopic = Request()->query('topic');
 
-        $topic = Topic::where('title', $selectedTopic)->first();
+        $topic = Topic::where('slug', $selectedTopic)->first();
         $topics = Topic::limit(4)->get();
         
         if($search){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
@@ -69,8 +70,9 @@ class RoomController extends Controller
         */
 
         $room = Room::getRoomByCode($code);
-        
         $quizId = $room->quiz_id;
+        $currentTime = Carbon::now();
+        $leaderboardTime = 15;
 
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
         if($countPlayer < 2){
@@ -78,14 +80,32 @@ class RoomController extends Controller
         }
 
         $questionsId = Question::getRandomQuestion($quizId);
+        // dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
+            
             $dataRoomQuestion = [
                 'question_id' => $questionsId[$i],
                 'room_id' => $room->id,
                 'order' => $i+1,
             ];
-            RoomQuestion::create($dataRoomQuestion);
+            $roomQuestion = RoomQuestion::create($dataRoomQuestion);
+            $getTimer = $roomQuestion->question->timer;
+            
+            if($i == 0){
+                $timeStartDate = $currentTime->toDateTimeString();
+                $timeEndInt = strtotime($currentTime) + $getTimer + $leaderboardTime;
+            }else{
+                $timeStartDate = $roomQuestion->time_end;
+                $timeEndInt = strtotime($roomQuestion->time_start) + $getTimer + $leaderboardTime;
+            }
+            
+            $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
+            // dd($timeEndInt, $timeStartDate, $timeEndDate);
+            RoomQuestion::where('room_id', $room->id)->where('order', $i+1)->update([
+                'time_start' => $timeStartDate,
+                'time_end' => $timeEndDate,
+            ]);
         }
 
         $dataRoomUser = [
