@@ -36,6 +36,12 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/test/quiz', function () {
         return view('quiz');
     });
+    Route::get('/test/activity', function () {
+        return view('activity');
+    })->name('test.activity');
+    Route::get('/test/activity/made', function () {
+        return view('activity');
+    })->name('test.activity.made');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard'); 

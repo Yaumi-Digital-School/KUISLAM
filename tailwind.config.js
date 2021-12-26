@@ -9,6 +9,9 @@ module.exports = {
 
     theme: {
         extend: {
+            width: {
+                120: "30rem",
+            },
             fontFamily: {
                 poppins: ["Poppins"],
                 sans: ["Nunito", ...defaultTheme.fontFamily.sans],
@@ -28,6 +31,7 @@ module.exports = {
                     darkBg: "#F8F8F8",
                     lightBg: "#FBFBFB",
                     input: "rgba(196, 196, 196, 0.25)",
+                    link: "#9B9B9B",
                 },
                 yellow: {
                     yellowMain: "#FFB73D",

@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     public function index(){
         $currentTime = Carbon::now();
-        dd(strtotime($currentTime), $currentTime->toDateTimeString());
+        // dd(strtotime($currentTime), $currentTime->toDateTimeString());
         $quizzes = Quiz::getQuizGroupByTitle(); 
         if(Auth::check()){
             // ganti data nya ya kalo dia udah login
