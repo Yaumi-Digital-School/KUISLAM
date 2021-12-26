@@ -96,7 +96,7 @@
                                 <div class="flex flex-col items-center">
                                     <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
-                                        <a href="">Edit Profil</a>
+                                        <a href="{{  route('profile.detail-account') }}">Edit Profil</a>
                                         <span>&#8226</span>
                                         <a href="">Lihat Aktivitas</a>
                                     </div>
