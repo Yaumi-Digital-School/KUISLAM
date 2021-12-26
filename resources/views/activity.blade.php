@@ -5,7 +5,6 @@
     
     {{-- navbar  --}}
     @include('layouts.navigation', ['themePage' => 'white'])
-
     
     {{-- main content --}}
     <div class="font-poppins mt-20 md:mt-28">
@@ -19,7 +18,7 @@
             </div>
             {{-- grid content  --}}
             @if (request()->routeIs("test.activity"))
-                <div class="grid grid-cols-12 relative z-10 gap-x-2 gap-y-4 md:gap-6">
+                <div class="grid grid-cols-12 xl:grid-cols-15 relative z-10 gap-x-2 gap-y-4 md:gap-6">
                     @for ($i = 0; $i < 10; $i++)
                         {{-- card --}}
                         <div class="col-span-6 md:col-span-4 lg:col-span-3 flex flex-col rounded-lg bg-gray-card p-2 h-64 md:h-80">

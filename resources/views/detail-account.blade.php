@@ -1,28 +1,11 @@
 <x-main-layout titlePage="Laravel">
     {{-- additional style  --}}
     @section('style')
-        <style>
-            .swiper-button-prev:after,
-            .swiper-rtl .swiper-button-next:after {
-                content: '';
-            }
-            .swiper-button-next:after,
-            .swiper-rtl .swiper-button-next:after {
-                content: '';
-            }
-            .swiper-button-next{
-                position: absolute;
-                right: -4%;
-            }
-            .swiper-button-prev{
-                position: absolute;
-                left: -4%;
-            }
-        </style>
     @endsection
     
     {{-- navbar  --}}
     @include('layouts.navigation', ['themePage' => 'white'])
+
     {{-- main content  --}}
     <div class="bg-green-lightBg font-poppins mt-6">
         {{-- main container  --}}
@@ -31,7 +14,7 @@
                 @csrf
                 @method('PUT')
                 <div class="bg-white flex flex-col space-y-3 @if ($errors->any()) mt-24 mb-10 md:mt-20 md:mb-10 @endif py-4 px-4 max-w-lg rounded-lg mx-4">   
-                    <h1 class="text-center text-4xl font-bold" style="color: #2A610B">Akun</h1>
+                    <h1 class="text-center text-4xl font-bold" style="color: #2A610B">HEHEEH</h1>
                     <div>
                         <label for="name">Nama</label>
                         <input class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" 
