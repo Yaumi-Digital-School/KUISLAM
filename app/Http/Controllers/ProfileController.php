@@ -38,7 +38,7 @@ class ProfileController extends Controller
             User::where('id', Auth::user()->id)->update($dataUser);
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
     public function changePassword(Request $request){
@@ -56,9 +56,9 @@ class ProfileController extends Controller
             ];
             User::where('id', Auth::user()->id)->update($data);
 
-            return back()->with('success', 'Success change your password');
+            return back()->with('success', 'Data berhasil disimpan!');
         }else{
-            return back()->withErrors(['old_password' => 'Make sure you fill your current password']);
+            return back()->with(['failed' => 'Password tidak sesuai']);
         }
     }
 }
