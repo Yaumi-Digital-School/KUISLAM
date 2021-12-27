@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Quiz;
 use App\Models\Topic;
+use App\Models\RoomUser;
 use Illuminate\Http\Request;
+use App\Models\UserQuestionRoom;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -15,14 +18,16 @@ class HomeController extends Controller
     }
 
     public function index(){
-        $currentTime = Carbon::now();
-        // dd(strtotime($currentTime), $currentTime->toDateTimeString());
-        $quizzes = Quiz::getQuizGroupByTitle(); 
-        if(Auth::check()){
-            // ganti data nya ya kalo dia udah login
-            return view('welcome', compact('quizzes'));
+        $quizzes = Quiz::getPopularQuiz(); 
+        $roomUser = RoomUser::getAllDoneQuiz();
+        if($roomUser){
+            // dd($roomUser);
+            $accuracy = UserQuestionRoom::where('user_id', Auth::id())->where('room_id')->where('is_correct', 1)->get()->count();
+            $hasActivity = true;
+            return view('welcome', compact('quizzes', 'roomUser', 'hasActivity'));
         }
-        return view('welcome', compact('quizzes'));
+        $hasActivity = false;
+        return view('welcome', compact('quizzes', 'hasActivity'));
     }
 
     public function redirect($message){
@@ -48,5 +53,14 @@ class HomeController extends Controller
         }
 
         return view('discover', compact('quizzes', 'topics'));
+    }
+
+    public function activity(){
+        $roomUser = RoomUser::getAllDoneQuiz();
+        return view('activity', compact('roomUser'));
+    }
+
+    public function activitymade(){
+        return view('activity');
     }
 }

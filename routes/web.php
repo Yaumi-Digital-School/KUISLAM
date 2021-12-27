@@ -44,9 +44,11 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
         return view('activity');
     })->name('test.activity.made');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard'); 
-    
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/activity', [HomeController::class, 'activity'])->name('activity'); 
+    Route::get('/activity/made', [HomeController::class, 'activitymade'])->name('activity.made'); 
+
     Route::prefix('/rooms')->group(function () {
         Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
         

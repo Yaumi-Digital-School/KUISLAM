@@ -22,6 +22,7 @@ class QuizFactory extends Factory
             'slug' => Str::slug($title, '-'),
             'image' => $this->faker->words(3, true) .'.jpg',
             'description' => $this->faker->sentence(25),
+            'counter' => rand(5, 25),
         ];
     }
 }

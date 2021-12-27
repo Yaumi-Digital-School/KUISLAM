@@ -13,7 +13,11 @@
             {{-- profile information desktop  --}}
             <div class="hidden md:block md:col-span-4 relative z-10">
                 <div class="bg-white shadow-custom1 flex flex-col justify-between items-center px-4 py-6 space-y-4 rounded-xl">
-                    <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('/images/default_profpic.png') }}" alt="">
+                    @if(Auth::user()->avatar)
+                        <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                    @else
+                        <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('/images/default_profpic.png') }}" alt="">
+                    @endif
                     <div class="text-center space-y-1 font-semibold">
                         <p class="text-lg">{{ Auth::user()->name }}</p>
                         <p class="text-gray-link">{{ Auth::user()->username }}</p>
@@ -24,7 +28,7 @@
             <div class="col-span-12 md:col-span-8 relative z-10 mb-10">
                 <div class="bg-white shadow-custom1 rounded-xl pb-2">
                     {{-- form nama, username, email  --}}
-                    <form id="form-name-username" action="{{ route('profile.update-account') }}" method="POST" class="flex flex-col space-y-4 py-4 px-6">
+                    <form id="form-name-username" action="{{ route('profile.update-account') }}" method="POST" enctype="multipart/form-data" class="flex flex-col space-y-4 py-4 px-6">
                         @csrf
                         @method('PUT')
                         {{-- title  --}}
@@ -36,12 +40,16 @@
                         <div class="space-y-4">
                             {{-- image  --}}
                             <div class="flex items-center space-x-4">
-                                <img class="block w-20 rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="">
+                                @if(Auth::user()->avatar)
+                                    <img class="block w-20 rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                                @else
+                                    <img class="block w-20 rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="">
+                                @endif
                                 <div class="flex flex-col space-y-2">
                                     <span class="font-semibold">{{ Auth::user()->username }}</span>
                                     <label class="bg-gray-inputFileButton text-sm text-gray-inputFileButtonTxt rounded p-2 cursor-pointer" >
                                         Ganti gambar
-                                        <input accept=".png, .jpg, .jpeg" type="file" style="display: none;" name="image" id="image"/>
+                                        <input accept=".png, .jpg, .jpeg" type="file" style="display: none;" name="avatar" id="image"/>
                                     </label>
                                 </div>
                             </div>
@@ -75,7 +83,7 @@
                         </div>
                     </form>
                     {{-- form password  --}}
-                    @if(Auth::user()->google_id == NULL|| !Auth::user()->facebook_id == NULL)
+                    @if(!Auth::user()->google_id || !Auth::user()->facebook_id)
                         <form action="{{ route('profile.change-password') }}" method="POST" class="flex flex-col space-y-4 py-4 px-6">
                             @csrf
                             @method('PUT')

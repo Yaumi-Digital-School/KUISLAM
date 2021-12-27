@@ -60,7 +60,7 @@
                                     </div>
                                 @else
                                     <div class="flex items-center h-10 w-10 ">
-                                        <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                        <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
                                     </div>
                                 @endif
                             @endauth
@@ -75,7 +75,7 @@
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
                                         <a href="{{  route('profile.detail-account') }}" class="hover:underline">Edit Profil</a>
                                         <span>&#8226</span>
-                                        <a href="{{  route('roomuser.getallplayedquiz') }}" class="hover:underline">Lihat Aktivitas</a>
+                                        <a href="{{ route("activity") }}" class="hover:underline">Lihat Aktivitas</a>
                                     </div>
                                 @endauth
                                 @guest
@@ -101,7 +101,7 @@
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
                                         <a href="{{  route('profile.detail-account') }}">Edit Profil</a>
                                         <span>&#8226</span>
-                                        <a href="">Lihat Aktivitas</a>
+                                        <a href="{{ route('activity') }}">Lihat Aktivitas</a>
                                     </div>
                                 </div>
                             @endauth
@@ -125,11 +125,11 @@
                         </div>
                     </div>
                 </div>
-                {{-- swiper --}}
-                <div class="mt-3 md:mt-10 flex flex-col space-y-3 md:space-y-6">
-                    @foreach($quizzes as $topic_name => $quiz)
+                @if($hasActivity === true)
+                    {{-- swiper --}}
+                    <div class="mt-3 md:mt-10 flex flex-col space-y-3 md:space-y-6">
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
-                            <h1>{{ $topic_name }}</h1>
+                            <h1>Recent Activity</h1>
                         </div>
                         <div class="md:mx-4 relative swiper-container">
                             @auth
@@ -141,9 +141,9 @@
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
-                                    @foreach($quiz as $data)
+                                    @foreach($roomUser as $data)
                                         @php
-                                            $description = $data->description;
+                                            $description = $data->room->quiz->description;
                                             if(strlen($description) > 60)
                                                 $description = substr($description, 0, 60);
                                             $description .= " ...";
@@ -155,8 +155,8 @@
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">
-                                                        <h3 class="text-sm text-black-cardText">{{ $data->title }}</h3>
+                                                    <a href="#" class="font-bold">
+                                                        <h3 class="text-sm text-black-cardText">{{ $data->room->quiz->title }}</h3>
                                                         <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                                     </a>
                                                 </div>
@@ -182,7 +182,59 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    </div>
+                @endif
+                {{-- swiper --}}
+                <div class="mt-3 md:mt-10 flex flex-col space-y-3 md:space-y-6">
+                    <div class="z-10 text-xl md:text-2xl font-bold relative">
+                        <h1>Popular Quiz</h1>
+                    </div>
+                    <div class="md:mx-4 relative swiper-container">
+                        @auth
+                            <div class="swiper w-full h-64 md:h-80">
+                        @endauth
+                        @guest
+                            <div class="swiper w-full h-64 md:h-72">
+                        @endguest
+                            <!-- Additional required wrapper -->
+                            <div class="swiper-wrapper">
+                                <!-- Slides -->
+                                @foreach($quizzes as $data)
+                                    @php
+                                        $description = $data->description;
+                                        if(strlen($description) > 100)
+                                            $description = substr($description, 0, 100);
+                                        $description .= " ...";
+                                    @endphp    
+                                    {{-- red 0% akurasi --}}
+                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
+                                        <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
+                                            <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-2/5">
+                                            <div class="flex flex-col space-y-1 p-1">
+                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">
+                                                    <h3 class="text-sm text-black-cardText">{{ $data->title }}</h3>
+                                                    <span class="text-sm text-gray-cardText">{{ $description }}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <!-- If we need navigation buttons -->
+                            <div class="swiper-button-prev">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-left'></i>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-right'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
