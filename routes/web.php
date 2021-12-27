@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuizController;
@@ -7,14 +8,12 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\RoomUserController;
-use App\Http\Controllers\LeaderboardController;
 
-use App\Http\Controllers\import\UserImportController;
-use App\Http\Controllers\import\QuestionImportController;
+use App\Http\Controllers\RoomUserController;
 use App\Http\Controllers\import\QuizImportController;
+use App\Http\Controllers\import\UserImportController;
 use App\Http\Controllers\import\TopicImportController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\import\QuestionImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +29,6 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 
-
     // testing
     Route::get('/leaderboard', function () {
         return view('leaderboard');
@@ -38,11 +36,15 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/test/quiz', function () {
         return view('quiz');
     });
+    Route::get('/test/activity', function () {
+        return view('activity');
+    })->name('test.activity');
+    Route::get('/test/activity/made', function () {
+        return view('activity');
+    })->name('test.activity.made');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
-    
-    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard.index');  
+    Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard'); 
     
     Route::prefix('/rooms')->group(function () {
         Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
@@ -52,18 +54,28 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
         });
 
+        
         Route::prefix('/{room:code}')->group(function () {
-            Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
             Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
             Route::get('/enter', [RoomController::class, 'enterRoom'])->name('room.enter');
             Route::get('/player/prewaiting', [RoomController::class, 'preWaitingPlayer'])->name('room.pre-waiting-player');
-            Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
-            Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+            Route::get('/exit-game', [RoomController::class, 'exitGame'])->name('game.exit');
 
-            Route::prefix('/{order}')->group(function () {
-                Route::get('/question', [RoomController::class, 'viewQuestion'])->name('room.view-question');
-                Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
+            // Route::middleware(['waiting'])->group(function () {
+                Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
+                Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
+                Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
+            // });
+
+            Route::prefix('/question')->group(function () {
+                Route::get('/{order}', [RoomController::class, 'viewQuestion'])->name('question.view');
+                Route::post('/{order}', [RoomController::class, 'handleAnswer'])->name('question.handle');
+                Route::get('/{order}/leaderboard', [RoomController::class, 'leaderboard'])->name('question.leaderboard');
+
+                // for testing
+                // Route::get('/{order}/test', [RoomController::class, 'test'])->name('question.test');
             });
+
         });
     });
 

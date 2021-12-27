@@ -13,7 +13,7 @@
         {{-- timer  --}}
         <div class="hidden md:block">
             <p class=" relative z-10 text-green-nav font-bold text-3xl">
-                00:<span class="timer">{{ $roomQuestion->question->timer }}</span> 
+                00:<span class="timer">{{ $timeLeftForQuestion }}</span> 
             </p>
         </div>
         {{-- points and rank  --}}
@@ -38,7 +38,7 @@
     {{-- timer mobile  --}}
     <div class="mt-10 mb-6 flex items-center justify-center md:hidden">
         <p class=" relative z-10 text-green-nav font-bold text-2xl md:text-3xl">
-            00:<span class="timer">{{ $roomQuestion->question->timer }}</span> 
+            00:<span class="timer">{{ $timeLeftForQuestion }}</span> 
         </p>
     </div> 
     {{-- question text --}}
@@ -50,11 +50,10 @@
     <div class="max-w-6xl mx-5 md:mx-auto relative z-10 mb-8">
         <img class="mx-auto" src="{{ asset('images/question_img.png') }}" alt="">
     </div>
-    @else
-
     @endif
     {{-- question options  --}}
-    <form id="form-answer" action="" method="POST" class="grid grid-cols-12 gap-6 md:gap-10 max-w-6xl mx-5 xl:mx-auto relative z-10 text-white my-10">
+    <form id="form-answer" action="{{ route('question.handle', ['room' => $code, 'order' => $order]) }}" method="POST" class="grid grid-cols-12 gap-6 md:gap-10 max-w-6xl mx-5 xl:mx-auto relative z-10 text-white my-10">
+        @csrf
         <div data-option="option_1" id="option_1" class="options ring-red-200 cursor-pointer rounded-md flex space-x-2 bg-red-redMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
             <span>A.</span> <span>{{ $roomQuestion->question->option_1 }}.</span> 
         </div>
@@ -67,10 +66,14 @@
         <div data-option="option_4" id="option_4" class="options ring-yellow-200 cursor-pointer rounded-md flex space-x-2 bg-yellow-yellowMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
             <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}.</span> 
         </div>
-        {{-- <input class="col-span-12" id="answer" type="text" name="answer" value=""> --}}
+        <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
+        <input type="hidden" name="timer" value="60">
+        <button  type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button>
     </form>
     @section('script')
-    <script>    
+    <script>
+        const room_code = "{{$code}}";    
+        const order = "{{$order}}";    
         $( document ).ready(function(){
             // const allTimer = $(".timer");
             setInterval(() => {
@@ -78,12 +81,37 @@
                 const timerNow = parseInt(allTimer[0].innerText);
                 allTimer[0].innerText = timerNow-1;
                 allTimer[1].innerText = timerNow-1;
+                if(timerNow == 40){
+                    let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
+                    url = url.replace(':room', room_code);
+                    url = url.replace(':order', order);
+
+                    const answer = $("#answer").val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            answer_option: answer,
+                            code: room_code,
+                            order: order
+                        },
+                        success: function(response){
+                            // console.log(response.room);
+                            let urlRedirect = "{{ route('question.leaderboard', ['room' => ':room', 'order' => ':order']) }}";
+                            urlRedirect = urlRedirect.replace(':room', response.room);
+                            urlRedirect = urlRedirect.replace(':order', response.order);
+                            window.location.href = urlRedirect;
+                        }
+                    });
+                } 
             }, 1000);
             $('#form-answer .options').click(function(){
                 $(this).parent().find('.ring-8').removeClass('ring-8');
                 $(this).addClass('ring-8');
                 var val = $(this).attr('data-option');
-                $(this).parent().find('input').val(val);
+                $(this).parent().find('#answer').val(val);
             });
         });
     </script>

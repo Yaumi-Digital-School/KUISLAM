@@ -27,6 +27,14 @@ class RoomQuestion extends Model
         return RoomQuestion::where('room_id', $room->id)->delete();
     }
 
+    public static function getQuestionByRoomIdAndOrder($roomId, $order){
+        return RoomQuestion::where('room_id', $roomId)->where('order', $order)->first();
+    }
+
+    public static function getTotalQuestionsInRoom($roomId){
+        return RoomQuestion::where('room_id', $roomId)->get()->count();
+    }
+
     public static function autoIncrement()
     {
         // Start a loop
