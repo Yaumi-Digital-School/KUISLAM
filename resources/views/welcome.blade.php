@@ -1,4 +1,7 @@
 <x-main-layout titlePage="Laravel" themePage="white">
+    {{-- @if (session('message'))
+        {{dd(session('message'))}}
+    @endif --}}
     {{-- additional style  --}}
     @section('style')
         <style>
@@ -186,6 +189,7 @@
     </div>
 
     @section('script')
+        {{-- swiper  --}}
         <script>
             $( window ).on( "load", function() {
                 const swiper = new Swiper('.swiper', {
@@ -217,6 +221,18 @@
                     },
                 });
             });
+        </script>
+        {{-- redirect with message  --}}
+        <script>
+            const message = "{{ session('message') }}";
+            if("{{ session('message') }}"){
+                Swal.fire({
+                    title: 'Host telah membatalkan permainan!',
+                    timer: 2000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                })
+            }
         </script>
     @endsection
 </x-main-layout>

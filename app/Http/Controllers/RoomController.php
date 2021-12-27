@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HostCancelRoom;
 use Carbon\Carbon;
 use App\Events\HostStartQuiz;
 use App\Models\Quiz;
@@ -260,6 +261,8 @@ class RoomController extends Controller
             RoomUser::deleteRoomUserByCode($code);
             RoomQuestion::deleteRoomQuestion($code);
             Room::deleteRoomByCode($code);
+
+            HostCancelRoom::dispatch($room->id);
 
             return redirect()->route('index');
         }elseif ($player){

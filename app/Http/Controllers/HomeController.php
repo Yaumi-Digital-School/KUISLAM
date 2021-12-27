@@ -25,6 +25,13 @@ class HomeController extends Controller
         return view('welcome', compact('quizzes'));
     }
 
+    public function redirect($message){
+        // dd($message);
+        if($message == "host_exit_room"){
+            return redirect()->route('index')->with('message', "Host telah membatalkan permainan!");
+        }
+    }
+
     public function discover(){
         $search = Request()->query('search');
         $selectedTopic = Request()->query('topic');

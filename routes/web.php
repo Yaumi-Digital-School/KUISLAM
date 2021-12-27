@@ -27,6 +27,7 @@ use App\Http\Controllers\import\QuestionImportController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/home/{message?}', [HomeController::class, 'redirect'])->name('index.redirect');
 Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
 
     // testing

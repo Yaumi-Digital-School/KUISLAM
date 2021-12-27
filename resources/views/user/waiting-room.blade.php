@@ -105,6 +105,17 @@
                 window.location.href = url;
             });
         </script>
+        {{-- list host cancel quiz  --}}
+        <script>
+            window.Echo.channel(`host-cancel-room-${room_id}`).listen("HostCancelRoom", (data) => {
+                const message = "host_exit_room";
+
+                let url = "{{ route('index.redirect', ['message' => ':message']) }}";
+                url = url.replace(':message', message);
+                
+                window.location.href = url;
+            });
+        </script>
         {{-- fullscreen --}}
         <script>
             const body = document.documentElement;
