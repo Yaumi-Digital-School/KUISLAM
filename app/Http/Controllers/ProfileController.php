@@ -12,14 +12,15 @@ use Illuminate\Http\Request;
 class ProfileController extends Controller
 {
     public function detailAccount(){
+        // dd(Auth::user()->avatar);
         return view('detail-account');
     }
 
     public function updateAccount(ProfileRequest $request){
-        if ($request->avatar <> "") {
+        if ($request->avatar) {
             // Jika ingin ganti Avatar
             $imageAvatar = $request->avatar;
-            $avatarFile = $request->name."Avatar.".$imageAvatar->extension();
+            $avatarFile = $request->username."Avatar.".$imageAvatar->extension();
             $imageAvatar->move(storage_path('app/public/user/avatar'), $avatarFile);
 
             $dataUser = [
@@ -28,8 +29,7 @@ class ProfileController extends Controller
                 'avatar' => $avatarFile,
             ];
             User::where('id', Auth::user()->id)->update($dataUser);
-        }
-        else {
+        }else {
             // Jika tidak ingin ganti Avatar
             $dataUser = [
                 'name' => $request->name,

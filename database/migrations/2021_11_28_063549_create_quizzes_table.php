@@ -20,6 +20,7 @@ class CreateQuizzesTable extends Migration
             $table->string('slug');
             $table->string('image');
             $table->text('description');
+            $table->integer('counte');
             $table->timestamps();
         });
     }

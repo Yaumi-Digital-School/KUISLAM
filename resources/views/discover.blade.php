@@ -78,8 +78,8 @@
                                     @foreach($quiz as $data)
                                         @php
                                             $description = $data->description;
-                                            if(strlen($description) > 60)
-                                                $description = substr($description, 0, 60);
+                                            if(strlen($description) > 100)
+                                                $description = substr($description, 0, 100);
                                             $description .= " ...";
                                         @endphp    
                                         {{-- red 0% akurasi --}}
@@ -94,11 +94,11 @@
                                                         <span class="text-sm text-gray-cardText">{{ $description }}</span>
                                                     </a>
                                                 </div>
-                                                @auth
+                                                {{-- @auth
                                                     <div class="bg-red-redMain text-white rounded-lg mb-1">
                                                         <span class="ml-4">0% akurasi</span> 
                                                     </div>
-                                                @endauth
+                                                @endauth --}}
                                             </div>
                                         </div>
                                     @endforeach
