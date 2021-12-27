@@ -31,7 +31,7 @@
                 </div>
             </div>
             {{-- button --}}
-            <a href="{{ route('room.enter', $room->code) }}" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center">JOIN</a>
+            <a href="{{ route('room.enter', $room->code) }}" class="bg-white hover:bg-gray-100 transition my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center">JOIN</a>
         </div>
     </div>
 
