@@ -28,6 +28,16 @@
                 <a class="bg-green-lightBg py-1 px-3" href="{{ route('login') }}">Masuk</a>
             @endguest
             @auth
+                @php
+                    $avatar = Auth::user()->avatar;
+                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+
+                    if($isFile){
+                        $file =  true; 
+                    }else{
+                        $file =  false;
+                    }
+                @endphp
                 @if(Auth::user()->avatar)
                     @if($file === true)
                         <div class="flex items-center h-12 w-12 ">

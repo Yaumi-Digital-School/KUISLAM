@@ -54,6 +54,16 @@
                     <div class="w-full md:w-2/6 shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg">
                         <div class="flex flex-col items-center space-y-1">
                             @auth
+                                @php
+                                    $avatar = Auth::user()->avatar;
+                                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+
+                                    if($isFile){
+                                        $file =  true; 
+                                    }else{
+                                        $file =  false;
+                                    }
+                                @endphp
                                 @if(Auth::user()->avatar)
                                     @if($file === true)
                                         <div class="flex items-center h-10 w-10 ">
@@ -99,6 +109,16 @@
                     <div style="border: 1px solid #F8F8F8;" class="drop-shadow-profile mt-3 rounded-lg md:rounded-none md:m-0 z-10 py-3 flex md:hidden justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-3 md:space-y-1 ">
                             @auth
+                                @php
+                                    $avatar = Auth::user()->avatar;
+                                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+
+                                    if($isFile){
+                                        $file =  true; 
+                                    }else{
+                                        $file =  false;
+                                    }
+                                @endphp
                                 @if(Auth::user()->avatar)
                                     @if($file === true)
                                         <div class="flex items-center h-10 w-10 ">
