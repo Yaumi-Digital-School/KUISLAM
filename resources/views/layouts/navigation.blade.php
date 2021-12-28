@@ -20,7 +20,14 @@
             <div class="hidden md:flex space-x-8 font-medium">
                 <a class="py-0.5" href="{{ route("index") }}" @if (request()->routeIs("index")) style="border-bottom: 3px solid white" @endif>Beranda</a>
                 <a class="py-0.5 " href="{{ route("discover") }}" @if (request()->routeIs("discover")) style="border-bottom: 3px solid white" @endif>Eksplor</a>
-                <a class="py-0.5 " href="{{ route("activity") }}" @if (request()->routeIs("activity")) style="border-bottom: 3px solid white" @endif>Aktivitas</a>
+                <a class="py-0.5 cursor-pointer"
+                    @auth
+                        href="{{ route("activity") }}"         
+                    @endauth 
+                    @guest
+                        onclick="triggerAuthPopup()"
+                    @endguest   
+                    @if (request()->routeIs("activity")) style="border-bottom: 3px solid white; " @endif>Aktivitas</a>
             </div>
         </div>
         <div class="hidden md:flex justify-end w-4/12 space-x-8 items-center">

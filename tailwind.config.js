@@ -62,6 +62,7 @@ module.exports = {
                 profile: "0px 4px 4px 0 rgba(0, 0, 0, 0.25)",
                 custom1: "0 2px 6px 0 rgba(0, 0, 0, 0.25)",
                 card: "0 2px 8px 0 rgba(0, 0, 0, 0.25)",
+                authPopup: "0 1px 4px 0 rgba(0, 0, 0, 0.5)",
             },
         },
     },

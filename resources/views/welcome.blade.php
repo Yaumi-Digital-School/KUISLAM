@@ -9,6 +9,13 @@
             .swiper-rtl .swiper-button-next:after {
                 content: '';
             }
+            .swal2-actions {
+                flex-direction: column;
+                width: 80% !important;
+            }
+            .swal2-confirm:focus {
+                border: none !important;
+            }
         </style>
     @endsection
     
@@ -93,9 +100,9 @@
                                 @guest
                                     <p class="font-semibold text-lg">Kamu belum login!</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
-                                        <a href="{{ route('login') }}" class="hover:underline">Masuk</a>
+                                        <a href="{{ route('login') }}" class="hover:underline cursor-pointer">Masuk</a>
                                         <span>&#8226</span>
-                                        <a href="{{ route('register') }}" class="hover:underline">Daftar</a>
+                                        <a href="{{ route('register') }}" class="hover:underline cursor-pointer">Daftar</a>
                                     </div>
                                 @endguest
                             </div>
@@ -222,7 +229,14 @@
                                         </div>
                                         <div class="flex flex-col justify-between h-2/6 px-1">
                                             <div class="flex flex-col space-y-1 p-1">
-                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-semibold text-lg">
+                                                <a 
+                                                    @auth
+                                                        href="{{ route('room.pre-waiting-host', $data->slug) }}" 
+                                                    @endauth
+                                                    @guest
+                                                        onclick="triggerAuthPopup()"
+                                                    @endguest
+                                                    class="font-semibold text-lg cursor-pointer">
                                                     {{ $data->title }}
                                                 </a>
                                             </div>

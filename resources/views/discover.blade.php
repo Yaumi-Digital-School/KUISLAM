@@ -103,7 +103,12 @@
                                         </div>
                                         <div class="flex flex-col justify-between h-2/6 px-1">
                                             <div class="flex flex-col space-y-1 p-1">
-                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-semibold text-lg">
+                                                <a @auth
+                                                        href="{{ route('room.pre-waiting-host', $data->slug) }}" 
+                                                    @endauth
+                                                    @guest
+                                                        onclick="triggerAuthPopup()"
+                                                    @endguest class="font-semibold text-lg cursor-pointer">
                                                     {{ $data->title }}
                                                 </a>
                                             </div>
