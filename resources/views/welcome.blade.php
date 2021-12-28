@@ -54,13 +54,19 @@
                     <div class="w-full md:w-2/6 shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg">
                         <div class="flex flex-col items-center space-y-1">
                             @auth
-                                @if(!Auth::user()->avatar)
-                                    <div class="flex items-center h-10 w-10 ">
-                                        <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
-                                    </div>
+                                @if(Auth::user()->avatar)
+                                    @if($file === true)
+                                        <div class="flex items-center h-10 w-10 ">
+                                            <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
+                                        </div>
+                                    @else
+                                        <div class="flex items-center h-10 w-10 ">
+                                            <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="flex items-center h-10 w-10 ">
-                                        <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
+                                        <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
                                     </div>
                                 @endif
                             @endauth
@@ -93,9 +99,21 @@
                     <div style="border: 1px solid #F8F8F8;" class="drop-shadow-profile mt-3 rounded-lg md:rounded-none md:m-0 z-10 py-3 flex md:hidden justify-center items-center bg-gray-lightBg col-span-5">
                         <div class="flex flex-col items-center space-y-3 md:space-y-1 ">
                             @auth
-                                <div class="flex items-center h-10 w-10 ">
-                                    <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
-                                </div>
+                                @if(Auth::user()->avatar)
+                                    @if($file === true)
+                                        <div class="flex items-center h-10 w-10 ">
+                                            <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
+                                        </div>
+                                    @else
+                                        <div class="flex items-center h-10 w-10 ">
+                                            <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="flex items-center h-10 w-10 ">
+                                        <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                    </div>
+                                @endif
                                 <div class="flex flex-col items-center">
                                     <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">

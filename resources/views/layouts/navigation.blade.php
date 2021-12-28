@@ -29,9 +29,15 @@
             @endguest
             @auth
                 @if(Auth::user()->avatar)
-                    <div class="flex items-center h-12 w-12 ">
-                        <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
-                    </div>
+                    @if($file === true)
+                        <div class="flex items-center h-12 w-12 ">
+                            <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
+                        </div>
+                    @else
+                        <div class="flex items-center h-12 w-12 ">
+                            <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                        </div>
+                    @endif
                 @else
                     <div class="flex items-center h-12 w-12 ">
                         <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">

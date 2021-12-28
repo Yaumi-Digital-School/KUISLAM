@@ -213,7 +213,7 @@ class RoomController extends Controller
         ];
         RoomUser::create($dataRoomUser);
         
-        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
 
         return redirect()->route('room.waiting', $room->code);   
     }
@@ -267,7 +267,7 @@ class RoomController extends Controller
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
-            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
             RoomUser::deleteRoomUserByUserId($code);
 
             return redirect()->route('index');
