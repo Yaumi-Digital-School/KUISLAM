@@ -1,8 +1,4 @@
 <x-main-layout titlePage="Laravel" themePage="white">
-    {{-- @if (session('message'))
-        {{dd(session('message'))}}
-    @endif --}}
-    {{-- additional style  --}}
     @section('style')
         <style>
             .swiper-button-prev:after,
@@ -32,13 +28,13 @@
                 <div class="flex flex-col md:flex-row justify-between md:space-x-8">
                     {{-- kode game  --}}
                     <div class="w-full mr-20 md:w-4/6 md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg">
-                        <div class="bg-gray-input w-full md:w-5/6 px-4 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
+                        <div class="w-full md:w-4/6 px-4 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
                             <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col">
                                 @csrf
                                 <div class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
                                     <input type="text" name="code"
                                         class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                                        placeholder="Masukan kode game...">
+                                        placeholder="Masukan kode permainan...">
                                     <button type="submit" 
                                         class="bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition">
                                         Gabung
@@ -169,37 +165,24 @@
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
                             <h1>Recent Activity</h1>
                         </div>
-                        <div class="md:mx-4 relative swiper-container">
-                            @auth
-                                <div class="swiper w-full h-64 md:h-80">
-                            @endauth
-                            @guest
-                                <div class="swiper w-full h-64 md:h-72">
-                            @endguest
+                        <div class="relative swiper-container">
+                            <div class="swiper w-full h-64 md:h-72 p-1">
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
-                                    @foreach($roomUser as $data)
-                                        @php
-                                            $description = $data->room->quiz->description;
-                                            if(strlen($description) > 60)
-                                                $description = substr($description, 0, 60);
-                                            $description .= " ...";
-                                        @endphp    
-                                        {{-- red 0% akurasi --}}
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                    @foreach($roomUser as $data) 
+                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                                <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
                                             </div>
-                                            <div class="flex flex-col justify-between h-2/5">
+                                            <div class="flex flex-col justify-between h-2/5 px-1">
                                                 <div class="flex flex-col space-y-1 p-1">
-                                                    <a href="#" class="font-bold">
-                                                        <h3 class="text-sm text-black-cardText">{{ $data->room->quiz->title }}</h3>
-                                                        <span class="text-sm text-gray-cardText">{{ $description }}</span>
-                                                    </a>
+                                                    <span class="font-semibold text-lg">
+                                                        {{ $data->room->quiz->title }}
+                                                    </span>
                                                 </div>
                                                 @auth
-                                                    <div class="bg-red-redMain text-white rounded-lg mb-1">
+                                                    <div class="bg-red-redMain text-white rounded-lg mb-2">
                                                         <span class="ml-4">0% akurasi</span> 
                                                     </div>
                                                 @endauth
@@ -227,33 +210,20 @@
                     <div class="z-10 text-xl md:text-2xl font-bold relative">
                         <h1>Popular Quiz</h1>
                     </div>
-                    <div class="md:mx-4 relative swiper-container">
-                        @auth
-                            <div class="swiper w-full h-64 md:h-80">
-                        @endauth
-                        @guest
-                            <div class="swiper w-full h-64 md:h-72">
-                        @endguest
+                    <div class="relative swiper-container">
+                        <div class="swiper w-full h-56 md:h-64 p-2">
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
                                 <!-- Slides -->
-                                @foreach($quizzes as $data)
-                                    @php
-                                        $description = $data->description;
-                                        if(strlen($description) > 100)
-                                            $description = substr($description, 0, 100);
-                                        $description .= " ...";
-                                    @endphp    
-                                    {{-- red 0% akurasi --}}
-                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                        <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                            <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                                @foreach($quizzes as $data) 
+                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                        <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                            <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
                                         </div>
-                                        <div class="flex flex-col justify-between h-2/5">
+                                        <div class="flex flex-col justify-between h-2/6 px-1">
                                             <div class="flex flex-col space-y-1 p-1">
-                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">
-                                                    <h3 class="text-sm text-black-cardText">{{ $data->title }}</h3>
-                                                    <span class="text-sm text-gray-cardText">{{ $description }}</span>
+                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-semibold text-lg">
+                                                    {{ $data->title }}
                                                 </a>
                                             </div>
                                         </div>
@@ -286,23 +256,28 @@
                     // Optional parameters
                     slidesPerView: 2,
                     spaceBetween: 15,
+                    slideShadows: true,
                     // Navigation arrows
                     breakpoints: {
                         768:{
                             slidesPerView: 3,
                             spaceBetween: 20,
+                            slideShadows: true,
                         },
                         1024:{
                             slidesPerView: 4,
                             spaceBetween: 30,
+                            slideShadows: true,
                         },
                         1280:{
                             slidesPerView: 4,
                             spaceBetween: 30,
+                            slideShadows: true,
                         },
                         1600:{
                             slidesPerView: 5,
                             spaceBetween: 45,
+                            slideShadows: true,
                         }
                     },
                     navigation: {

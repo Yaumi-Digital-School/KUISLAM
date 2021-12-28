@@ -29,7 +29,7 @@ module.exports = {
                 },
                 gray: {
                     nav: "#C4C4C4",
-                    card: "#F5F5F5",
+                    card: "#FEFBFB",
                     cardText: "#BEBEBE",
                     darkBg: "#F8F8F8",
                     lightBg: "#FBFBFB",
@@ -39,6 +39,8 @@ module.exports = {
                     inputFileButton: "#D9D9D9",
                     inputFileButtonTxt: "#7A7A7A",
                     link: "#9B9B9B",
+                    topicList: "#F5F5F5",
+                    topicListTxt: "#656565",
                 },
                 yellow: {
                     yellowMain: "#FFB73D",
@@ -57,11 +59,9 @@ module.exports = {
                 "3xl": "1600px",
             },
             boxShadow: {
-                profile: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                profile: "0px 4px 4px 0 rgba(0, 0, 0, 0.25)",
                 custom1: "0 2px 6px 0 rgba(0, 0, 0, 0.25)",
-            },
-            dropShadow: {
-                profile: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                card: "0 2px 8px 0 rgba(0, 0, 0, 0.25)",
             },
         },
     },

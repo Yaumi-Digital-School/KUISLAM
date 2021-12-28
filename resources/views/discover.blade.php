@@ -10,6 +10,9 @@
             .swiper-rtl .swiper-button-next:after {
                 content: '';
             }
+            .swiper-pagination-bullet-active {
+                background: #6DAF2B;
+            }
         </style>
     @endsection
     
@@ -23,7 +26,7 @@
         <div class="max-w-screen-xl 3xl:max-w-screen-2xl mx-auto h-screen">
             <div class="px-4 xl:px-0 pb-20">
                 {{-- search and topic list --}}
-                <div class="z-10 relative flex flex-col md:flex-row justify-between space-y-4 mb-8 bg-gray-lightBg md:shadow-profile rounded-lg md:px-8 md:pt-4 lg:pt-2 md:h-24">
+                <div class="z-10 relative flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 mb-8 rounded-lg">
                     {{-- search quiz based on topic  --}}
                     <form action="{{ route('discover') }}" method="GET" class="z-10 md:w-2/5 flex flex-col md:flex-row space-y-4">
                         {{-- input title quiz --}}
@@ -45,13 +48,13 @@
                     <h1 class="font-semibold md:hidden z-10 ">Populer Topic</h1>
                     <div class="md:w-3/5 mt-3 md:mt-0 flex flex-col item overflow-hidden">
                         <div class="md:mx-4 relative swiper-container">
-                            <div class="swiper-topic w-full h-10 lg:h-12">
+                            <div class="swiper-topic w-full h-10 lg:h-12 p-1">
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
                                     <!-- Slides -->
                                     @foreach($topics as $topic)
-                                        <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="swiper-slide flex flex-col border-2 border-red-redMain text-red-redMain font-semibold justify-center items-center rounded">
-                                            {{ $topic->title }}
+                                        <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile bg-gray-topicList text-gray-topicListTxt font-semibold justify-center items-center rounded">
+                                            {{$topic->title}}
                                         </a>
                                     @endforeach
                                 </div>
@@ -59,62 +62,67 @@
                         </div>
                     </div>
                 </div>
-                {{-- swiper --}}
-                <div class="flex flex-col space-y-8">
-                    @foreach($quizzes as $topic_name => $quiz)
-                    <div class="md:mx-4 relative swiper-container">
-                        <div class="z-10 text-xl md:text-2xl font-bold relative">
-                            <h1>{{ $topic_name }}</h1>
-                        </div>
-                        @auth
-                            <div class="swiper w-full h-64 md:h-80">
-                        @endauth
-                        @guest
-                            <div class="swiper w-full h-64 md:h-72">
-                        @endguest
-                                <!-- Additional required wrapper -->
-                                <div class="swiper-wrapper">
-                                    <!-- Slides -->
-                                    @foreach($quiz as $data)
-                                        @php
-                                            $description = $data->description;
-                                            if(strlen($description) > 100)
-                                                $description = substr($description, 0, 100);
-                                            $description .= " ...";
-                                        @endphp    
-                                        {{-- red 0% akurasi --}}
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card p-2">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
-                                            </div>
-                                            <div class="flex flex-col justify-between h-2/5">
-                                                <div class="flex flex-col space-y-1 p-1">
-                                                    <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-bold">
-                                                        <h3 class="text-sm text-black-cardText">{{ $data->title }}</h3>
-                                                        <span class="text-sm text-gray-cardText">{{ $description }}</span>
-                                                    </a>
-                                                </div>
-                                                {{-- @auth
-                                                    <div class="bg-red-redMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">0% akurasi</span> 
-                                                    </div>
-                                                @endauth --}}
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <!-- If we need navigation buttons -->
-                                <div class="swiper-button-prev">
-                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                        <i class='bx bx-chevron-left'></i>
-                                    </div>
-                                </div>
-                                <div class="swiper-button-next">
-                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                        <i class='bx bx-chevron-right'></i>
-                                    </div>
+                {{-- swiper hero slide  --}}
+                <div class="swiper-container mb-8 overflow-hidden">
+                    <div class="relative z-10 swiper-hero w-full h-64 md:h-80 p-2">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
                                 </div>
                             </div>
+                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                                </div>
+                            </div>
+                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- If we need pagination -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                {{-- swiper quiz list--}}
+                <div class="flex flex-col space-y-8">
+                    @foreach($quizzes as $topic_name => $quiz)
+                    <div class="z-10 text-xl md:text-2xl font-bold relative">
+                        <h1>{{ $topic_name }}</h1>
+                    </div>
+                    <div class="relative swiper-container">
+                        <div class="swiper w-full h-56 md:h-64 p-2">
+                            <!-- Additional required wrapper -->
+                            <div class="swiper-wrapper">
+                                <!-- Slides -->
+                                @foreach($quiz as $data) 
+                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                        <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                            <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                        </div>
+                                        <div class="flex flex-col justify-between h-2/6 px-1">
+                                            <div class="flex flex-col space-y-1 p-1">
+                                                <a href="{{ route('room.pre-waiting-host', $data->slug) }}" class="font-semibold text-lg">
+                                                    {{ $data->title }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <!-- If we need navigation buttons -->
+                            <div class="swiper-button-prev">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-left'></i>
+                                </div>
+                            </div>
+                            <div class="swiper-button-next">
+                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
+                                    <i class='bx bx-chevron-right'></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     @endforeach
                 </div>
@@ -172,6 +180,19 @@
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
                     },
+                });
+                const swiperHero = new Swiper('.swiper-hero', {
+                    // Optional parameters
+                    slidesPerView: 1,
+                    spaceBetween: 15,
+                    // If we need pagination
+                    pagination: {
+                        el: '.swiper-pagination',
+                    },
+                    autoplay: {
+                        delay: 4000,
+                    },
+                    speed: 1000,
                 });
             });
         </script>
