@@ -2,7 +2,7 @@
     {{-- navbar --}}
     <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
         <nav class="text-white flex w-2/3 md:w-full justify-between items-center px-6 font-bold h-full">
-            <a href="{{ route('index') }}" class="text-4xl flex items-center text-white">
+            <a href="{{ route('index') }}" class="md:hidden text-4xl flex items-center text-white">
                 <i class='bx bx-chevron-left'></i>
             </a>
             <a href="{{ route("index") }}" class="">

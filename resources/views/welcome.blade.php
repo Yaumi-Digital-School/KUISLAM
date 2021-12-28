@@ -56,41 +56,46 @@
                     {{-- desktop  profile --}}
                     <div class="w-full md:w-2/6 shadow-profile rounded-lg mt-3 md:m-0 z-10 py-3 hidden md:flex justify-center items-center bg-gray-lightBg">
                         <div class="flex flex-col items-center space-y-1">
-                            @auth
-                                @php
-                                    $avatar = Auth::user()->avatar;
-                                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
-
-                                    if($isFile){
-                                        $file =  true; 
-                                    }else{
-                                        $file =  false;
-                                    }
-                                @endphp
-                                @if(Auth::user()->avatar)
-                                    @if($file === true)
-                                        <div class="flex items-center h-10 w-10 ">
-                                            <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
-                                        </div>
+                            <div class="flex items-center justify-between space-x-3">
+                                @auth
+                                    @php
+                                        $avatar = Auth::user()->avatar;
+                                        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+    
+                                        if($isFile){
+                                            $file =  true; 
+                                        }else{
+                                            $file =  false;
+                                        }
+                                    @endphp
+                                    @if(Auth::user()->avatar)
+                                        @if($file === true)
+                                            <div class="flex items-center h-10 w-10 ">
+                                                <img class="rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="burger icon">
+                                            </div>
+                                        @else
+                                            <div class="flex items-center h-10 w-10 ">
+                                                <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                            </div>
+                                        @endif
                                     @else
                                         <div class="flex items-center h-10 w-10 ">
-                                            <img class="rounded-full" src="{{ Auth::user()->avatar }}" alt="burger icon">
+                                            <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
                                         </div>
                                     @endif
-                                @else
+                                @endauth
+                                @guest
                                     <div class="flex items-center h-10 w-10 ">
                                         <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
                                     </div>
-                                @endif
-                            @endauth
-                            @guest
-                                <div class="flex items-center h-10 w-10 ">
-                                    <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
+                                @endguest
+                                <div>
+                                    <p class="font-semibold text-sm">{{ Auth::user()->name }}</p>
+                                    <p class="font-semibold text-gray-link text-sm">{{ Auth::user()->username }}</p>
                                 </div>
-                            @endguest
+                            </div>
                             <div class="flex flex-col items-center">
                                 @auth
-                                    <p class="font-semibold text-lg">{{ Auth::user()->name }}</p>
                                     <div class="flex text-sm space-x-2 text-green-lightBg font-semibold">
                                         <a href="{{  route('profile.detail-account') }}" class="hover:underline">Edit Profil</a>
                                         <span>&#8226</span>
@@ -263,6 +268,7 @@
     </div>
 
     @section('script')
+
         {{-- swiper  --}}
         <script>
             $( window ).on( "load", function() {
