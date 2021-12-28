@@ -35,7 +35,7 @@ class UserQuestionRoom extends Model
     }
 
     public static function getSavedDataOrder($roomId){
-        return UserQuestionRoom::where('user_id', Auth::id())->where('room_id', $roomId)->get()->SortByDesc('order');
+        return UserQuestionRoom::where('user_id', Auth::user()->id)->where('room_id', $roomId)->get()->SortByDesc('order');
     }
 
     public static function getAuthUserRank($roomId, $order){

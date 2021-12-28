@@ -3,24 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
-use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
     public function detailAccount(){
-        // dd(Auth::user()->avatar);
-        return view('detail-account');
+        $avatar = Auth::user()->avatar;
+        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+        
+        if($isFile){
+            $file = true;
+            return view('detail-account', compact('file'));  
+        }else{
+            $file = false;
+            return view('detail-account', compact('file')); 
+        }
     }
 
     public function updateAccount(ProfileRequest $request){
         if ($request->avatar) {
             // Jika ingin ganti Avatar
             $imageAvatar = $request->avatar;
-            $avatarFile = $request->username."Avatar.".$imageAvatar->extension();
+            $avatarFile = Auth::user()->username . "." . $imageAvatar->extension();
             $imageAvatar->move(storage_path('app/public/user/avatar'), $avatarFile);
 
             $dataUser = [

@@ -14,7 +14,11 @@
             <div class="hidden md:block md:col-span-4 relative z-10">
                 <div class="bg-white shadow-custom1 flex flex-col justify-between items-center px-4 py-6 space-y-4 rounded-xl">
                     @if(Auth::user()->avatar)
-                        <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                        @if($file === true)
+                            <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                        @else
+                            <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ Auth::user()->avatar }}" alt="">
+                        @endif
                     @else
                         <img class="block w-24 rounded-full border-4 border-green-nav" src="{{ asset('/images/default_profpic.png') }}" alt="">
                     @endif
@@ -41,7 +45,11 @@
                             {{-- image  --}}
                             <div class="flex items-center space-x-4">
                                 @if(Auth::user()->avatar)
-                                    <img class="block w-20 rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                                    @if($file === true)
+                                        <img class="block w-20 rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                                    @else
+                                        <img class="block w-20 rounded-full" src="{{ Auth::user()->avatar }}" alt="">
+                                    @endif
                                 @else
                                     <img class="block w-20 rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="">
                                 @endif
