@@ -27,26 +27,13 @@ class HomeController extends Controller
             $avatar = Auth::user()->avatar;
             $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
 
-            if($isFile){
-                $file =  true;
-                if($roomUser->isNotEmpty()){
-                    $hasActivity = true;
-                    return view('welcome', compact('quizzes', 'roomUser', 'hasActivity', 'file'));  
-                }else{
-                    $hasActivity = false;
-                    return view('welcome', compact('quizzes', 'roomUser', 'hasActivity', 'file'));
-                }
-            }else{
-                $file =  false;
-                if($roomUser->isNotEmpty()){
-                    $hasActivity = true;
-                    return view('welcome', compact('quizzes', 'roomUser', 'hasActivity', 'file'));  
-                }else{
-                    // dd(true);
-                    $hasActivity = false;
-                    return view('welcome', compact('quizzes', 'roomUser', 'hasActivity', 'file'));
-                }
+            if($roomUser->isNotEmpty()){
+                $hasActivity = true;
+                return view('welcome', compact('quizzes', 'roomUser', 'hasActivity'));  
             }
+
+            $hasActivity = false;
+            return view('welcome', compact('quizzes', 'roomUser', 'hasActivity'));           
         }
         $hasActivity = false;
         return view('welcome', compact('quizzes', 'hasActivity'));
@@ -65,26 +52,6 @@ class HomeController extends Controller
 
         $topic = Topic::where('slug', $selectedTopic)->first();
         $topics = Topic::limit(4)->get();
-
-        if(Auth::check()){
-            $avatar = Auth::user()->avatar;
-            $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
-
-            if($isFile){
-                $file =  true;
-            }else{
-                $file =  false;
-            }
-
-            if($search){
-                $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
-            }elseif($selectedTopic){
-                $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->with('topic')->latest()->get()->groupBy('topic.title');
-            }else{
-                $quizzes = Quiz::getQuizGroupByTitle();
-            }
-            return view('discover', compact('quizzes', 'topics', 'file'));
-        }
         
         if($search){
             $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
@@ -99,28 +66,11 @@ class HomeController extends Controller
 
     public function activity(){
         $roomUser = RoomUser::getAllDoneQuiz();
-        $avatar = Auth::user()->avatar;
-        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
-
-        if($isFile){
-            $file =  true;
-            return view('activity', compact('roomUser', 'file'));
-        }else{
-            $file =  false;
-            return view('activity', compact('roomUser', 'file'));
-        }        
+             
+        return view('activity', compact('roomUser'));   
     }
 
-    public function activitymade(){
-        $avatar = Auth::user()->avatar;
-        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
-
-        if($isFile){
-            $file = true;
-            return view('activity', compact('file'));
-        }else{
-            $file = false;
-            return view('activity', compact('file'));
-        }        
+    public function activitymade(){    
+        return view('activity');   
     }
 }
