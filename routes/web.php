@@ -46,6 +46,9 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/admin', function () {
         return view('admin.welcome');
     });
+    Route::get('/verification', function () {
+        return view('verification');
+    });
 
 
 Route::middleware('auth')->group(function () {
