@@ -30,7 +30,7 @@
             @auth
                 @php
                     $avatar = Auth::user()->avatar;
-                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
+                    $isFile = Str::contains($avatar, ['.jpg', '.jpeg', '.png']);
 
                     if($isFile){
                         $file =  true; 
