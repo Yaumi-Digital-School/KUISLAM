@@ -20,7 +20,7 @@
         <div class="grid grid-cols-4 gap-x-2 grid-flow-row z-10 relative sm:px-12 px-4 rounded-full items-center">
             {{-- 1st --}}
             {{-- Medal --}}
-            @if($data->rank === 1)
+            @if($loop->index === 0)
             <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/1st_medal.svg')}}"> 
             </div>
@@ -43,7 +43,7 @@
             </div>
             {{-- 2nd --}}
             {{-- Medal --}}
-            @elseif($data->rank === 2)
+            @elseif($loop->index === 1)
             <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/2nd_medal.svg')}}"> 
             </div>
@@ -66,7 +66,7 @@
             </div>
             {{-- 3rd --}}
             {{-- Medal --}}
-            @elseif($data->rank === 3)
+            @elseif($loop->index === 2)
             <div class="flex justify-end row-start-1">
                 <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/3rd_medal.svg')}}"> 
             </div>
