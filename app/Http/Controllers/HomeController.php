@@ -24,8 +24,6 @@ class HomeController extends Controller
         
         if(Auth::check()){
             $roomUser = RoomUser::getAllDoneQuiz();
-            $avatar = Auth::user()->avatar;
-            $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
 
             if($roomUser->isNotEmpty()){
                 $hasActivity = true;
@@ -54,7 +52,7 @@ class HomeController extends Controller
         $topics = Topic::limit(4)->get();
         
         if($search){
-            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
+            $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->orWhere('description', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
         }elseif($selectedTopic){
             $quizzes = Quiz::where('topic_id', 'LIKE', "%{$topic->id}%")->with('topic')->latest()->get()->groupBy('topic.title');
         }else{

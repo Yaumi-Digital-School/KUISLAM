@@ -17,6 +17,9 @@
     
     {{-- Rank --}}
     @foreach($roomUser as $data)
+        @php
+            $file = App\Models\User::authUserImageIsFile($data->user->avatar);
+        @endphp
         <div class="grid grid-cols-4 gap-x-2 grid-flow-row z-10 relative sm:px-12 px-4 rounded-full items-center">
             {{-- 1st --}}
             {{-- Medal --}}
@@ -27,13 +30,19 @@
             <div class="col-start-2 col-end-4 bg-orange-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
-                    @if(!$data->user->avatar)
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
+                    @if($data->user->avatar)
+                        @if($file === true)
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @else                        
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -50,13 +59,19 @@
             <div class="col-start-2 col-end-4 bg-blue-600 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
-                    @if(!$data->user->avatar)
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
+                    @if($data->user->avatar)
+                        @if($file === true)
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @else                        
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -73,13 +88,19 @@
             <div class="col-start-2 col-end-4 bg-green-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
-                    @if(!$data->user->avatar)
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
+                    @if($data->user->avatar)
+                        @if($file === true)
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @else                        
+                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            </div>
+                        @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -96,13 +117,19 @@
                     <div class="row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 bg-gray-100 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
                         {{-- User Info --}}
                         <div class="flex items-center">
-                            @if(!$data->user->avatar)
-                                <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                                </div>
+                            @if($data->user->avatar)
+                                @if($file === true)
+                                    <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                        <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                                    </div>
+                                @else                        
+                                    <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
+                                        <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                    </div>
+                                @endif
                             @else
                                 <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                    <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
                                 </div>
                             @endif
                             <h1 class="text-green-nav font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>

@@ -13,16 +13,9 @@ use App\Http\Requests\ProfileRequest;
 class ProfileController extends Controller
 {
     public function detailAccount(){
-        $avatar = Auth::user()->avatar;
-        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', 'png']);
-        
-        if($isFile){
-            $file = true;
-            return view('detail-account', compact('file'));  
-        }else{
-            $file = false;
-            return view('detail-account', compact('file')); 
-        }
+        $file = User::authUserImageIsFile(Auth::user()->avatar);
+
+        return view('detail-account', compact('file'));  
     }
 
     public function updateAccount(ProfileRequest $request){
