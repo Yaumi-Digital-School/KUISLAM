@@ -89,10 +89,12 @@
                                         <img class="rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="burger icon">
                                     </div>
                                 @endguest
-                                <div>
-                                    <p class="font-semibold text-sm">{{ Auth::user()->name }}</p>
-                                    <p class="font-semibold text-gray-link text-sm">{{ Auth::user()->username }}</p>
-                                </div>
+                                @auth
+                                    <div>
+                                        <p class="font-semibold text-sm">{{ Auth::user()->name }}</p>
+                                        <p class="font-semibold text-gray-link text-sm">{{ Auth::user()->username }}</p>
+                                    </div>
+                                @endauth    
                             </div>
                             <div class="flex flex-col items-center">
                                 @auth
@@ -184,7 +186,7 @@
                                     <!-- Slides -->
                                     @foreach($roomUser as $data) 
                                         <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
                                                 <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
                                             </div>
                                             <div class="flex flex-col justify-between h-2/5 px-1">
@@ -268,7 +270,6 @@
     </div>
 
     @section('script')
-
         {{-- swiper  --}}
         <script>
             $( window ).on( "load", function() {
