@@ -5,6 +5,8 @@ use App\Models\QuizUser;
 
 use App\Models\RoomUser;
 use App\Models\Leaderboard;
+use Illuminate\Support\Str;
+use App\Models\UserQuestionRoom;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -72,5 +74,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
         // shuffle the result
         return str_shuffle($pin);
+    }
+
+    public static function authUserImageIsFile($avatar){
+        $isFile = Str::contains($avatar, ['.jpg', '.jpeg', '.png']);
+
+        if($isFile){
+            return true; 
+        }
+        return false;
     }
 }
