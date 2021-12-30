@@ -43,9 +43,14 @@ Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
     Route::get('/test/activity/made', function () {
         return view('activity');
     })->name('test.activity.made');
-    Route::get('/admin', function () {
-        return view('admin.welcome');
-    });
+
+    // testing admin 
+    Route::get('/test/admin', function () {
+        return view('admin.dashboard');
+    })->name('test.admin.dashboard');
+    Route::get('/test/admin/topics', function () {
+        return view('admin.topics');
+    })->name('test.admin.topics');
 
 
 Route::middleware('auth')->group(function () {
@@ -120,7 +125,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', function(){
         Auth::logout();
         return redirect()->route('index');
-    });
+    })->name('logout-anchor');
 });
 
 

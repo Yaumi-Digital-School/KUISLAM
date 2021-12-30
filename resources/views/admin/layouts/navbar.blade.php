@@ -1,6 +1,6 @@
-<div class="container flex items-center justify-between md:justify-end w-full h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
+<div class="container flex items-center justify-between md:justify-end w-full h-full px-6 mx-auto text-green-nav">
   <!-- Mobile hamburger -->
-  <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple"
+  <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-green"
     @click="toggleSideMenu"
     aria-label="Menu">
     <svg class="w-6 h-6"
@@ -79,26 +79,23 @@
                 <span>Settings</span>
                 </a>
             </li>
-            <li class="flex">
-                <a
-                class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-                href="#"
-                >
-                <svg
-                    class="w-4 h-4 mr-3"
-                    aria-hidden="true"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                    ></path>
-                </svg>
-                <span>Log out</span>
+            <li class="logout-btn" class="flex">
+                <a href="{{ route('logout-anchor') }}" class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                    <svg
+                        class="w-4 h-4 mr-3"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+                        ></path>
+                    </svg>
+                    <span>Log out</span>
                 </a>
             </li>
             </ul>

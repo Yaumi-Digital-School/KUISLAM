@@ -6,6 +6,7 @@ use App\Models\Topic;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\TopicRequest;
+use Exception;
 
 class TopicController extends Controller
 {    
@@ -17,8 +18,9 @@ class TopicController extends Controller
     public function index(Topic $topic){
         // route : topics (GET)
         // route name : topics.index
-        $topics = Topic::latest()->paginate(10);
-        return view('admin.import.topics.topics', compact('topics'));
+        $topics = Topic::orderBy('updated_at', 'desc')->get();
+        // dd($topics);
+        return view('admin.topics', compact('topics'));
     }
 
     /**
@@ -44,14 +46,16 @@ class TopicController extends Controller
 
         $title =  $request->title;
 
-        dd($title);
+        // dd($title);
         $data = [
             'title' => $title,
             'slug' => Str::slug($title, '-'),
         ];
-        Topic::create($data);
 
-        return redirect()->route('topics.index');
+        Topic::create($data);
+        return response()->json(['success' => $data ]);
+
+        // return redirect()->route('topics.index');
     }
 
     /**
@@ -90,9 +94,11 @@ class TopicController extends Controller
         // route name : topics.update
         $data = [
             'title' => $request->title,
+            'slug' => Str::slug($request->title, '-'),
         ];
         Topic::updateTopic($id, $data);
-        return redirect()->route('topics.index');
+        // return redirect()->route('topics.index');
+        return response()->json(['success' => $data ]);
     }
 
     /**
@@ -105,6 +111,7 @@ class TopicController extends Controller
         // route : topics/{topic} (DELETE)
         // route name : topics.destroy
         Topic::deleteTopic($id);
-        return redirect()->route('topics.index');
+        // return redirect()->route('topics.index');
+        return response()->json(['success' => "Topic berhasil dihapus"]);
     }
 }
