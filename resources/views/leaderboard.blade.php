@@ -30,19 +30,20 @@
             <div class="col-start-2 col-end-4 bg-orange-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
+                <h1 class="text-white font-bold sm:text-xl text-xs font-poppins mr-4">{{$loop->index+1}}</h1>
                     @if($data->user->avatar)
                         @if($file === true)
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-4">
                             </div>
                         @else                        
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-4">
                             </div>
                         @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-orange-avatar border-4">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -59,19 +60,20 @@
             <div class="col-start-2 col-end-4 bg-blue-600 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
+                    <h1 class="text-white font-bold sm:text-xl text-xs font-poppins mr-4">{{$loop->index+1}}</h1>
                     @if($data->user->avatar)
                         @if($file === true)
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-4">
                             </div>
                         @else                        
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-4">
                             </div>
                         @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-avatar border-4">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -88,19 +90,20 @@
             <div class="col-start-2 col-end-4 bg-green-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
                 {{-- User Info --}}
                 <div class="flex items-center">
+                <h1 class="text-white font-bold sm:text-xl text-xs font-poppins mr-4">{{$loop->index+1}}</h1>
                     @if($data->user->avatar)
                         @if($file === true)
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-4">
                             </div>
                         @else                        
                             <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                <img src="{{ $data->user->avatar }}" class="rounded-full border-yellow-avatar border-4">
                             </div>
                         @endif
                     @else
                         <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
+                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-orange-podium border-4">
                         </div>
                     @endif
                     <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -108,11 +111,9 @@
                 {{-- score --}}
                 <h1 class="text-white font-poppins font-bold sm:text-xl text-xs">{{ $data->points }} pts</h1>
             </div>
+            
             {{-- 4th and goes on --}}
             @else
-                <div class="sm:flex sm:justify-end hidden row-start-{{ $data->rank}} col-end-2">
-                    <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20 row-start-{{ $data->rank}}" src="{{asset('images/4th_medal.svg')}}"> 
-                </div>
                 <div class="px-12 sm:px-0 row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 mb-4">
                     <div class="row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 bg-gray-100 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
                         {{-- User Info --}}
@@ -120,16 +121,16 @@
                             @if($data->user->avatar)
                                 @if($file === true)
                                     <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                        <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
+                                        <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-lightBg border-4">
                                     </div>
                                 @else                        
                                     <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                        <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
+                                        <img src="{{ $data->user->avatar }}" class="rounded-full border-green-lightBg border-4">
                                     </div>
                                 @endif
                             @else
                                 <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
+                                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-lightBg border-4">
                                 </div>
                             @endif
                             <h1 class="text-green-nav font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
@@ -141,8 +142,14 @@
             @endif
         </div>
     @endforeach
+    {{-- Button Show All --}}
+            <button class="sm:w-80 w-28 sm:h-20 h-8 bg-white z-10 relative mx-auto mt-4 flex justify-center items-center rounded-md shadow-lg">
+                <h1 class="text-green-lightBg font-bold font-poppins sm:text-2xl text-xs">Lihat Semua</h1>
+            </button>
+
+
     @section('script')
-        <script>
+        {{-- <script>
             const room_code = '{{$code}}';
             let order = '{{$order}}';
             const final = '{{$final}}';
@@ -156,6 +163,6 @@
                     window.location.href = url;
                 }, 5000);
             }
-        </script>
+        </script> --}}
     @endsection
 </x-main>

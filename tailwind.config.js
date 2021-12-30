@@ -9,8 +9,8 @@ module.exports = {
 
     theme: {
         extend: {
-            gridTemplateColumns:{
-                '15': 'repeat(15, minmax(0, 1fr))',
+            gridTemplateColumns: {
+                15: "repeat(15, minmax(0, 1fr))",
             },
             width: {
                 120: "30rem",
@@ -41,9 +41,11 @@ module.exports = {
                     link: "#9B9B9B",
                     topicList: "#F5F5F5",
                     topicListTxt: "#656565",
+                    avatar: "#CECDD2",
                 },
                 yellow: {
                     yellowMain: "#FFB73D",
+                    avatar: "#F79429",
                 },
                 red: {
                     redMain: "#FF6368",
@@ -53,6 +55,7 @@ module.exports = {
                 },
                 orange: {
                     podium: "#FFB436",
+                    avatar: "#FCC417",
                 },
             },
             screens: {
@@ -63,6 +66,7 @@ module.exports = {
                 custom1: "0 2px 6px 0 rgba(0, 0, 0, 0.25)",
                 card: "0 2px 8px 0 rgba(0, 0, 0, 0.25)",
                 authPopup: "0 1px 4px 0 rgba(0, 0, 0, 0.5)",
+                rank: "0 10px 10px 0 rgba(109, 109, 109, 0.5)",
             },
         },
     },
