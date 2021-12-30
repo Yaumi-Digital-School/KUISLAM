@@ -46,12 +46,15 @@ use App\Http\Controllers\import\QuestionImportController;
         Route::get('/admin', function () {
             return view('admin.welcome');
         });
-
+        Route::get('/verification', function () {
+            return view('verification');
+        });
 
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
         Route::get('/activity', [HomeController::class, 'activity'])->name('activity'); 
         Route::get('/activity/made', [HomeController::class, 'activitymade'])->name('activity.made'); 
+
 
         Route::prefix('/rooms')->group(function () {
             Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
