@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -18,9 +19,9 @@ class QuizController extends Controller
     public function index(Quiz $quiz){
         // route : quizzes (GET)
         // route name : quizzes.index
-        $quiz = Quiz::getAllQuiz();
+        $quizzes = Quiz::getAllQuiz();
         // return view('v_quizzes', compact('quiz'));
-        return '<h1> ini halaman untuk list quiz</h1>';
+        return view('admin.quizzes', compact('quizzes'));
     }
 
     /**
@@ -31,7 +32,8 @@ class QuizController extends Controller
     public function create(){
         // route : quizzes/create (GET)
         // route name : quizzes.create
-        return '<h1> ini halaman berisi FORM untuk CREATE quiz</h1>';
+        $topics = Topic::all(); 
+        return view('admin.quiz-form', compact('topics'));
     }
 
     /**
@@ -42,18 +44,21 @@ class QuizController extends Controller
      */
     public function store(QuizRequest $request){
         // route : quizzes (POST)
-        // route name : quizzes.create
+        // route name : quizzes.store
         $slug = Str::slug($request->title);
         $imageName = $slug . '.jpg';
-
+        // dd($request->input());
         $data = [
             'topic_id' => $request->topic_id,
+            'slug' => $slug,
             'title' => $request->title,
-            'image' => $imageName
+            'image' => $imageName,
+            'description' => $request->description,
+            'counter' => '0',
         ];
         Quiz::create($data);
         
-        return redirect()->route('quizzes.index');
+        return redirect()->route('quizzes.index')->with('message', 'Quiz berhasil disimpan');
     }
 
     /**
@@ -79,7 +84,10 @@ class QuizController extends Controller
     public function edit($id){
         // route : quizzes/{quiz}/edit (GET)
         // route name : quizzes.edit
-        return '<h1> ini halaman berisi FORM untuk EDIT quiz dengan id = ' . $id . '</h1>';
+        $topics = Topic::all();
+        $editQuiz = Quiz::find($id);
+        // dd($editQuiz);
+        return view('admin.quiz-form', compact('topics', 'editQuiz'));
     }
 
     /**
@@ -112,7 +120,7 @@ class QuizController extends Controller
             ];
             Quiz::updateQuiz($id, $data);
         }
-        return redirect()->route('quizzes.index');
+        return redirect()->route('quizzes.index')->with('message', 'Quiz berhasil diubah');
     }
 
     /**
@@ -125,6 +133,7 @@ class QuizController extends Controller
         // route : quizzes/{quiz} (DELETE)
         // route name : quizzes.destroy
         Quiz::deleteQuiz($id);
-        return redirect()->route('quizzes.index');
+        // return redirect()->route('quizzes.index');
+        return response()->json(['message' => 'Quiz berhasil dihapus']);
     }
 }
