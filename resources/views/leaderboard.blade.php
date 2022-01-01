@@ -143,13 +143,14 @@
         </div>
     @endforeach
     {{-- Button Show All --}}
-            <button class="sm:w-80 w-28 sm:h-20 h-8 bg-white z-10 relative mx-auto mt-4 flex justify-center items-center rounded-md shadow-lg">
-                <h1 class="text-green-lightBg font-bold font-poppins sm:text-2xl text-xs">Lihat Semua</h1>
-            </button>
-
+    @if($final)
+        <button class="sm:w-80 w-28 sm:h-20 h-8 bg-white z-10 relative mx-auto mt-4 flex justify-center items-center rounded-md shadow-lg">
+            <h1 class="text-green-lightBg font-bold font-poppins sm:text-2xl text-xs">Lihat Semua</h1>
+        </button>
+    @endif
 
     @section('script')
-        {{-- <script>
+        <script>
             const room_code = '{{$code}}';
             let order = '{{$order}}';
             const final = '{{$final}}';
@@ -165,6 +166,6 @@
                     window.location.href = url;
                 }, timeLeftForLeaderboard);
             }
-        </script> --}}
+        </script>
     @endsection
 </x-main>

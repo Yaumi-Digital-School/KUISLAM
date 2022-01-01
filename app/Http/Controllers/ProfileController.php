@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\PasswordRequest;
 
 class ProfileController extends Controller
 {
@@ -43,12 +42,7 @@ class ProfileController extends Controller
         return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
-    public function changePassword(Request $request){
-        request()->validate([
-            'old_password' => 'required',
-            'password' => ['required', 'string', 'min:8', 'confirmed']
-        ]);
-
+    public function changePassword(PasswordRequest $request){
         $currentPassword = Auth::user()->password;
         $oldPassword = $request->old_password;
 

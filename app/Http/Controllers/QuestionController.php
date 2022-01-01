@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\Question;
+use Illuminate\Support\Str;
+use App\Models\RoomQuestion;
+use App\Models\UserQuestionRoom;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\QuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -41,26 +45,20 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
         // route : questions (POST)
         // route name : questions.store
-        $request->validate([
-            'quiz_id' => 'required|exists:quizzes,id',
-            'question' => 'required|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:1024',
-            'option_1' => 'required|max:255',
-            'option_2' => 'required|max:255',
-            'option_3' => 'required|max:255',
-            'option_4' => 'required|max:255',
-            'answer' => 'required',
-            'timer' => 'required|numeric|min:45|max:60',
-        ]);
-        // dd($request->input());
+        
+        $imageImage = $request->image;
+        $trimQuestion = Str::limit($request->question, 20);
+        $imageName = $request->quiz_id . $trimQuestion . "Image." . $imageImage->extension();
+        $imageImage->move(storage_path('app/public/question/image'), $imageName);
+
         $dataQuestion = [
             'quiz_id' => $request->quiz_id,
             'question' => $request->question,
-            'image' => $request->image,
+            'image' => $imageName,
             'option_1' => $request->option_1,
             'option_2' => $request->option_2,
             'option_3' => $request->option_3,
@@ -69,6 +67,7 @@ class QuestionController extends Controller
             'timer' => $request->timer
         ];
         Question::create($dataQuestion);
+
         return redirect()->route('questions.index')->with('message', 'Question berhasil disimpan!');
     }
 
@@ -94,9 +93,9 @@ class QuestionController extends Controller
     {
         // route : questions/{question}/edit (GET)
         // route name : questions.edit
-        // dd($questionEdit);
         $quizzes = Quiz::all();
         $editQuestion = Question::find($id);
+
         return view('admin.question-form', compact('quizzes', 'editQuestion'));
     }
 
@@ -107,27 +106,36 @@ class QuestionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(QuestionRequest $request, $id)
     {
         // route : questions/{question} (PUT)
         // route name : questions.update
 
-        $request->validate([
-            'quiz_id' => 'required|exists:quizzes,id',
-            'question' => 'required|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:1024',
-            'option_1' => 'required|max:255',
-            'option_2' => 'required|max:255',
-            'option_3' => 'required|max:255',
-            'option_4' => 'required|max:255',
-            'answer' => 'required',
-            'timer' => 'required|numeric|min:45|max:60',
-        ]);
+        if ($request->image) {
+            // Jika ingin ganti Image
+            $imageImage = $request->image;
+            $trimQuestion = Str::limit($request->question, 20);
+            $imageName = $request->quiz_id . $trimQuestion . "Image." . $imageImage->extension();
+            $imageImage->move(storage_path('app/public/question/image'), $imageName);
 
+            $dataQuestion = [
+                'quiz_id' => $request->quiz_id,
+                'question' => $request->question,
+                'image' => $imageName,
+                'option_1' => $request->option_1,
+                'option_2' => $request->option_2,
+                'option_3' => $request->option_3,
+                'option_4' => $request->option_4,
+                'answer' => $request->answer,
+                'timer' => $request->timer
+            ];
+            Question::updateQuestion($id, $dataQuestion);
+        }
+
+        // Jika tidak ingin ganti Image
         $dataQuestion = [
             'quiz_id' => $request->quiz_id,
             'question' => $request->question,
-            'image' => $request->image,
             'option_1' => $request->option_1,
             'option_2' => $request->option_2,
             'option_3' => $request->option_3,
@@ -136,6 +144,7 @@ class QuestionController extends Controller
             'timer' => $request->timer
         ];
         Question::updateQuestion($id, $dataQuestion);
+
         return redirect()->route('questions.index')->with('message', "Question berhasil diedit");
     }
 
@@ -149,6 +158,12 @@ class QuestionController extends Controller
     {
         // route : questions/{question} (DELETE)
         // route name : questions.destroy
+        $roomQuestion = RoomQuestion::where('question_id', $id)->first();
+        $UserQuestionRoom = UserQuestionRoom::where('question_id', $id)->first();
+
+        if($roomQuestion || $UserQuestionRoom){
+            return back()->with('message', "Question gagal dihapus");
+        }
         Question::deleteQuestion($id);
         // return response()->json(['message' => 'Quiz berhasil dihapus']);
         return redirect()->route('questions.index')->with('message', "Question berhasil dihapus");

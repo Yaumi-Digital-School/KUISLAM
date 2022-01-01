@@ -68,16 +68,16 @@
     <form id="form-answer" action="{{ route('question.handle', ['room' => $code, 'order' => $order]) }}" method="POST" class="grid grid-cols-12 gap-6 md:gap-10 max-w-6xl mx-5 xl:mx-auto relative z-10 text-white my-10">
         @csrf
         <div data-option="option_1" id="option_1" class="options ring-red-200 cursor-pointer rounded-md flex space-x-2 bg-red-redMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>A.</span> <span>{{ $roomQuestion->question->option_1 }}.</span> 
+            <span>A.</span> <span>{{ $roomQuestion->question->option_1 }}</span> 
         </div>
         <div data-option="option_2" id="option_2" class="options ring-green-200 cursor-pointer rounded-md flex space-x-2 bg-green-greenMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>B.</span> <span>{{ $roomQuestion->question->option_2 }}.</span> 
+            <span>B.</span> <span>{{ $roomQuestion->question->option_2 }}</span> 
         </div>
         <div data-option="option_3" id="option_3" class="options ring-blue-200 cursor-pointer rounded-md flex space-x-2 bg-blue-blueMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>C.</span> <span>{{ $roomQuestion->question->option_3 }}.</span> 
+            <span>C.</span> <span>{{ $roomQuestion->question->option_3 }}</span> 
         </div>
         <div data-option="option_4" id="option_4" class="options ring-yellow-200 cursor-pointer rounded-md flex space-x-2 bg-yellow-yellowMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}.</span> 
+            <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}</span> 
         </div>
         <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
         <input type="hidden" name="timer" value="60">

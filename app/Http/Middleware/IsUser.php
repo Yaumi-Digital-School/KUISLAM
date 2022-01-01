@@ -21,7 +21,7 @@ class IsUser
             if(Auth::user()->role === 'user'){
                 return $next($request);
             }elseif (Auth::user()->role === 'admin') {
-                return redirect()->route('index');
+                return redirect()->route('admin.dashboard');
             }
         }
         return $next($request);

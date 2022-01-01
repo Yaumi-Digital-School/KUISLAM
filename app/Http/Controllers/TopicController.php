@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\Quiz;
+use App\Models\Room;
 use App\Models\Topic;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\TopicRequest;
-use Exception;
+use App\Http\Controllers\Controller;
 
 class TopicController extends Controller
 {    
@@ -110,6 +113,10 @@ class TopicController extends Controller
     public function destroy($id){
         // route : topics/{topic} (DELETE)
         // route name : topics.destroy
+        $quiz = Quiz::where('topic_id', $id)->first();
+        if($quiz){
+            return back()->with('message', 'Quiz gagal dihapus');
+        }
         Topic::deleteTopic($id);
         // return redirect()->route('topics.index');
         return response()->json(['success' => "Topic berhasil dihapus"]);

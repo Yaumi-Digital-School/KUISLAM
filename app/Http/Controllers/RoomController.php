@@ -77,15 +77,14 @@ class RoomController extends Controller
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
         // if total player < 2
-        if($countPlayer < 2){
-            return back();
-        }
+        // if($countPlayer < 2){
+        //     return back();
+        // }
 
         // get random question
         $questionsId = Question::getRandomQuestion($quizId);
 
         for($i = 0; $i < 10; $i++){
-            
             $dataRoomQuestion = [
                 'question_id' => $questionsId[$i],
                 'room_id' => $room->id,
@@ -338,7 +337,6 @@ class RoomController extends Controller
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentTime = Carbon::now();
-        // dd($currentTime);
 
         if(intval($order) === $totalQuestion){
             $timeLeftForLeaderboard = 0;
@@ -351,7 +349,7 @@ class RoomController extends Controller
 
         $final = false;
         $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
-        // dd($timeLeftForLeaderboard);
+        
         return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
     }
 
@@ -359,7 +357,14 @@ class RoomController extends Controller
         $dataRoomUser = [
             'status' => 'done',
         ];
-        RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+        $roomUser = RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+
+        $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
+        $dataQuiz = [
+            'status' => $quiz->counter + 1,
+        ];
+        Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
+        
         return redirect()->route('index');
     }
 

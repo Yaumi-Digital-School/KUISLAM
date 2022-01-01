@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfileRequest extends FormRequest
+class PasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ProfileRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,9 +24,8 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => ['required', 'string', 'max:255'],
-            'username'  => ['required', 'string', 'min:8', 'max:255', 'alpha_dash', 'unique:users,username'],
-            'avatar'    => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'old_password'  => ['required', 'string', 'min:8'],
+            'password'      => ['required', 'string', 'min:8', 'confirmed']
         ];
     }
 }
