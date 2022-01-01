@@ -29,26 +29,28 @@ use App\Http\Controllers\import\QuestionImportController;
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/home/{message?}', [HomeController::class, 'redirect'])->name('index.redirect');
     Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
-
-        // testing
-        Route::get('/leaderboard', function () {
-            return view('leaderboard');
-        });
-        Route::get('/test/quiz', function () {
-            return view('quiz');
-        });
-        Route::get('/test/activity', function () {
-            return view('activity');
-        })->name('test.activity');
-        Route::get('/test/activity/made', function () {
-            return view('activity');
-        })->name('test.activity.made');
-        Route::get('/admin', function () {
-            return view('admin.welcome');
-        });
-        Route::get('/verification', function () {
-            return view('verification');
-        });
+        
+            // testing
+            Route::get('/leaderboard', function () {
+                return view('leaderboard');
+            });
+            Route::get('/test/quiz', function () {
+                return view('quiz');
+            });
+            Route::get('/test/activity', function () {
+                return view('activity');
+            })->name('test.activity');
+            Route::get('/test/activity/made', function () {
+                return view('activity');
+            })->name('test.activity.made');
+        
+            // testing admin 
+            Route::get('/test/admin', function () {
+                return view('admin.dashboard');
+            })->name('test.admin.dashboard');
+            Route::get('/test/admin/topics', function () {
+                return view('admin.topics');
+            })->name('test.admin.topics');
 
     Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
@@ -100,15 +102,18 @@ use App\Http\Controllers\import\QuestionImportController;
         *  Route untuk Admin 
         */ 
         Route::prefix('/admin')->group(function () {
+            Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
             Route::resource('/topics', TopicController::class);
             Route::resource('/quizzes', QuizController::class); 
             Route::resource('/questions', QuestionController::class);
+            Route::get('/users', [UserImportController::class, 'index'])->name('users.index');
+            Route::get('/{user}/role/change', [UserImportController::class, 'changeRole'])->name('users.change-role');
         
             Route::prefix('/import')->group(function () {
-                Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
+                // Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
                 Route::post('/users', [UserImportController::class, 'store'])->name('import.store.users');
-                Route::get('/{user}/role/change', [UserImportController::class, 'change'])->name('import.change.users');
-
+                Route::get('/{user}/role/change', [UserImportController::class, 'changeRole'])->name('import.change.users');
+    
                 Route::get('/topics', [TopicImportController::class, 'show'])->name('import.show.topics');
                 Route::post('/topics', [TopicImportController::class, 'store'])->name('import.store.topics');
         
@@ -119,12 +124,11 @@ use App\Http\Controllers\import\QuestionImportController;
                 Route::post('/questions', [QuestionImportController::class, 'store'])->name('import.store.questions');
             });
         });
-        
+
         Route::get('/logout', function(){
             Auth::logout();
             return redirect()->route('index');
-        });
+        })->name('logout-anchor');
     });
 // });
-
 require __DIR__.'/auth.php';

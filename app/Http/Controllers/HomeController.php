@@ -10,10 +10,19 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\UserQuestionRoom;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    public function adminDashboard(){
+        $users = User::count();
+        $topics = Topic::count();
+        $questions = Question::count();
+        return view('admin.dashboard', compact('users', 'topics', 'questions'));
+    }
+
     public function dashboard(){
         return view('dashboard');
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Quiz;
 
 class QuestionController extends Controller
 {
@@ -17,7 +18,7 @@ class QuestionController extends Controller
         // route : questions (GET)
         // route name : questions.index
         $questions = Question::getAllQuestion();
-        // return view('v_questions', compact('questions'));
+        return view('admin.questions', compact('questions'));
     }
 
     /**
@@ -29,7 +30,9 @@ class QuestionController extends Controller
     {
         // route : questions/create (GET)
         // route name : questions.create
-        
+
+        $quizzes = Quiz::all();
+        return view('admin.question-form', compact('quizzes'));
     }
 
     /**
@@ -41,8 +44,21 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         // route : questions (POST)
-        // route name : questions.create
+        // route name : questions.store
+        $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id',
+            'question' => 'required|max:255',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:1024',
+            'option_1' => 'required|max:255',
+            'option_2' => 'required|max:255',
+            'option_3' => 'required|max:255',
+            'option_4' => 'required|max:255',
+            'answer' => 'required',
+            'timer' => 'required|numeric|min:45|max:60',
+        ]);
+        // dd($request->input());
         $dataQuestion = [
+            'quiz_id' => $request->quiz_id,
             'question' => $request->question,
             'image' => $request->image,
             'option_1' => $request->option_1,
@@ -53,7 +69,7 @@ class QuestionController extends Controller
             'timer' => $request->timer
         ];
         Question::create($dataQuestion);
-        return redirect()->route('questions.index');
+        return redirect()->route('questions.index')->with('message', 'Question berhasil disimpan!');
     }
 
     /**
@@ -78,7 +94,10 @@ class QuestionController extends Controller
     {
         // route : questions/{question}/edit (GET)
         // route name : questions.edit
-        return '<h1> ini halaman berisi FORM untuk EDIT question dengan id = ' . $id . '</h1>';
+        // dd($questionEdit);
+        $quizzes = Quiz::all();
+        $editQuestion = Question::find($id);
+        return view('admin.question-form', compact('quizzes', 'editQuestion'));
     }
 
     /**
@@ -92,7 +111,21 @@ class QuestionController extends Controller
     {
         // route : questions/{question} (PUT)
         // route name : questions.update
+
+        $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id',
+            'question' => 'required|max:255',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:1024',
+            'option_1' => 'required|max:255',
+            'option_2' => 'required|max:255',
+            'option_3' => 'required|max:255',
+            'option_4' => 'required|max:255',
+            'answer' => 'required',
+            'timer' => 'required|numeric|min:45|max:60',
+        ]);
+
         $dataQuestion = [
+            'quiz_id' => $request->quiz_id,
             'question' => $request->question,
             'image' => $request->image,
             'option_1' => $request->option_1,
@@ -103,7 +136,7 @@ class QuestionController extends Controller
             'timer' => $request->timer
         ];
         Question::updateQuestion($id, $dataQuestion);
-        return redirect()->route('questions.index');
+        return redirect()->route('questions.index')->with('message', "Question berhasil diedit");
     }
 
     /**
@@ -117,6 +150,7 @@ class QuestionController extends Controller
         // route : questions/{question} (DELETE)
         // route name : questions.destroy
         Question::deleteQuestion($id);
-        return redirect()->route('questions.index');
+        // return response()->json(['message' => 'Quiz berhasil dihapus']);
+        return redirect()->route('questions.index')->with('message', "Question berhasil dihapus");
     }
 }
