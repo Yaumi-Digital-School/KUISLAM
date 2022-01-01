@@ -133,7 +133,7 @@ class QuizController extends Controller
         // route : quizzes/{quiz} (DELETE)
         // route name : quizzes.destroy
         Quiz::deleteQuiz($id);
-        // return redirect()->route('quizzes.index');
-        return response()->json(['message' => 'Quiz berhasil dihapus']);
+        return redirect()->route('quizzes.index')->with('message', 'Question berhasil dihapus');
+        // return response()->json(['message' => 'Quiz berhasil dihapus']);
     }
 }
