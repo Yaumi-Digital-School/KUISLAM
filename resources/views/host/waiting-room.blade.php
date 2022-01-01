@@ -2,9 +2,6 @@
     {{-- button icon --}}
     <div class="flex justify-between mt-10 mx-8">
         <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">
-                <a href="{{ route('index') }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
-            </div>
             <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
                 <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
             </div>
@@ -35,8 +32,8 @@
                         </div>
                         {{-- button --}}
                         <div class="flex justify-around mt-10 mb-2">
-                            <a href="{{ route('room.start', $room->code) }}" class="bg-green-nav text-white text-2xl px-7 py-1 rounded-sm font-semibold">MULAI</a>
-                            <a href="{{ route('room.exit', $room->code) }}" class="border border-green-nav text-green-nav px-7 py-1 text-2xl rounded-sm font-semibold">BATAL</a>
+                            <a href="{{ route('room.start', $room->code) }}" class="bg-green-nav hover:bg-green-darkBg transition text-white text-2xl px-7 py-1 rounded-sm font-semibold">MULAI</a>
+                            <a href="{{ route('room.exit', $room->code) }}" class="border hover:bg-gray-100 transition border-green-nav text-green-nav px-7 py-1 text-2xl rounded-sm font-semibold">BATAL</a>
                         </div>
                     </div>
             </div>
@@ -56,7 +53,7 @@
     </div>
     @section('script')
         <script src="/js/app.js"></script>
-        {{-- join room  --}}
+        {{-- listen join room  --}}
         <script>
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
@@ -79,7 +76,7 @@
                 });
             });
         </script>
-        {{-- exit room  --}}
+        {{-- listen exit room  --}}
         <script>
             window.Echo.channel(`exit-room-${room_id}`).listen("UserExitRoom", (data) => {
                 $( document ).ready(function(){

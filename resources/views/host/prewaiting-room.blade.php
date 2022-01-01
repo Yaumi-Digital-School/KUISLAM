@@ -29,7 +29,7 @@
                 </div>
             </div>
             {{-- button --}}
-            <a href="{{ route('room.make', $quiz->slug) }}" class="bg-white my-8 sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center shadow-profile">BUAT RUANGAN</a>
+            <a href="{{ route('room.make', $quiz->slug) }}" class="bg-white my-8 hover:bg-gray-100 transition sm:w-64 py-2 rounded-md text-green-nav font-bold text-2xl cursor-pointer z-10 w-3/4 text-center shadow-profile">BUAT RUANGAN</a>
         </div>
     </div>
     @section('script')

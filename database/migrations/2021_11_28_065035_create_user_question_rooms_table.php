@@ -18,9 +18,10 @@ class CreateUserQuestionRoomsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('room_id')->constrained();
             $table->foreignId('question_id')->constrained();
+            $table->integer('order');
             $table->integer('point')->default(0);
-            $table->char('answer_option', 8);
-            $table->boolean('is_correct')->default(false);
+            $table->char('answer_option', 8)->default(null);
+            $table->boolean('is_correct');
             $table->timestamps();
         });
     }

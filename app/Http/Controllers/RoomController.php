@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\UserExitRoom;
-use App\Events\UserJoinedRoom;
+use App\Events\HostCancelRoom;
+use Carbon\Carbon;
+use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
 use App\Models\RoomUser;
+use App\Events\UserExitRoom;
 use App\Models\RoomQuestion;
 use Illuminate\Http\Request;
+use App\Events\UserJoinedRoom;
+use App\Models\UserQuestionRoom;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,9 +42,10 @@ class RoomController extends Controller
         */
 
         $code = Room::getCode();
-
+        $slugId = Quiz::getQuizSlug($slug);
+        
         $dataRoom = [
-            'quiz_id' => Quiz::getQuizSlug($slug)->id,
+            'quiz_id' => $slugId->id,
             'code' => $code,
         ];
         $room = Room::create($dataRoom);
@@ -49,7 +54,7 @@ class RoomController extends Controller
             'user_id' => Auth::user()->id,
             'room_id' => $room->id,
             'is_host' => 1,
-            'is_active' => 1
+            'status' => 'waiting'
         ]; 
         RoomUser::create($dataRoomUser);
 
@@ -65,22 +70,56 @@ class RoomController extends Controller
         */
 
         $room = Room::getRoomByCode($code);
-        
         $quizId = $room->quiz_id;
+        $currentTime = Carbon::now();
+        $leaderboardTime = 15;
 
+        // Check total player in a room
+        $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
+        // if total player < 2
+        if($countPlayer < 2){
+            return back();
+        }
+
+        // get random question
         $questionsId = Question::getRandomQuestion($quizId);
-        // dd($questionsId);
 
         for($i = 0; $i < 10; $i++){
+            
             $dataRoomQuestion = [
                 'question_id' => $questionsId[$i],
                 'room_id' => $room->id,
                 'order' => $i+1,
             ];
-            RoomQuestion::create($dataRoomQuestion);
+            $roomQuestion = RoomQuestion::create($dataRoomQuestion);
+
+            $tempRoomQuestion = RoomQuestion::where('room_id', $room->id)->get();
+            $getTimer = $roomQuestion->question->timer;
+            
+            if($roomQuestion->order == 1){
+                $timeStartDate = $currentTime->toDateTimeString();
+                $timeEndInt = strtotime($currentTime) + $getTimer + $leaderboardTime;
+                $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
+            }elseif($roomQuestion->order > 1){
+                $timeStartDate = $tempRoomQuestion[$i-1]->time_end;
+                $timeEndInt = strtotime($tempRoomQuestion[$i-1]->time_end) + $getTimer + $leaderboardTime;
+                $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
+            }
+            
+            RoomQuestion::where('room_id', $room->id)->where('order', $i+1)->update([
+                'time_start' => $timeStartDate,
+                'time_end' => $timeEndDate,
+            ]);
         }
 
-        return redirect()->route('room.view-question', [
+        $dataRoomUser = [
+            'status' => 'ongoing',
+        ];
+        RoomUser::updateOngoingRoomUser($code, $dataRoomUser);
+
+        HostStartQuiz::dispatch($code);
+
+        return redirect()->route('question.view', [
             'room' => $code, 
             'order' => 1
         ]);
@@ -88,21 +127,32 @@ class RoomController extends Controller
 
     public function viewQuestion($code, $order){
         /* 
-            Method ini untuk memulai Room
-            Waiting room - peserta calon moderator 
-            Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
-            START
+            Method ini untuk menampilkan Pertanyaan
         */
         $room = Room::getRoomByCode($code);
-        $roomQuestion = RoomQuestion::where('room_id', $room->id)->where('order', $order)->first();
-        return view('quiz', compact('roomQuestion'));
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        $currentTime = Carbon::now();
+        
+        if($savedDataOrder){
+            $accessableOrder = $savedDataOrder->order + 1;
+        }
+        
+        if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
+            // User can't move to another order by changing the question order on URL
+            return back();
+        }
+        
+        $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+        
+        return view('quiz', compact('roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
     public function joinRoomWithLink($code){  
         /* 
             Method ini dipanggil ketika User memasukkan link kedalam URL 
         */
-
         $room = Room::getRoomByCode($code);
         
         return redirect()->route('room.pre-waiting-player', $room->code);
@@ -130,13 +180,16 @@ class RoomController extends Controller
 
     public function preWaitingPlayer($code){
         /* Method ini dipanggil ketika Room berhasil dibuat */
-        /* Pre-Waiting room - peserta */
+        /* Pre-Waiting room - player */
         /* Jika merujuk ke desain method ini akan di panggil ketika 
         user memasukkan link share untuk join ke room atau setelah
         user menginput data kode room pada field yang tersedia */
 
         $room = Room::getRoomByCode($code);
-        // return 'Ini page wating player';
+        if(!$room){
+            return redirect()->route('index');
+        }
+
         return view('user.prewaiting-room', compact('room'));
     }
 
@@ -148,21 +201,21 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         
-        if($room){
-            $dataRoomUser = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'is_host' => 0,
-                'is_active' => 1
-            ];
-            RoomUser::create($dataRoomUser);
-            
-            UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
-
-            return redirect()->route('room.waiting', $room->code);      
-        }else{
-            return redirect()->route('dashboard');
+        if(!$room){
+            return redirect()->route('index'); 
         }
+        
+        $dataRoomUser = [
+            'user_id' => Auth::user()->id,
+            'room_id' => $room->id,
+            'is_host' => 0,
+            'status' => 'waiting'
+        ];
+        RoomUser::create($dataRoomUser);
+        
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
+
+        return redirect()->route('room.waiting', $room->code);   
     }
 
     public function waitingRoom($code){
@@ -209,13 +262,107 @@ class RoomController extends Controller
             RoomQuestion::deleteRoomQuestion($code);
             Room::deleteRoomByCode($code);
 
+            HostCancelRoom::dispatch($room->id);
+
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
-            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
             RoomUser::deleteRoomUserByUserId($code);
 
             return redirect()->route('index');
         }
     }
+
+    public function handleAnswer(Request $request, $code, $order){
+        $room = Room::getRoomByCode($code);        
+        $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
+
+        if($questionId->question->answer === $request->answer_option){
+            // If answer correct
+            $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
+            
+            $dataUserQuestionRoom = [
+                'user_id' => Auth::user()->id,
+                'room_id' => $room->id,
+                'question_id' => $questionId->id,
+                'order' => $order,
+                'point' => $currentPoint + $point,
+                'answer_option' => $request->answer_option,
+                'is_correct' => true,
+            ];
+            UserQuestionRoom::create($dataUserQuestionRoom);
+
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+            $dataRoomUser = [
+                'rank' => $rank,
+                'points' => $currentPoint + $point,
+            ];
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
+        }else{
+            // If answer wrong
+            $dataUserQuestionRoom = [
+                'user_id' => Auth::user()->id,
+                'room_id' => $room->id,
+                'question_id' => $questionId->id,
+                'order' => $order,
+                'point' => $currentPoint + 0,
+                'answer_option' => $request->answer_option,
+                'is_correct' => false,
+            ];
+            UserQuestionRoom::create($dataUserQuestionRoom);
+
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+            $dataRoomUser = [
+                'rank' => $rank,
+                'points' => $currentPoint + 0,
+            ];
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
+        }
+
+        return response()->json([
+            'room' => $code,
+            'order' => $order
+        ]);
+    }
+
+    public function leaderboard($code, $order){
+        $room = Room::getRoomByCode($code);
+        $roomUser = RoomUser::getTop5Rank($room->id);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentTime = Carbon::now();
+        $timeLeaderboard = 15;
+
+        if(intval($order) === $totalQuestion){
+            $final = true;
+            return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
+        }elseif(intval($order) != $savedDataOrder->order){
+            // User can't move to another order by changing the question order on URL
+            return back();
+        }
+
+        $final = false;
+        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_end) - $timeLeaderboard) - strtotime($currentTime);
+
+        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
+    }
+
+    public function exitGame($code){
+        $dataRoomUser = [
+            'status' => 'done',
+        ];
+        RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+        return redirect()->route('index');
+    }
+
+    // public function test($code, $order){
+    //     $room = Room::getRoomByCode($code);
+    //     $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+    //     dd($rank);
+    // }
 }

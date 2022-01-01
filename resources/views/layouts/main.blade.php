@@ -30,10 +30,38 @@
         </div>
 
         <!-- Scripts -->
+        {{-- swal popup auth  --}}
+        <script>
+            function triggerAuthPopup(){
+                // defining custom class 
+                const btnClass = 'w-full md:text-lg font-poppins py-1 px-2 rounded font-semibold shadow-authPopup';
+
+                const authPopupSwal = Swal.mixin({
+                    customClass: {
+                        title: 'font-semibold',
+                        confirmButton: `${btnClass} bg-green-nav mb-4 text-white hover:bg-green-darkBg transition focus:outline-none`,
+                        cancelButton: `${btnClass} bg-white text-green-nav hover:bg-gray-200 transition`,
+                    },
+                    buttonsStyling: false
+                });
+                authPopupSwal.fire({
+                        title: 'Hanya butuh beberapa detik!',
+                        text: 'Daftar atau masuk ke akun kamu untuk lanjut bermain.',
+                        imageUrl: "{{ asset('./img/popup_auth.png') }}",
+                        imageWidth: 480,
+                        imageAlt: 'Custom image',
+                        showCancelButton: true,
+                        focusConfirm: false,
+                        confirmButtonText: "<a href='{{ route('register') }}'>Daftar Sekarang</a>",
+                        cancelButtonText: "<a href='{{ route('login') }}'>Masuk Akun</a>",
+                    });
+            }
+        </script>
         <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
         </script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('js/app.js') }}" defer></script>
         @yield('script')
     </body>

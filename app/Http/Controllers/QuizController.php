@@ -92,16 +92,26 @@ class QuizController extends Controller
     public function update(QuizRequest $request, $id){
         // route : quizzes/{quiz} (PUT)
         // route name : quizzes.update
-        $slug = Str::slug($request->title);
-        $imageName = $slug . '.jpg';
+        if ($request->image) {
+            // Jika ingin ganti Image
+            $imageImage = $request->image;
+            $imageFile = $request->title."Image.".$imageImage->extension();
+            $imageImage->move(storage_path('app/public/quiz/image'), $imageFile);
 
-        $data = [
-            'topic_id' => $request->topic_id,
-            'title' => $request->title,
-            'image' => $imageName
-        ];
-        Quiz::updateQuiz($id, $data);
-
+            $data = [
+                'topic_id' => $request->topic_id,
+                'title' => $request->title,
+                'image' => $imageFile
+            ];
+            Quiz::updateQuiz($id, $data);
+        }else {
+            // Jika tidak ingin ganti Image
+            $data = [
+                'topic_id' => $request->topic_id,
+                'title' => $request->title,
+            ];
+            Quiz::updateQuiz($id, $data);
+        }
         return redirect()->route('quizzes.index');
     }
 

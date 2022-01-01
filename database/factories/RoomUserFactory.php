@@ -18,7 +18,7 @@ class RoomUserFactory extends Factory
             'rank' => $this->faker->numberBetween(1, 4),
             'points' => $this->faker->randomNumber(4, true),
             'is_host' => $this->faker->boolean(),
-            'is_active' => $this->faker->boolean(),
+            'status' => $this->faker->randomElement(['waiting', 'ongoing', 'done']),
         ];
     }
 }

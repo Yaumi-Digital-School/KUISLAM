@@ -9,6 +9,12 @@ module.exports = {
 
     theme: {
         extend: {
+            gridTemplateColumns:{
+                '15': 'repeat(15, minmax(0, 1fr))',
+            },
+            width: {
+                120: "30rem",
+            },
             fontFamily: {
                 poppins: ["Poppins"],
                 sans: ["Nunito", ...defaultTheme.fontFamily.sans],
@@ -23,11 +29,18 @@ module.exports = {
                 },
                 gray: {
                     nav: "#C4C4C4",
-                    card: "#F5F5F5",
+                    card: "#FEFBFB",
                     cardText: "#BEBEBE",
                     darkBg: "#F8F8F8",
                     lightBg: "#FBFBFB",
                     input: "rgba(196, 196, 196, 0.25)",
+                    inputDisabledBg: "#F6F6F6",
+                    inputDisabledTxt: "#A8A8A8",
+                    inputFileButton: "#D9D9D9",
+                    inputFileButtonTxt: "#7A7A7A",
+                    link: "#9B9B9B",
+                    topicList: "#F5F5F5",
+                    topicListTxt: "#656565",
                 },
                 yellow: {
                     yellowMain: "#FFB73D",
@@ -46,10 +59,10 @@ module.exports = {
                 "3xl": "1600px",
             },
             boxShadow: {
-                profile: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-            },
-            dropShadow: {
-                profile: "0 1px 1px rgba(0, 0, 0, 0.1)",
+                profile: "0px 4px 4px 0 rgba(0, 0, 0, 0.25)",
+                custom1: "0 2px 6px 0 rgba(0, 0, 0, 0.25)",
+                card: "0 2px 8px 0 rgba(0, 0, 0, 0.25)",
+                authPopup: "0 1px 4px 0 rgba(0, 0, 0, 0.5)",
             },
         },
     },
