@@ -72,7 +72,7 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);
         $quizId = $room->quiz_id;
         $currentTime = Carbon::now();
-        $leaderboardTime = 15;
+        $leaderboardTime = 10;
 
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
@@ -97,7 +97,8 @@ class RoomController extends Controller
             $getTimer = $roomQuestion->question->timer;
             
             if($roomQuestion->order == 1){
-                $timeStartDate = $currentTime->toDateTimeString();
+                $timeStartInt = strtotime($currentTime->toDateTimeString()) + 5;
+                $timeStartDate = date("Y-m-d H:i:s", $timeStartInt);
                 $timeEndInt = strtotime($currentTime) + $getTimer + $leaderboardTime;
                 $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
             }elseif($roomQuestion->order > 1){
@@ -105,11 +106,10 @@ class RoomController extends Controller
                 $timeEndInt = strtotime($tempRoomQuestion[$i-1]->time_end) + $getTimer + $leaderboardTime;
                 $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
             }
-            
             RoomQuestion::where('room_id', $room->id)->where('order', $i+1)->update([
                 'time_start' => $timeStartDate,
                 'time_end' => $timeEndDate,
-            ]);
+            ]);        
         }
 
         $dataRoomUser = [
@@ -130,6 +130,8 @@ class RoomController extends Controller
             Method ini untuk menampilkan Pertanyaan
         */
         $room = Room::getRoomByCode($code);
+        $roomUser = RoomUser::getPlayerCurrentPoint($room->id);
+        // $allRank = RoomUser::getAllRank($room->id);
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
@@ -146,7 +148,7 @@ class RoomController extends Controller
         
         $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
         
-        return view('quiz', compact('roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
+        return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
     public function joinRoomWithLink($code){  
@@ -336,19 +338,20 @@ class RoomController extends Controller
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentTime = Carbon::now();
-        $timeLeaderboard = 15;
+        // dd($currentTime);
 
         if(intval($order) === $totalQuestion){
+            $timeLeftForLeaderboard = 0;
             $final = true;
-            return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
+            return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
         }elseif(intval($order) != $savedDataOrder->order){
             // User can't move to another order by changing the question order on URL
             return back();
         }
 
         $final = false;
-        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_end) - $timeLeaderboard) - strtotime($currentTime);
-
+        $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
+        // dd($timeLeftForLeaderboard);
         return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
     }
 

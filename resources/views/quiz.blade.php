@@ -19,16 +19,29 @@
         {{-- points and rank  --}}
         <div class="flex relative z-10 justify-between items-center space-x-4 md:space-x-6">
             <div class="flex items-center md:space-x-1">
-                
-                <div>
-                    <img class="w-10 md:w-12" src="{{ asset('images/medal.png') }}" alt="">
-                </div>
-                
-                <span class="text-green-nav font-bold text-xl md:text-2xl">3rd</span>
+                @if(!$roomUser->rank)
+                @elseif($roomUser->rank === 1)
+                    <div>
+                        <img class="w-10 md:w-12" src="{{ asset('images/1st_medal.svg') }}" alt="">
+                    </div>
+                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}st</span>
+                @elseif($roomUser->rank === 2)
+                    <div>
+                        <img class="w-10 md:w-12" src="{{ asset('images/2nd_medal.svg') }}" alt="">
+                    </div>
+                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}nd</span>
+                @elseif($roomUser->rank === 3)
+                    <div>
+                        <img class="w-10 md:w-12" src="{{ asset('images/3rd_medal.svg') }}" alt="">
+                    </div>
+                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}rd</span>
+                @else
+                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}th</span>
+                @endif
             </div>
             <div class="bg-green-nav p-1 md:p-2 rounded">
                 <div class="text-white font-bold text-2xl">
-                    <span>100</span>  
+                    <span>{{ $roomUser->points }}</span>  
                     <span class="hidden md:inline">Points</span>
                     <span class="md:hidden">Pts</span>
                 </div>
@@ -68,7 +81,7 @@
         </div>
         <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
         <input type="hidden" name="timer" value="60">
-        <button  type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button>
+        {{-- <button type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button> --}}
     </form>
     @section('script')
     <script>
@@ -81,7 +94,7 @@
                 const timerNow = parseInt(allTimer[0].innerText);
                 allTimer[0].innerText = timerNow-1;
                 allTimer[1].innerText = timerNow-1;
-                if(timerNow == 40){
+                if(timerNow == 1){
                     let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
                     url = url.replace(':room', room_code);
                     url = url.replace(':order', order);
