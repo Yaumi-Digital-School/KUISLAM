@@ -149,12 +149,14 @@
             order = parseInt(order);
             console.log(order)
             if(!final){
+                let timeLeftForLeaderboard = '{{$timeLeftForLeaderboard}}';
+                timeLeftForLeaderboard = parseInt(timeLeftForLeaderboard) * 1000;
                 setTimeout(() => {
                     let url = "{{ route('question.view', ['room' => ':room', 'order' => ':order']) }}";
                     url = url.replace(':room', room_code);
                     url = url.replace(':order', order+1);
                     window.location.href = url;
-                }, 5000);
+                }, timeLeftForLeaderboard);
             }
         </script>
     @endsection

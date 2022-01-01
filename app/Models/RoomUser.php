@@ -37,7 +37,7 @@ class RoomUser extends Model
 
     public static function getAllDoneQuiz(){
         // Get All done quiz
-        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'done')->get();
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'done')->get()->SortByDesc('updated_at');
     }
 
     public static function updateOngoingRoomUser($code, $dataRoomUser){
@@ -90,5 +90,10 @@ class RoomUser extends Model
     public static function getTop5Rank($roomId){
         // get top 5 rank
         return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->limit(5)->get()->SortByDesc('points');
+    }
+
+    public static function getAllRank($roomId){
+        // get top 5 rank
+        return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->get()->SortByDesc('points');
     }
 }
