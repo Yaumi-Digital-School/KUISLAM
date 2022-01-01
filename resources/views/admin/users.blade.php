@@ -43,7 +43,7 @@
                     @endif
                 </td>
                 <td class="px-4 py-3 text-sm flex justify-center items-center space-x-3">
-                    @if ($user->role == "admin")
+                    @if ($user->role === "admin")
                         <a href="{{ route('users.change-role', $user->id) }}" type="submit" class="px-4 py-2 font-semibold leading-tight text-red-700 bg-red-100 focus:outline-none hover:bg-red-200 transition rounded-full">
                             Change to user
                         </a>

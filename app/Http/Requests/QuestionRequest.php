@@ -13,7 +13,7 @@ class QuestionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class QuestionRequest extends FormRequest
         return [
             'quiz_id'   => ['required', 'exists:quizzes,id'],
             'question'  => ['required', 'max:255'],
-            'image'     => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'image'     => ['required_unless:image,null', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
             'option_1'  => ['required', 'max:255'],
             'option_2'  => ['required', 'max:255'],
             'option_3'  => ['required', 'max:255'],
