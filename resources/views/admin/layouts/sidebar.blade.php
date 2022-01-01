@@ -10,16 +10,16 @@
 			{{-- dashboard  --}}
 			<li class="relative px-6 py-3">
 				{{-- check if its active link  --}}
-				@if ((request()->routeIs("test.admin.dashboard")))
+				@if ((request()->routeIs("admin.dashboard")))
 					@include('admin.components.active-link')
 				@endif
 				{{-- actual link  --}}
 				<a class="inline-flex items-center w-full text-sm font-semibold 
-					@if ((request()->routeIs("test.admin.dashboard")))
+					@if ((request()->routeIs("admin.dashboard")))
 						text-gray-800
 					@endif 
 					transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-					href="{{ route('test.admin.dashboard') }}">
+					href="{{ route('admin.dashboard') }}">
 					<svg class="w-5 h-5"
 						aria-hidden="true"
 						fill="none"
@@ -111,8 +111,16 @@
 			</li>
 			{{-- users  --}}
 			<li class="relative px-6 py-3">
-				<a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-					href="charts.html">
+				{{-- check if its active link  --}}
+				@if (request()->routeIs("users.index"))
+					@include('admin.components.active-link')
+				@endif
+				<a class="inline-flex items-center w-full text-sm font-semibold 
+					@if (request()->routeIs("users.index"))
+						text-gray-800
+					@endif
+					transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+					href="{{ route("users.index") }}">
 					<svg class="w-5 h-5"
 						aria-hidden="true"
 						fill="none"
@@ -128,12 +136,6 @@
 				</a>
 			</li>
 		</ul>
-		{{-- button create account  --}}
-		<div class="px-6 my-6">
-			<button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150  border border-transparent rounded-lg bg-green-nav hover:bg-green-darkBg focus:outline-none focus:shadow-outline-green">
-				Create account <span class="ml-2" aria-hidden="true">+</span>
-			</button>
-		</div>
 	</div>
 </aside>
 
@@ -169,16 +171,16 @@
 			{{-- dashboard  --}}
 			<li class="relative px-6 py-3">
 				{{-- check if its active link  --}}
-				@if ((request()->routeIs("test.admin.dashboard")))
+				@if ((request()->routeIs("admin.dashboard")))
 					@include('admin.components.active-link')
 				@endif
 				{{-- actual links  --}}
 				<a class="inline-flex items-center w-full text-sm font-semibold 
-					@if ((request()->routeIs("test.admin.dashboard")))
+					@if ((request()->routeIs("admin.dashboard")))
 						text-gray-800
 					@endif
 					transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100" 
-					href="{{ route('test.admin.dashboard') }}">
+					href="{{ route('admin.dashboard') }}">
 					<svg
 						class="w-5 h-5"
 						aria-hidden="true"
@@ -271,9 +273,16 @@
 			</li>
 			{{-- users  --}}
 			<li class="relative px-6 py-3">
-				<a class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-					href="charts.html">
-
+				{{-- check if its active link  --}}
+				@if (request()->routeIs("users.index"))
+					@include('admin.components.active-link')
+				@endif
+				<a class="inline-flex items-center w-full text-sm font-semibold
+					@if (request()->routeIs("users.index"))
+						text-gray-800
+					@endif
+					transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+					href="{{ route("users.index") }}">
 					<svg class="w-5 h-5"
 						aria-hidden="true"
 						fill="none"
@@ -289,11 +298,5 @@
 				</a>
 			</li>
 		</ul>
-		{{-- button add account  --}}
-		<div class="px-6 my-6">
-			<button class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg bg-green-nav hover:bg-green-darkBg focus:outline-none focus:shadow-outline-green">
-				Create account <span class="ml-2" aria-hidden="true">+</span>
-			</button>
-		</div>
 	</div>
 </aside>

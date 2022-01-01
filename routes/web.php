@@ -102,14 +102,17 @@ Route::middleware('auth')->group(function () {
      *  Route untuk Admin 
      */ 
     Route::prefix('/admin')->group(function () {
+        Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
         Route::resource('/topics', TopicController::class);
         Route::resource('/quizzes', QuizController::class); 
         Route::resource('/questions', QuestionController::class);
+        Route::get('/users', [UserImportController::class, 'index'])->name('users.index');
+        Route::get('/{user}/role/change', [UserImportController::class, 'changeRole'])->name('users.change-role');
     
         Route::prefix('/import')->group(function () {
-            Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
+            // Route::get('/users', [UserImportController::class, 'show'])->name('import.show.users');
             Route::post('/users', [UserImportController::class, 'store'])->name('import.store.users');
-            Route::get('/{user}/role/change', [UserImportController::class, 'change'])->name('import.change.users');
+            Route::get('/{user}/role/change', [UserImportController::class, 'changeRole'])->name('import.change.users');
 
             Route::get('/topics', [TopicImportController::class, 'show'])->name('import.show.topics');
             Route::post('/topics', [TopicImportController::class, 'store'])->name('import.store.topics');
