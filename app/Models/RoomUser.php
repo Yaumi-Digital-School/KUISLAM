@@ -82,7 +82,7 @@ class RoomUser extends Model
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('status', 'waiting')->first();
     }
 
-    public static function getPlayerCurrentPoint($roomId){
+    public static function getPlayerCurrentRoomData($roomId){
         // get player current point
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->first();
     }

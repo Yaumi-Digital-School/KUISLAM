@@ -20,6 +20,7 @@ class CreateRoomUsersTable extends Migration
             $table->integer('rank')->nullable();
             $table->integer('points')->default(0);
             $table->boolean('is_host')->default(false);
+            $table->integer('total_correct')->default(0);
             $table->enum('status', ['waiting', 'ongoing', 'done']);
             $table->timestamps();
         });

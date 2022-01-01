@@ -39,9 +39,26 @@
                                     </a>
                                 </div>
                                 @auth
-                                    <div class="bg-red-redMain text-white rounded-lg mb-1">
-                                        <span class="ml-4">0% akurasi</span> 
-                                    </div>
+                                    @php
+                                        $totalCorrect = $data->total_correct * 10;
+                                    @endphp
+                                    @if($totalCorrect < 25)
+                                        <div class="bg-red-redMain text-white rounded-lg mb-1">
+                                            <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                        </div>
+                                    @elseif($totalCorrect > 25 && $totalCorrect < 50)
+                                        <div class="bg-yellow-yellowMain text-white rounded-lg mb-1">
+                                            <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                        </div>
+                                    @elseif($totalCorrect > 50 && $totalCorrect < 75)
+                                        <div class="bg-blue-blueMain text-white rounded-lg mb-1">
+                                            <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                        </div>
+                                    @elseif($totalCorrect > 75)
+                                        <div class="bg-green-greenMain text-white rounded-lg mb-1">
+                                            <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                        </div>
+                                    @endif
                                 @endauth
                             </div>
                         </div>

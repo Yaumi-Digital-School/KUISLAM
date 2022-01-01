@@ -129,7 +129,7 @@ class RoomController extends Controller
             Method ini untuk menampilkan Pertanyaan
         */
         $room = Room::getRoomByCode($code);
-        $roomUser = RoomUser::getPlayerCurrentPoint($room->id);
+        $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
         // $allRank = RoomUser::getAllRank($room->id);
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
@@ -278,7 +278,8 @@ class RoomController extends Controller
     public function handleAnswer(Request $request, $code, $order){
         $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
+        $currentPoint = RoomUser::getPlayerCurrentRoomData($room->id)->points;
+        $currentTotalCorrect = RoomUser::getPlayerCurrentRoomData($room->id)->total_correct;
         $currentAnswer = is_null($request->answer_option) ? "option_5" : $request->answer_option;
         // dd($request->answer_option);
         if($questionId->question->answer === $currentAnswer){
@@ -301,6 +302,7 @@ class RoomController extends Controller
             $dataRoomUser = [
                 'rank' => $rank,
                 'points' => $currentPoint + $point,
+                'total_correct' => $currentTotalCorrect + 1
             ];
             RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }else{
@@ -365,12 +367,14 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);
         $roomUser = $room->roomusers->first();
         // dd($roomUser->room);
-
-        $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
-        $dataQuiz = [
-            'counter' => $quiz->counter + 1,
-        ];
-        Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
+        $host = RoomUser::isHost($code);
+        if($host){
+            $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
+            $dataQuiz = [
+                'counter' => $quiz->counter + 1,
+            ];
+            Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
+        }
         
         return redirect()->route('index');
     }

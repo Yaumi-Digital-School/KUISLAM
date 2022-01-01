@@ -63,7 +63,6 @@
                         </div>
                         <div class="text-sm @error('image') text-red-600 @enderror font-bold"> 
                             @error('image') <p> {{$message}}</p> @enderror 
-                            <p>Harus berupa file gambar dengan ekstensi .jpg, .jpeg, atau .png</p>
                         </div>
                     </div>
                 <img src="" style="max-height: 100px; width: auto" class="my-3" id="previewImgAdd">

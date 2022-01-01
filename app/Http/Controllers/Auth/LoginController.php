@@ -60,7 +60,7 @@ class LoginController extends Controller
             $findFacebookId = User::where('facebook_id', $user->getId())->first();
             $findEmailFacebook = User::where('email', $user->getEmail())->where('facebook_id', Null)->first();
             
-            /* Versi Google MENERIMA input data email yang telah terdaftar */
+            /* Versi Facebook MENERIMA input data email yang telah terdaftar */
             if($findFacebookId){
                 Auth::login($findFacebookId);
 

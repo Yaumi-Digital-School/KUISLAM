@@ -28,8 +28,7 @@ class HomeController extends Controller
     }
 
     public function index(){
-        $quizzes = Quiz::getPopularQuiz(); 
-        // $accuracy = UserQuestionRoom::where('user_id', Auth::user()->id)->where('room_id')->where('is_correct', 1)->get()->count();
+        $quizzes = Quiz::getPopularQuiz();
         
         if(Auth::check()){
             $roomUser = RoomUser::getAllDoneQuiz();
