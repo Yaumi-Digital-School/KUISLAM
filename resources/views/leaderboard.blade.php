@@ -159,6 +159,8 @@
             if(!final){
                 let timeLeftForLeaderboard = '{{$timeLeftForLeaderboard}}';
                 timeLeftForLeaderboard = parseInt(timeLeftForLeaderboard) * 1000;
+                console.log(timeLeftForLeaderboard);
+                // let timeLeftForLeaderboard = 7000;
                 setTimeout(() => {
                     let url = "{{ route('question.view', ['room' => ':room', 'order' => ':order']) }}";
                     url = url.replace(':room', room_code);

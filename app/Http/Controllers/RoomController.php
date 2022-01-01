@@ -279,8 +279,9 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
-
-        if($questionId->question->answer === $request->answer_option){
+        $currentAnswer = is_null($request->answer_option) ? "option_5" : $request->answer_option;
+        // dd($request->answer_option);
+        if($questionId->question->answer === $currentAnswer){
             // If answer correct
             $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
             
@@ -290,7 +291,7 @@ class RoomController extends Controller
                 'question_id' => $questionId->id,
                 'order' => $order,
                 'point' => $currentPoint + $point,
-                'answer_option' => $request->answer_option,
+                'answer_option' => $currentAnswer,
                 'is_correct' => true,
             ];
             UserQuestionRoom::create($dataUserQuestionRoom);
@@ -310,7 +311,7 @@ class RoomController extends Controller
                 'question_id' => $questionId->id,
                 'order' => $order,
                 'point' => $currentPoint + 0,
-                'answer_option' => $request->answer_option,
+                'answer_option' => $currentAnswer,
                 'is_correct' => false,
             ];
             UserQuestionRoom::create($dataUserQuestionRoom);
@@ -323,7 +324,8 @@ class RoomController extends Controller
             ];
             RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         }
-
+        
+        // return redirect()->route('question.leaderboard', ['room' => $code, 'order' => $order]);
         return response()->json([
             'room' => $code,
             'order' => $order
@@ -332,6 +334,7 @@ class RoomController extends Controller
 
     public function leaderboard($code, $order){
         $room = Room::getRoomByCode($code);
+        // dd($code);
         $roomUser = RoomUser::getTop5Rank($room->id);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
@@ -359,9 +362,13 @@ class RoomController extends Controller
         ];
         $roomUser = RoomUser::updateDoneRoomUser($code, $dataRoomUser);
 
+        $room = Room::getRoomByCode($code);
+        $roomUser = $room->roomusers->first();
+        // dd($roomUser->room);
+
         $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
         $dataQuiz = [
-            'status' => $quiz->counter + 1,
+            'counter' => $quiz->counter + 1,
         ];
         Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
         

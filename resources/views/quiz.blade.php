@@ -81,7 +81,8 @@
         </div>
         <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
         <input type="hidden" name="timer" value="60">
-        {{-- <button type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button> --}}
+        <input type="hidden" name="code" value="{{$code}}">
+        <button type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button>
     </form>
     @section('script')
     <script>
@@ -92,15 +93,17 @@
             setInterval(() => {
                 const allTimer = $(".timer");
                 const timerNow = parseInt(allTimer[0].innerText);
-                allTimer[0].innerText = timerNow-1;
-                allTimer[1].innerText = timerNow-1;
-                if(timerNow == 1){
+                if(timerNow >= 1){
+                    allTimer[0].innerText = timerNow-1;
+                    allTimer[1].innerText = timerNow-1;
+                }
+                if(timerNow <= 1){
                     let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
                     url = url.replace(':room', room_code);
                     url = url.replace(':order', order);
 
                     const answer = $("#answer").val();
-
+                    console.log(room_code)
                     $.ajax({
                         type: "POST",
                         url: url,
