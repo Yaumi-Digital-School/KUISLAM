@@ -179,61 +179,49 @@
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
                             <h1>Recent Activity</h1>
                         </div>
-                        <div class="relative swiper-container">
-                            <div class="swiper w-full h-64 md:h-72 p-1">
-                                <!-- Additional required wrapper -->
-                                <div class="swiper-wrapper">
-                                    <!-- Slides -->
-                                    @foreach($roomUser as $data) 
-                                        <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
-                                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
-                                                <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
-                                            </div>
-                                            <div class="flex flex-col justify-between h-2/5 px-1">
-                                                <div class="flex flex-col space-y-1 p-1">
-                                                    <span class="font-semibold text-lg">
-                                                        {{ $data->room->quiz->title }}
-                                                    </span>
-                                                </div>
-                                                @auth
-                                                @php
-                                                    $totalCorrect = $data->total_correct * 10;
-                                                @endphp
-                                                @if($totalCorrect < 25)
-                                                    <div class="bg-red-redMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
-                                                    </div>
-                                                @elseif($totalCorrect > 25 && $totalCorrect < 50)
-                                                    <div class="bg-yellow-yellowMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
-                                                    </div>
-                                                @elseif($totalCorrect > 50 && $totalCorrect < 75)
-                                                    <div class="bg-blue-blueMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
-                                                    </div>
-                                                @elseif($totalCorrect > 75)
-                                                    <div class="bg-green-greenMain text-white rounded-lg mb-1">
-                                                        <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
-                                                    </div>
-                                                @endif
-                                                @endauth
-                                            </div>
+                        <x-swiper-container>
+                            <!-- Slides -->
+                            @foreach($roomUser as $data) 
+                                <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                    <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                        <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                    </div>
+                                    <div class="flex flex-col justify-between h-2/5 px-1">
+                                        <div class="flex flex-col space-y-1 p-1">
+                                            <span class="font-semibold text-lg">
+                                                {{ $data->room->quiz->title }}
+                                            </span>
                                         </div>
-                                    @endforeach
-                                </div>
-                                <!-- If we need navigation buttons -->
-                                <div class="swiper-button-prev">
-                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                        <i class='bx bx-chevron-left'></i>
+                                        @auth
+                                        @php
+                                            $totalCorrect = $data->total_correct * 10;
+                                        @endphp
+                                        @if($totalCorrect < 25)
+                                            <div class="bg-red-redMain text-white rounded-lg mb-1">
+                                                <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                            </div>
+                                        @elseif($totalCorrect > 25 && $totalCorrect < 50)
+                                            <div class="bg-yellow-yellowMain text-white rounded-lg mb-1">
+                                                <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                            </div>
+                                        @elseif($totalCorrect > 50 && $totalCorrect < 75)
+                                            <div class="bg-blue-blueMain text-white rounded-lg mb-1">
+                                                <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                            </div>
+                                        @elseif($totalCorrect > 75)
+                                            <div class="bg-green-greenMain text-white rounded-lg mb-1">
+                                                <span class="ml-4">{{ $totalCorrect }}% akurasi</span> 
+                                            </div>
+                                        @endif
+                                        @endauth
                                     </div>
                                 </div>
-                                <div class="swiper-button-next">
-                                    <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                        <i class='bx bx-chevron-right'></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            @endforeach
+                            <!-- If we need navigation buttons -->
+                            <x-slot name="nav_btn">
+                                <x-swiper-navigation />
+                            </x-slot>
+                        </x-swiper-container>
                     </div>
                 @endif
                 {{-- swiper --}}
@@ -241,46 +229,34 @@
                     <div class="z-10 text-xl md:text-2xl font-bold relative">
                         <h1>Popular Quiz</h1>
                     </div>
-                    <div class="relative swiper-container">
-                        <div class="swiper w-full h-56 md:h-64 p-2">
-                            <!-- Additional required wrapper -->
-                            <div class="swiper-wrapper">
-                                <!-- Slides -->
-                                @foreach($quizzes as $data) 
-                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
-                                        <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
-                                            <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
-                                        </div>
-                                        <div class="flex flex-col justify-between h-2/6 px-1">
-                                            <div class="flex flex-col space-y-1 p-1">
-                                                <a 
-                                                    @auth
-                                                        href="{{ route('room.pre-waiting-host', $data->slug) }}" 
-                                                    @endauth
-                                                    @guest
-                                                        onclick="triggerAuthPopup()"
-                                                    @endguest
-                                                    class="font-semibold text-lg cursor-pointer">
-                                                    {{ $data->title }}
-                                                </a>
-                                            </div>
-                                        </div>
+                    <x-swiper-container>
+                        <!-- Slides -->
+                        @foreach($quizzes as $data) 
+                            <div class="transform transition duration-400 hover:scale-105 swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                    <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                </div>
+                                <div class="flex flex-col justify-between h-2/6 px-1">
+                                    <div class="flex flex-col space-y-1 p-1">
+                                        <a 
+                                            @auth
+                                                href="{{ route('room.pre-waiting-host', $data->slug) }}" 
+                                            @endauth
+                                            @guest
+                                                onclick="triggerAuthPopup()"
+                                            @endguest
+                                            class="font-semibold text-lg cursor-pointer">
+                                            {{ $data->title }}
+                                        </a>
                                     </div>
-                                @endforeach
-                            </div>
-                            <!-- If we need navigation buttons -->
-                            <div class="swiper-button-prev">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-left'></i>
                                 </div>
                             </div>
-                            <div class="swiper-button-next">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-right'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        @endforeach
+                        <!-- If we need navigation buttons -->
+                        <x-slot name="nav_btn">
+                            <x-swiper-navigation />
+                        </x-slot>
+                    </x-swiper-container>
                 </div>
             </div>
         </div>

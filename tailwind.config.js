@@ -8,6 +8,7 @@ module.exports = {
     ],
     theme: {
         extend: {
+            transform: ['hover', 'focus'],
             gridTemplateColumns: {
                 15: "repeat(15, minmax(0, 1fr))",
             },

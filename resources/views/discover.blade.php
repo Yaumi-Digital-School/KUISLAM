@@ -47,88 +47,68 @@
                     {{-- topic list  --}}
                     <h1 class="font-semibold md:hidden z-10 ">Populer Topic</h1>
                     <div class="md:w-3/5 mt-3 md:mt-0 flex flex-col item overflow-hidden">
-                        <div class="md:mx-4 relative swiper-container">
-                            <div class="swiper-topic w-full h-10 lg:h-12 p-1">
-                                <!-- Additional required wrapper -->
-                                <div class="swiper-wrapper">
-                                    <!-- Slides -->
-                                    @foreach($topics as $topic)
-                                        <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile bg-gray-topicList text-gray-topicListTxt font-semibold justify-center items-center rounded">
-                                            {{$topic->title}}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
+                        <x-swiper-container classTop="md:mx-4 relative swiper-container" classBot="swiper-topic w-full h-10 lg:h-12 p-1">
+                            <!-- Slides -->
+                            @foreach($topics as $topic)
+                                <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile bg-gray-topicList text-gray-topicListTxt font-semibold justify-center items-center rounded">
+                                    {{$topic->title}}
+                                </a>
+                            @endforeach
+                        </x-swiper-container>
                     </div>
                 </div>
                 {{-- swiper hero slide  --}}
-                <div class="swiper-container mb-8 overflow-hidden">
-                    <div class="relative z-10 swiper-hero w-full h-64 md:h-80 p-2">
-                        <!-- Additional required wrapper -->
-                        <div class="swiper-wrapper">
-                            <!-- Slides -->
-                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
-                                </div>
-                            </div>
-                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
-                                </div>
-                            </div>
-                            <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                                <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
-                                </div>
-                            </div>
+                <x-swiper-container classTop="swiper-container mb-8 overflow-hidden" classBot="relative z-10 swiper-hero w-full h-64 md:h-80 p-2">
+                    <!-- Slides -->
+                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
                         </div>
-                        <!-- If we need pagination -->
-                        <div class="swiper-pagination"></div>
                     </div>
-                </div>
+                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        </div>
+                    </div>
+                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
+                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        </div>
+                    </div>
+                    <!-- If we need pagination -->
+                    <x-slot name="pagination">
+                        <div class="swiper-pagination"></div>
+                    </x-slot>
+                </x-swiper-container>
                 {{-- swiper quiz list--}}
                 <div class="flex flex-col space-y-8">
                     @foreach($quizzes as $topic_name => $quiz)
                     <div class="z-10 text-xl md:text-2xl font-bold relative">
                         <h1>{{ $topic_name }}</h1>
                     </div>
-                    <div class="relative swiper-container">
-                        <div class="swiper w-full h-56 md:h-64 p-2">
-                            <!-- Additional required wrapper -->
-                            <div class="swiper-wrapper">
-                                <!-- Slides -->
-                                @foreach($quiz as $data) 
-                                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
-                                        <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
-                                            <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
-                                        </div>
-                                        <div class="flex flex-col justify-between h-2/6 px-1">
-                                            <div class="flex flex-col space-y-1 p-1">
-                                                <a @auth
-                                                        href="{{ route('room.pre-waiting-host', $data->slug) }}" 
-                                                    @endauth
-                                                    @guest
-                                                        onclick="triggerAuthPopup()"
-                                                    @endguest class="font-semibold text-lg cursor-pointer">
-                                                    {{ $data->title }}
-                                                </a>
-                                            </div>
-                                        </div>
+                    <x-swiper-container>
+                        <!-- Slides -->
+                        @foreach($quiz as $data) 
+                            <div class="transform transition duration-400 hover:scale-105 swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
+                                <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                    <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                </div>
+                                <div class="flex flex-col justify-between h-2/6 px-1">
+                                    <div class="flex flex-col space-y-1 p-1">
+                                        <a @auth
+                                                href="{{ route('room.pre-waiting-host', $data->slug) }}" 
+                                            @endauth
+                                            @guest
+                                                onclick="triggerAuthPopup()"
+                                            @endguest class="font-semibold text-lg cursor-pointer">
+                                            {{ $data->title }}
+                                        </a>
                                     </div>
-                                @endforeach
-                            </div>
-                            <!-- If we need navigation buttons -->
-                            <div class="swiper-button-prev">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-left'></i>
                                 </div>
                             </div>
-                            <div class="swiper-button-next">
-                                <div class="hidden xl:flex text-3xl text-white bg-green-lightBg p-1">
-                                    <i class='bx bx-chevron-right'></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        @endforeach
+                        <!-- If we need navigation buttons -->
+                        <x-slot name="nav_btn">
+                            <x-swiper-navigation />
+                        </x-slot>
+                    </x-swiper-container>
                     @endforeach
                 </div>
             </div>
