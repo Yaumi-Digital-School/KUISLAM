@@ -35,7 +35,7 @@
                                 <div class="flex flex-col space-y-1 p-1">
                                     <a href="" class="font-bold">
                                         <h3 class="text-sm text-black-cardText">{{ $data->room->quiz->title }}</h3>
-                                        <span class="text-sm text-gray-cardText">{{ $description }}</span>
+                                        {{-- <span class="text-sm text-gray-cardText">{{ $description }}</span> --}}
                                     </a>
                                 </div>
                                 @auth

@@ -82,7 +82,7 @@
         <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
         <input type="hidden" name="timer" value="60">
         <input type="hidden" name="code" value="{{$code}}">
-        <button type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button>
+        {{-- <button type="submit" class="col-span-6 relative z-20 text-white bg-black">HEHEHE</button> --}}
     </form>
     @section('script')
     <script>

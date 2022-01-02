@@ -198,6 +198,7 @@
                         delay: 4000,
                     },
                     speed: 1000,
+                    loop: true,
                 });
             });
         </script>
