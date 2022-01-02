@@ -67,7 +67,7 @@ class HomeController extends Controller
             $quizzes = Quiz::getQuizGroupByTitle();
         }
 
-        return view('discover', compact('quizzes', 'topics'));
+        return view('discover', ['quizzes' => $quizzes, 'topics' => $topics, 'selectedTopic' => $topic]);
     }
 
     public function activity(){

@@ -20,22 +20,15 @@
             @if (request()->routeIs("activity"))
                 <div class="grid grid-cols-12 xl:grid-cols-15 relative z-10 gap-x-2 gap-y-4 md:gap-6">
                     @foreach ($roomUser as $data)
-                        @php
-                            $description = $data->room->quiz->description;
-                            if(strlen($description) > 60)
-                                $description = substr($description, 0, 60);
-                            $description .= " ...";
-                        @endphp    
                         {{-- card --}}
-                        <div class="col-span-6 md:col-span-4 lg:col-span-3 flex flex-col rounded-lg bg-gray-card p-2 h-64 md:h-80">
-                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg">
-                                <span class="absolute bottom-2 left-2 bg-gray-nav text-white text-sm px-2 rounded-xl">10 pertanyaan</span>
+                        <div class="col-span-6 md:col-span-4 lg:col-span-3 flex flex-col rounded-lg bg-gray-card p-2 h-64 md:h-72">
+                            <div class="h-3/5 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.jpg') }})">
+                                <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
                             </div>
                             <div class="flex flex-col justify-between h-2/5">
                                 <div class="flex flex-col space-y-1 p-1">
                                     <a href="" class="font-bold">
                                         <h3 class="text-sm text-black-cardText">{{ $data->room->quiz->title }}</h3>
-                                        {{-- <span class="text-sm text-gray-cardText">{{ $description }}</span> --}}
                                     </a>
                                 </div>
                                 @auth

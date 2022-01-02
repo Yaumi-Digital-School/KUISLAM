@@ -179,7 +179,7 @@
                         <div class="z-10 text-xl md:text-2xl font-bold relative">
                             <h1>Recent Activity</h1>
                         </div>
-                        <x-swiper-container>
+                        <x-swiper-container classBot="swiper w-full h-64 md:h-72 p-2">
                             <!-- Slides -->
                             @foreach($roomUser as $data) 
                                 <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">

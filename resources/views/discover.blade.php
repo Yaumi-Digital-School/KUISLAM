@@ -49,8 +49,12 @@
                     <div class="md:w-3/5 mt-3 md:mt-0 flex flex-col item overflow-hidden">
                         <x-swiper-container classTop="md:mx-4 relative swiper-container" classBot="swiper-topic w-full h-10 lg:h-12 p-1">
                             <!-- Slides -->
-                            @foreach($topics as $topic)
-                                <a href="{{ route('discover') }}?topic={{ $topic->slug }}" class="text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile bg-gray-topicList text-gray-topicListTxt font-semibold justify-center items-center rounded">
+                            @foreach($topics as $topic) 
+                                <a href="{{ route('discover') }}?topic={{ $topic->slug }}"
+                                    class="{{$selectedTopic->title == $topic->title ? 
+                                        'bg-green-nav text-white' : 
+                                        'bg-gray-topicList text-gray-topicListTxt'}} 
+                                        text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile  font-semibold justify-center items-center rounded">
                                     {{$topic->title}}
                                 </a>
                             @endforeach
