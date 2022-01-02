@@ -51,7 +51,7 @@
                             <!-- Slides -->
                             @foreach($topics as $topic) 
                                 <a href="{{ route('discover') }}?topic={{ $topic->slug }}"
-                                    class="{{$selectedTopic->title == $topic->title ? 
+                                    class="{{ isset($selectedTopic->title)  && $selectedTopic->title == $topic->title ? 
                                         'bg-green-nav text-white' : 
                                         'bg-gray-topicList text-gray-topicListTxt'}} 
                                         text-sm p-1 hover:bg-green-nav hover:text-white transition swiper-slide flex flex-col shadow-profile  font-semibold justify-center items-center rounded">
