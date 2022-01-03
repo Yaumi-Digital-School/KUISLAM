@@ -3,11 +3,9 @@
     <div class="flex justify-between mt-6 md:mt-10 mx-4 md:mx-8 items-center ">
         {{-- button icon  --}}
         <div class="z-10 flex justify-between items-center space-x-3 md:space-x-4">
-            
             <div class="bg-green-nav w-9 h-9 p-2 rounded">
                 <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
             </div>
-            
             <span class="text-green-nav font-bold text-2xl md:text-3xl">{{ $roomQuestion->order }}/10</span> 
         </div>
         {{-- timer  --}}
@@ -89,8 +87,8 @@
         const room_code = "{{$code}}";    
         const order = "{{$order}}";    
         $( document ).ready(function(){
-            // const allTimer = $(".timer");
-            setInterval(() => {
+            let intervalId = null;
+            intervalId = setInterval(() => {
                 const allTimer = $(".timer");
                 const timerNow = parseInt(allTimer[0].innerText);
                 if(timerNow >= 1){
@@ -107,6 +105,7 @@
                     $.ajax({
                         type: "POST",
                         url: url,
+                        async: false,
                         data: {
                             "_token": "{{ csrf_token() }}",
                             answer_option: answer,
@@ -114,11 +113,15 @@
                             order: order
                         },
                         success: function(response){
-                            // console.log(response.room);
+                            console.log(response);
                             let urlRedirect = "{{ route('question.leaderboard', ['room' => ':room', 'order' => ':order']) }}";
                             urlRedirect = urlRedirect.replace(':room', response.room);
                             urlRedirect = urlRedirect.replace(':order', response.order);
                             window.location.href = urlRedirect;
+                            clearInterval(intervalId);
+                        },
+                        error: function(err){
+                            console.log(err);
                         }
                     });
                 } 

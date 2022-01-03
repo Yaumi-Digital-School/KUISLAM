@@ -63,17 +63,17 @@
                 </div>
                 {{-- swiper hero slide  --}}
                 <x-swiper-container classTop="swiper-container mb-8 overflow-hidden" classBot="relative z-10 swiper-hero w-full h-64 md:h-80 p-2">
-                    <!-- Slides -->
+                    <!-- Slides img size (989px x 357px )-->
                     <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
                         </div>
                     </div>
                     <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
                         </div>
                     </div>
                     <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                        <div class="h-full w-full relative rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
                         </div>
                     </div>
                     <!-- If we need pagination -->

@@ -52,6 +52,8 @@ module.exports = {
                 },
                 blue: {
                     blueMain: "#2F83F9",
+                    facebook: "#4267B2",
+                    facebookDark: "#3B5B9D",
                 },
                 orange: {
                     podium: "#FFB436",

@@ -18,6 +18,11 @@
             </div>
             {{-- grid content  --}}
             @if (request()->routeIs("activity"))
+                @if(count($roomUser) == 0)
+                    <div class="">
+                        <img class="block mx-auto w-120 mt-14 md:mt-8" src="{{ asset('./images/activity_not_found.png') }}" alt="">
+                    </div>
+                @endempty
                 <div class="grid grid-cols-12 xl:grid-cols-15 relative z-10 gap-x-2 gap-y-4 md:gap-6">
                     @foreach ($roomUser as $data)
                         {{-- card --}}

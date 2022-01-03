@@ -72,7 +72,7 @@ class HomeController extends Controller
 
     public function activity(){
         $roomUser = RoomUser::getAllDoneQuiz();
-             
+        // dd($roomUser);
         return view('activity', compact('roomUser'));   
     }
 
