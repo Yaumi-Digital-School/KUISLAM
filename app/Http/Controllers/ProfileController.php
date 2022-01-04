@@ -3,23 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProfileRequest;
-use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
     public function detailAccount(){
-        return view('detail-account');
+        $file = User::authUserImageIsFile(Auth::user()->avatar);
+
+        return view('detail-account', compact('file'));  
     }
 
     public function updateAccount(ProfileRequest $request){
-        if ($request->avatar <> "") {
+        if ($request->avatar) {
             // Jika ingin ganti Avatar
             $imageAvatar = $request->avatar;
-            $avatarFile = $request->name."Avatar.".$imageAvatar->extension();
+            $avatarFile = Auth::user()->username . "." . $imageAvatar->extension();
             $imageAvatar->move(storage_path('app/public/user/avatar'), $avatarFile);
 
             $dataUser = [
@@ -28,8 +31,7 @@ class ProfileController extends Controller
                 'avatar' => $avatarFile,
             ];
             User::where('id', Auth::user()->id)->update($dataUser);
-        }
-        else {
+        }else {
             // Jika tidak ingin ganti Avatar
             $dataUser = [
                 'name' => $request->name,
@@ -38,7 +40,7 @@ class ProfileController extends Controller
             User::where('id', Auth::user()->id)->update($dataUser);
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
     public function changePassword(Request $request){
@@ -56,9 +58,9 @@ class ProfileController extends Controller
             ];
             User::where('id', Auth::user()->id)->update($data);
 
-            return back()->with('success', 'Success change your password');
+            return back()->with('success', 'Data berhasil disimpan!');
         }else{
-            return back()->withErrors(['old_password' => 'Make sure you fill your current password']);
+            return back()->with(['failed' => 'Password tidak sesuai']);
         }
     }
 }

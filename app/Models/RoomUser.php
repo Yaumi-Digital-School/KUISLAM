@@ -26,7 +26,7 @@ class RoomUser extends Model
     public static function isInRoom($code){
         // Check if user is in a room
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'waiting')->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('status', 'waiting')->first();
     }
 
     public static function getAllWaitingPlayer($code){

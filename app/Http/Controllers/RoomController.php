@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HostCancelRoom;
 use Carbon\Carbon;
 use App\Events\HostStartQuiz;
 use App\Models\Quiz;
@@ -212,7 +213,7 @@ class RoomController extends Controller
         ];
         RoomUser::create($dataRoomUser);
         
-        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
 
         return redirect()->route('room.waiting', $room->code);   
     }
@@ -261,10 +262,12 @@ class RoomController extends Controller
             RoomQuestion::deleteRoomQuestion($code);
             Room::deleteRoomByCode($code);
 
+            HostCancelRoom::dispatch($room->id);
+
             return redirect()->route('index');
         }elseif ($player){
             /* Method ini dipanggil ketika player / peserta keluar */
-            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::id(), "name" => Auth::user()->name]);
+            UserExitRoom::dispatch('user has exit', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
             RoomUser::deleteRoomUserByUserId($code);
 
             return redirect()->route('index');
