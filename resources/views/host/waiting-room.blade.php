@@ -44,10 +44,7 @@
         {{-- user card --}}
         @foreach($roomUser as $data)
             <div id="user-{{ $data->user_id }}" 
-                class="bg-white shadow-profile mx-auto w-60
-                @if ($data->user_id == Auth::id())
-                    transform scale-110
-                @endif h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg">
+                class="bg-white shadow-profile mx-auto w-60 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg">
                 <div class="flex justify-center items-center h-full w-1/5">
                     <img src="{{asset('images/default_profpic.png')}}" class="rounded-full h-10">
                 </div>

@@ -46,14 +46,11 @@
     <h1 class="text-center text-white text-3xl font-bold mb-3 z-10 relative">Menunggu permainan dimulai...</h1>
     
     {{-- user card container--}}
-    <div class="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 mb-8 relative z-10">
+    <div id="card-user-container" class="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-3 mb-8 relative z-10">
     {{-- user card --}}
         @foreach($roomUser as $data)
             <div id="user-{{ $data->user_id }}"
-                class="bg-white shadow-profile mx-auto w-60
-                    @if ($data->user_id == Auth::id())
-                        transform scale-110
-                    @endif h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg">
+                class="bg-white shadow-profile mx-auto w-60 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg">
                 <div class="flex justify-center items-center h-full w-1/5">
                     <img src="{{asset('images/default_profpic.png')}}" class="rounded-full h-10">
                 </div>
