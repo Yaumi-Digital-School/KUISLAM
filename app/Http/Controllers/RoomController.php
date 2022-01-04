@@ -158,10 +158,10 @@ class RoomController extends Controller
         $room = Room::getRoomByCode($code);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         
-        if(intval($order) != $savedDataOrder->order){
-            // User can't move to another order by changing the question order on URL
-            return back();
-        }
+        // if(intval($order) != $savedDataOrder->order){
+        //     // User can't move to another order by changing the question order on URL
+        //     return back();
+        // }
 
         // $allRank = RoomUser::getAllRank($room->id);
         $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
@@ -385,6 +385,12 @@ class RoomController extends Controller
     }
 
     public function leaderboard($code, $order){
+        //if done redirect to index
+        $roomIsDone = Room::roomIsDone($code);
+        if($roomIsDone){
+            return redirect()->route('index');
+        }
+
         $room = Room::getRoomByCode($code);
 
         $roomUser = RoomUser::getTop5Rank($room->id);
@@ -414,19 +420,22 @@ class RoomController extends Controller
         ];
         $roomUser = RoomUser::updateDoneRoomUser($code, $dataRoomUser);
 
-        $room = Room::getRoomByCode($code);
-        $roomUser = $room->roomusers->first();
         $host = RoomUser::isHost($code);
         
         if($host){
-            Room::updateDoneRoom($code, $dataRoomUser);
-
-            $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
-            $dataQuiz = [
-                'counter' => $quiz->counter + 1,
+            $dataRoom = [
+                'status' => 'done',
             ];
-            Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
+            Room::updateDoneRoom($code, $dataRoom);
         }
+        
+        $room = Room::getRoomByCode($code);
+        $roomUser = $room->roomusers->first();
+        $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
+        $dataQuiz = [
+            'counter' => $quiz->counter + 1,
+        ];
+        Quiz::where('id', $roomUser->room->quiz_id)->update($dataQuiz);
         
         return redirect()->route('index');
     }

@@ -49,7 +49,7 @@ class RoomUser extends Model
     public static function updateDoneRoomUser($code, $dataRoomUser){
         // update data in room_users table
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
     }
 
     public static function updateRoomUserByUserId($code, $dataRoomUser){
@@ -73,13 +73,13 @@ class RoomUser extends Model
     public static function isHost($code){
         // check if user is host
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->where('status', 'waiting')->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->first();
     }
 
     public static function isPlayer($code){
         // check if user is player
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('status', 'waiting')->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->first();
     }
 
     public static function isInWaitingRoom(){

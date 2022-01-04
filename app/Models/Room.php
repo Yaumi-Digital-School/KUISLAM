@@ -39,6 +39,10 @@ class Room extends Model
         return mt_rand(100000, 999999);
     }
 
+    public static function roomIsDone($code){
+        return Room::where('code', $code)->where('status', 'done')->first();
+    }
+
     public static function getRoomById($roomId){
         return Room::where('id', $roomId)->first();
     }
