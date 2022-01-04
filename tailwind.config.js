@@ -26,6 +26,7 @@ module.exports = {
                     nav: "#6DAF2B",
                     greenMain: "#52D876",
                     podium: "#52D876",
+                    leaderbord: "#F2FCD8",
                 },
                 gray: {
                     nav: "#C4C4C4",
@@ -59,6 +60,9 @@ module.exports = {
                     podium: "#FFB436",
                     avatar: "#FCC417",
                 },
+                brown: {
+                    leaderboard : "#525252",
+                }
             },
             screens: {
                 "3xl": "1600px",

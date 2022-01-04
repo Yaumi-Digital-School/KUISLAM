@@ -16,27 +16,6 @@
         </div>
         {{-- points and rank  --}}
         <div class="flex relative z-10 justify-between items-center space-x-4 md:space-x-6">
-            <div class="flex items-center md:space-x-1">
-                @if(!$roomUser->rank)
-                @elseif($roomUser->rank === 1)
-                    <div>
-                        <img class="w-10 md:w-12" src="{{ asset('images/1st_medal.svg') }}" alt="">
-                    </div>
-                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}st</span>
-                @elseif($roomUser->rank === 2)
-                    <div>
-                        <img class="w-10 md:w-12" src="{{ asset('images/2nd_medal.svg') }}" alt="">
-                    </div>
-                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}nd</span>
-                @elseif($roomUser->rank === 3)
-                    <div>
-                        <img class="w-10 md:w-12" src="{{ asset('images/3rd_medal.svg') }}" alt="">
-                    </div>
-                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}rd</span>
-                @else
-                    <span class="text-green-nav font-bold text-xl md:text-2xl">{{ $roomUser->rank }}th</span>
-                @endif
-            </div>
             <div class="bg-green-nav p-1 md:p-2 rounded">
                 <div class="text-white font-bold text-2xl">
                     <span>{{ $roomUser->points }}</span>  
@@ -49,7 +28,7 @@
     {{-- timer mobile  --}}
     <div class="mt-10 mb-6 flex items-center justify-center md:hidden">
         <p class=" relative z-10 text-green-nav font-bold text-2xl md:text-3xl">
-            00:<span class="timer">{{ $timeLeftForQuestion }}</span> 
+            00:<span class="timer">{{ (int) $timeLeftForQuestion ? $timeLeftForQuestion : '00'}}</span> 
         </p>
     </div> 
     {{-- question text --}}
@@ -58,9 +37,9 @@
     </div>
     {{-- question image --}}
     @if($roomQuestion->question->image)
-    <div class="max-w-6xl mx-5 md:mx-auto relative z-10 mb-8">
-        <img class="mx-auto" src="{{ asset('images/question_img.png') }}" alt="">
-    </div>
+        <div class="max-w-6xl mx-5 md:mx-auto relative z-10 mb-8">
+            <img class="mx-auto" src="{{ asset('images/question_img.png') }}" alt="">
+        </div>
     @endif
     {{-- question options  --}}
     <form id="form-answer" action="{{ route('question.handle', ['room' => $code, 'order' => $order]) }}" method="POST" class="grid grid-cols-12 gap-6 md:gap-10 max-w-6xl mx-5 xl:mx-auto relative z-10 text-white my-10">
