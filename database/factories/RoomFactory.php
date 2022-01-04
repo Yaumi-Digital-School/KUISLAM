@@ -14,7 +14,6 @@ class RoomFactory extends Factory
     public function definition()
     {
         return [
-            'quiz_id' => rand(1, 10),
             'code' => $this->faker->randomNumber(6, true)
         ];
     }
