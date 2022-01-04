@@ -97,6 +97,7 @@ class DatabaseSeeder extends Seeder
         // make 2 new room with each room contains 2 users
         Room::factory(2)->create([
             'quiz_id' => Quiz::inRandomOrder()->first()->id,
+            'status' => 'done'
         ])->each(function($room){
             User::inRandomOrder()->paginate(2)->each(function($user) use($room){
                 RoomUser::factory()->create([

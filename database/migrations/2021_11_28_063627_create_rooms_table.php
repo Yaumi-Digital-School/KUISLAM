@@ -17,6 +17,7 @@ class CreateRoomsTable extends Migration
             $table->id();
             $table->foreignId('quiz_id')->constrained();
             $table->char('code', 6)->unique();
+            $table->enum('status', ['waiting', 'ongoing', 'done']);
             $table->timestamps();
         });
     }

@@ -82,6 +82,21 @@ class RoomUser extends Model
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('status', 'waiting')->first();
     }
 
+    public static function isInWaitingRoom(){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'waiting')->first();
+    }
+
+    public static function isInOngoingRoom(){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'ongoing')->first();
+    }
+
+    public static function isDone($roomId){
+        // check if user is player
+        return RoomUser::where('room_id', $roomId)->where('status', 'done')->first();
+    }
+
     public static function getPlayerCurrentRoomData($roomId){
         // get player current point
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->first();

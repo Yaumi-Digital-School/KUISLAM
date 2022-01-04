@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\HostCancelRoom;
 use Carbon\Carbon;
-use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
@@ -12,8 +10,11 @@ use App\Models\RoomUser;
 use App\Events\UserExitRoom;
 use App\Models\RoomQuestion;
 use Illuminate\Http\Request;
+use App\Events\HostStartQuiz;
+use App\Events\HostCancelRoom;
 use App\Events\UserJoinedRoom;
 use App\Models\UserQuestionRoom;
+use App\Http\Requests\CodeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,13 +41,38 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika user menekan tombol 
             create room.
         */
+        $isInWaitingRoom = RoomUser::isInWaitingRoom();
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+        
+        if($isInWaitingRoom){
+            // If already in a waiting room
+            return redirect()->route('room.waiting', $isInWaitingRoom->room->code)->with('error', 'You already in a waiting room!');
+        }elseif($isInOngoingRoom){
+            $dataOngoingRoom = UserQuestionRoom::getDataUserQuestionRoom($isInOngoingRoom->room_id);
+            $isAnswered = $dataOngoingRoom->whereNotNull('is_correct')->whereNotNull('answer_option')->first();
+            if($isAnswered){
+                // return to leaderboard if question already answered
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order
+                ])->with('error', 'You already in a ongoing room!');
+            }
+            if($isAnswered->order !== 10){
+                // return to view question if question not answered yet
+                return redirect()->route('question.view', [
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order + 1
+                ])->with('error', 'You already in a ongoing room!');
+            }
+        }
 
-        $code = Room::getCode();
-        $slugId = Quiz::getQuizSlug($slug);
+        $code = Room::getCode(); // Generate random code
+        $slugId = Quiz::getQuizSlug($slug); // Get Quiz from slug
         
         $dataRoom = [
             'quiz_id' => $slugId->id,
             'code' => $code,
+            'status' => 'waiting'
         ];
         $room = Room::create($dataRoom);
 
@@ -76,10 +102,10 @@ class RoomController extends Controller
 
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        // if total player < 2
-        // if($countPlayer < 2){
-        //     return back();
-        // }
+        if($countPlayer < 2){
+            // if total player < 2
+            return back();
+        }
 
         // get random question
         $questionsId = Question::getRandomQuestion($quizId);
@@ -114,6 +140,7 @@ class RoomController extends Controller
         $dataRoomUser = [
             'status' => 'ongoing',
         ];
+        Room::updateOngoingRoom($code, $dataRoomUser);
         RoomUser::updateOngoingRoomUser($code, $dataRoomUser);
 
         HostStartQuiz::dispatch($code);
@@ -129,22 +156,19 @@ class RoomController extends Controller
             Method ini untuk menampilkan Pertanyaan
         */
         $room = Room::getRoomByCode($code);
-        $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
-        // $allRank = RoomUser::getAllRank($room->id);
-        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        $currentTime = Carbon::now();
         
-        if($savedDataOrder){
-            $accessableOrder = $savedDataOrder->order + 1;
-        }
-        
-        if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
+        if(intval($order) != $savedDataOrder->order){
             // User can't move to another order by changing the question order on URL
             return back();
         }
+
+        // $allRank = RoomUser::getAllRank($room->id);
+        $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         
+        $currentTime = Carbon::now();
         $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
         
         return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
@@ -159,19 +183,14 @@ class RoomController extends Controller
         return redirect()->route('room.pre-waiting-player', $room->code);
     }
 
-    public function joinRoomWithCode(Request $request){  
+    public function joinRoomWithCode(CodeRequest $request){  
         /* 
             Method ini dipanggil ketika USER menginput CODE Room
             Jika merujuk ke desain method ini akan di panggil ketika 
             user menekan tombol Gabung setelah menginput data kode room 
         */
 
-        $request->validate([
-            'code' => ['required', 'integer', 'digits:6']
-        ]);
-
         $room = Room::getRoomByCode($request->code);
-
         if(!$room){
             return back()->withErrors(['code' => 'Invalid code!']);
         }
@@ -201,9 +220,40 @@ class RoomController extends Controller
         user menekan tombol join */
 
         $room = Room::getRoomByCode($code);
+
+        // $wantJoinOngoingRoom = RoomUser::JoinOngoingRoom();
+        $isInWaitingRoom = RoomUser::isInWaitingRoom();
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+        $isDone = RoomUser::isDone($room->id);
         
-        if(!$room){
+        if(!$room || $isDone){
+            /* 
+                if room doesn't exist 
+                OR
+                if user want join to a room that already done
+            */
             return redirect()->route('index'); 
+        }elseif($isInWaitingRoom){
+            // If already in a waiting room
+            return redirect()->route('room.waiting', $isInWaitingRoom->room->code)->with('error', 'You already in a waiting room!');
+        }elseif($isInOngoingRoom){
+            $dataOngoingRoom = UserQuestionRoom::getDataUserQuestionRoom($isInOngoingRoom->room_id);
+            $isAnswered = $dataOngoingRoom->whereNotNull('is_correct')->whereNotNull('answer_option')->first();
+            if($isAnswered){
+                if($isAnswered->order !== 10){
+                    // return to view question if question not answered yet, as long as the order not 10
+                    return redirect()->route('question.view', [
+                        'room' => $isAnswered->room->code, 
+                        'order' => $isAnswered->order + 1
+                    ])->with('error', 'You already in a ongoing room!');
+                }
+
+                // return to leaderboard if question already answered
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order
+                ])->with('error', 'You already in a ongoing room!');
+            }
         }
         
         $dataRoomUser = [
@@ -336,7 +386,7 @@ class RoomController extends Controller
 
     public function leaderboard($code, $order){
         $room = Room::getRoomByCode($code);
-        // dd($code);
+
         $roomUser = RoomUser::getTop5Rank($room->id);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
@@ -366,9 +416,11 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         $roomUser = $room->roomusers->first();
-        // dd($roomUser->room);
         $host = RoomUser::isHost($code);
+        
         if($host){
+            Room::updateDoneRoom($code, $dataRoomUser);
+
             $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
             $dataQuiz = [
                 'counter' => $quiz->counter + 1,
