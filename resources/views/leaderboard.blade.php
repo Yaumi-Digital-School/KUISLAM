@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel">
+<x-main-layout titlePage="Leaderboard">
     {{-- header leaderbord  --}}
     @if($final === false)
         {{-- Breadcrumbs question --}}

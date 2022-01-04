@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel" themePage="white">
+<x-main-layout titlePage="Explore" themePage="white">
     {{-- additional style  --}}
     @section('style')
         <style>
