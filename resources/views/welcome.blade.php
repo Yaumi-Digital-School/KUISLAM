@@ -305,9 +305,9 @@
         {{-- redirect with message  --}}
         <script>
             const message = "{{ session('message') }}";
-            if("{{ session('message') }}"){
+            if(message){
                 Swal.fire({
-                    title: 'Host telah membatalkan permainan!',
+                    title: message,
                     timer: 2000,
                     timerProgressBar: true,
                     showConfirmButton: false,

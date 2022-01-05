@@ -20,7 +20,7 @@ class QuestionFactory extends Factory
             'option_3' => $this->faker->sentence(5),
             'option_4' => $this->faker->sentence(5),
             'answer' => $this->faker->randomElement(['option_1', 'option_2', 'option_3', 'option_4']),
-            'timer' => 20
+            'timer' => 40
         ];
     }
 }

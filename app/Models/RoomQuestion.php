@@ -35,6 +35,14 @@ class RoomQuestion extends Model
         return RoomQuestion::where('room_id', $roomId)->get()->count();
     }
 
+    public static function getRoomQuestionById($roomId){
+        return RoomQuestion::where('room_id', $roomId)->get();
+    }
+
+    public static function updateQuestionByRoomIdAndOrder($roomId, $order, $data){
+        return RoomQuestion::where('room_id', $roomId)->where('order', $order)->update($data);
+    }
+
     public static function autoIncrement()
     {
         // Start a loop

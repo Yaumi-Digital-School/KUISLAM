@@ -93,17 +93,17 @@ class RoomUser extends Model
     }
 
     public static function userIsInWaitingRoom($roomId){
-        // check if user is player
+        // check if user is in waiting room
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'waiting')->first();
     }
 
     public static function userIsInOngoingRoom($roomId){
-        // check if user is player
+        // check if user is in ongoing room
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'ongoing')->first();
     }
 
     public static function userIsInDoneRoom($roomId){
-        // check if user is player
+        // check if user is in done room
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'done')->first();
     }
 
@@ -123,7 +123,7 @@ class RoomUser extends Model
     }
 
     public static function getAllRank($roomId){
-        // get top 5 rank
+        // get all rank
         return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->get()->SortByDesc('points');
     }
 }

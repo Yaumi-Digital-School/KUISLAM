@@ -46,9 +46,14 @@ class HomeController extends Controller
     }
 
     public function redirect($message){
-        // dd($message);
         if($message == "host_exit_room"){
             return redirect()->route('index')->with('message', "Host telah membatalkan permainan!");
+        }elseif($message == "room-cant-access"){
+            return redirect()->route('index')->with('message', 'Anda tidak bisa mengakses halaman ini!');
+        }elseif($message == "leave-5-minute"){
+            return redirect()->route('index')->with('message', 'Anda telah meninggalkan room lebih dari 5 menit!');
+        }elseif($message == "room-not-exist"){
+            return redirect()->route('index')->with('message', 'Room tidak ada!');
         }
     }
 
