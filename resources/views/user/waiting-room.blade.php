@@ -66,11 +66,11 @@
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
                 $( document ).ready(function(){
-                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto");                    
+                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg");                    
                     $newUserDiv.attr("id", `user-${data.user_data.id}`);
-                    $newUserImageDiv = $("<div></div>").addClass("flex items-center h-16 w-16 mr-2");
-                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full");
-                    $newUserName = $("<div></div>").addClass("text-green-nav text-xl font-bold").html(data.user_data.name);
+                    $newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
+                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full h-10");
+                    $newUserName = $("<h1></h1>").addClass("text-green-nav text-xl font-bold w-4/5").html(data.user_data.name);
 
                     $newUserImageDiv.append($newUserImage);
                     $newUserDiv.append($newUserImageDiv);
