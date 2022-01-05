@@ -55,7 +55,7 @@ class RoomUser extends Model
     public static function updateRoomUserByUserId($code, $dataRoomUser){
         // update data in room_users table by user_id
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
     }
 
     public static function deleteRoomUserByCode($code){
@@ -92,6 +92,21 @@ class RoomUser extends Model
         return RoomUser::where('user_id', Auth::user()->id)->where('status', 'ongoing')->first();
     }
 
+    public static function userIsInWaitingRoom($roomId){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'waiting')->first();
+    }
+
+    public static function userIsInOngoingRoom($roomId){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'ongoing')->first();
+    }
+
+    public static function userIsInDoneRoom($roomId){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'done')->first();
+    }
+
     public static function isDone($roomId){
         // check if user is player
         return RoomUser::where('room_id', $roomId)->where('status', 'done')->first();
@@ -104,7 +119,7 @@ class RoomUser extends Model
 
     public static function getTop5Rank($roomId){
         // get top 5 rank
-        return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->limit(5)->get()->SortByDesc('points');
+        return RoomUser::where('room_id', $roomId)->limit(5)->get()->SortByDesc('points');
     }
 
     public static function getAllRank($roomId){

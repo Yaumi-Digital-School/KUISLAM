@@ -39,16 +39,24 @@ class Room extends Model
         return mt_rand(100000, 999999);
     }
 
-    public static function roomIsDone($code){
-        return Room::where('code', $code)->where('status', 'done')->first();
-    }
-
     public static function getRoomById($roomId){
         return Room::where('id', $roomId)->first();
     }
 
     public static function getRoomByCode($code){
         return Room::where('code', $code)->first();
+    }
+
+    public static function protectWaitingMethod($code){
+        return Room::where('code', $code)->where('status', 'waiting')->first();
+    }
+
+    public static function protectOngoingMethod($code){
+        return Room::where('code', $code)->where('status', 'ongoing')->first();
+    }
+
+    public static function protectDoneMethod($code){
+        return Room::where('code', $code)->where('status', 'done')->first();
     }
 
     public static function updateOngoingRoom($code, $data){
