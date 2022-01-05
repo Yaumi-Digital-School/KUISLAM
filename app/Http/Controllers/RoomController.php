@@ -167,10 +167,34 @@ class RoomController extends Controller
         $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
-        
+
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $currentTime = Carbon::now();
-        $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
         
+        if($savedDataOrder){
+            $accessableOrder = $savedDataOrder->order + 1;
+        }
+        
+        if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
+            // User can't move to another order by changing the question order on URL
+            return back();
+        }
+
+        $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+
+        // if user already submit the question 
+        if(UserQuestionRoom::where('user_id', Auth::id())
+                                    ->where('room_id', $room->id)
+                                    ->where('question_id', $roomQuestion->question->id)
+                                    ->exists()){
+            $user_answer = UserQuestionRoom::where('user_id', Auth::id())
+                                    ->where('room_id', $room->id)
+                                    ->where('question_id', $roomQuestion->question->id)
+                                    ->get()->first()->answer_option;
+            // dd($user_answer->answer_option);
+            return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
+        }
+
         return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
@@ -330,57 +354,42 @@ class RoomController extends Controller
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentPoint = RoomUser::getPlayerCurrentRoomData($room->id)->points;
         $currentTotalCorrect = RoomUser::getPlayerCurrentRoomData($room->id)->total_correct;
-        $currentAnswer = is_null($request->answer_option) ? "option_5" : $request->answer_option;
-        // dd($request->answer_option);
+        $currentAnswer = $request->answer_option;
+        $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+        // data to be inserted (default is wrong answer)
+        $dataUserQuestionRoom = [
+            'user_id' => Auth::user()->id,
+            'room_id' => $room->id,
+            'question_id' => $questionId->question_id,
+            'order' => $order,
+            'point' => $currentPoint,
+            'answer_option' => $currentAnswer,
+            'is_correct' => false,
+        ];
+        $dataRoomUser = [
+            'rank' => $rank,
+            'points' => $currentPoint,
+        ];
+
+        // If answer correct, update data to correct answer
         if($questionId->question->answer === $currentAnswer){
-            // If answer correct
             $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
             
-            $dataUserQuestionRoom = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'question_id' => $questionId->id,
-                'order' => $order,
-                'point' => $currentPoint + $point,
-                'answer_option' => $currentAnswer,
-                'is_correct' => true,
-            ];
-            UserQuestionRoom::create($dataUserQuestionRoom);
+            $dataUserQuestionRoom['point'] = $currentPoint + $point;
+            $dataUserQuestionRoom['is_correct'] = true;
 
-            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-
-            $dataRoomUser = [
-                'rank' => $rank,
-                'points' => $currentPoint + $point,
-                'total_correct' => $currentTotalCorrect + 1
-            ];
-            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
-        }else{
-            // If answer wrong
-            $dataUserQuestionRoom = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'question_id' => $questionId->id,
-                'order' => $order,
-                'point' => $currentPoint + 0,
-                'answer_option' => $currentAnswer,
-                'is_correct' => false,
-            ];
-            UserQuestionRoom::create($dataUserQuestionRoom);
-
-            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-
-            $dataRoomUser = [
-                'rank' => $rank,
-                'points' => $currentPoint + 0,
-            ];
-            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
+            $dataRoomUser['points'] = $currentPoint + $point;
+            $dataRoomUser['total_correct'] = $currentTotalCorrect + 1;
         }
+        UserQuestionRoom::create($dataUserQuestionRoom);
+        RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         
         // return redirect()->route('question.leaderboard', ['room' => $code, 'order' => $order]);
         return response()->json([
             'room' => $code,
-            'order' => $order
+            'order' => $order,
+            'user_answer' => $currentAnswer
         ]);
     }
 
@@ -403,10 +412,11 @@ class RoomController extends Controller
             $timeLeftForLeaderboard = 0;
             $final = true;
             return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
-        }elseif(intval($order) != $savedDataOrder->order){
-            // User can't move to another order by changing the question order on URL
-            return back();
         }
+        // elseif(intval($order) != $savedDataOrder->order){
+        //     // User can't move to another order by changing the question order on URL
+        //     return back();
+        // }
 
         $final = false;
         $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);

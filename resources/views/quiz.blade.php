@@ -44,18 +44,24 @@
     {{-- question options  --}}
     <form id="form-answer" action="{{ route('question.handle', ['room' => $code, 'order' => $order]) }}" method="POST" class="grid grid-cols-12 gap-6 md:gap-10 max-w-6xl mx-5 xl:mx-auto relative z-10 text-white my-10">
         @csrf
-        <div data-option="option_1" id="option_1" class="options ring-red-200 cursor-pointer rounded-md flex space-x-2 bg-red-redMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>A.</span> <span>{{ $roomQuestion->question->option_1 }}</span> 
-        </div>
-        <div data-option="option_2" id="option_2" class="options ring-green-200 cursor-pointer rounded-md flex space-x-2 bg-green-greenMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>B.</span> <span>{{ $roomQuestion->question->option_2 }}</span> 
-        </div>
-        <div data-option="option_3" id="option_3" class="options ring-blue-200 cursor-pointer rounded-md flex space-x-2 bg-blue-blueMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>C.</span> <span>{{ $roomQuestion->question->option_3 }}</span> 
-        </div>
-        <div data-option="option_4" id="option_4" class="options ring-yellow-200 cursor-pointer rounded-md flex space-x-2 bg-yellow-yellowMain col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
-            <span>D.</span> <span>{{ $roomQuestion->question->option_4 }}</span> 
-        </div>
+        @php
+            $colorBackground = ["bg-red-redMain", "bg-green-greenMain", "bg-blue-blueMain", "bg-yellow-yellowMain"];
+            $colorRing = ["ring-red-200", "ring-green-200", "ring-blue-200", "ring-yellow-200"];
+            $options = ["A", "B", "C", "D"];
+            $colorBackgroundHover = ["bg-red-redMainHover", "bg-green-greenMainHover", "bg-blue-blueMainHover", "bg-yellow-yellowMainHover"];
+            $hasRing = null;
+        @endphp
+        @for ($i = 1; $i <= 4; $i++)
+            @php
+                $hasRing = isset($user_answer) && ($user_answer == "option_{$i}") ? "ring-8" : null;
+            @endphp
+            <div data-option="option_{{$i}}" id="option_{{$i}}" class="options {{$hasRing}} {{$colorRing[$i-1]}} 
+                {{isset($user_answer) ? null : "cursor-pointer"}} rounded-md flex space-x-2 {{$colorBackground[$i-1]}} 
+                {{isset($user_answer) ? null : "hover:{$colorBackgroundHover[$i-1]}"}}
+                transition col-span-12 md:col-span-6 py-6 px-3 font-bold text-lg md:text-2xl">
+                <span>{{$options[$i-1]}}.</span> <span>{{ $roomQuestion->question->{'option_'.$i} }}</span> 
+            </div>
+        @endfor
         <input class="col-span-3 " id="answer" type="hidden" name="answer_option" value="">
         <input type="hidden" name="timer" value="60">
         <input type="hidden" name="code" value="{{$code}}">
@@ -65,10 +71,38 @@
     <script>
         const room_code = "{{$code}}";    
         const order = "{{$order}}";
+
         let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
         url = url.replace(':room', room_code);
         url = url.replace(':order', order);
-            
+
+        let submittedAnswer = "{{ isset($user_answer) ? $user_answer : null }}";
+        console.log(submittedAnswer)
+        let answer = "option_5";
+        
+        function submitAnswer(answer){
+            let responseSubmitted;
+            $.ajax({
+                type: "POST",
+                url: url,
+                async: false,
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    answer_option: answer,
+                    code: room_code,
+                    order: order
+                },
+                success: function(response){
+                    console.log(response);
+                    responseSubmitted = response;
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            });
+            return responseSubmitted;
+        }
+        // timer countdown answer 
         $( document ).ready(function(){
             let intervalId = null;
             intervalId = setInterval(() => {
@@ -79,37 +113,34 @@
                     allTimer[1].innerText = timerNow-1;
                 }
                 if(timerNow <= 1){
-                    const answer = $("#answer").val();
-                    console.log(room_code)
-                    $.ajax({
-                        type: "POST",
-                        url: url,
-                        async: false,
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            answer_option: answer,
-                            code: room_code,
-                            order: order
-                        },
-                        success: function(response){
-                            console.log(response);
-                            let urlRedirect = "{{ route('question.leaderboard', ['room' => ':room', 'order' => ':order']) }}";
-                            urlRedirect = urlRedirect.replace(':room', response.room);
-                            urlRedirect = urlRedirect.replace(':order', response.order);
-                            window.location.href = urlRedirect;
-                            clearInterval(intervalId);
-                        },
-                        error: function(err){
-                            console.log(err);
-                        }
-                    });
-                } 
+                    clearInterval(intervalId);
+                    console.log(order);  
+                    submitAnswer("option_5");
+                    let urlRedirect = "{{ route('question.leaderboard', ['room' => ':room', 'order' => ':order']) }}";
+                    urlRedirect = urlRedirect.replace(':room', room_code);
+                    urlRedirect = urlRedirect.replace(':order', order);
+                    window.location.href = urlRedirect;
+                }
             }, 1000);
+
+            // if a user already click the answer, submit them 
             $('#form-answer .options').click(function(){
+                // dont let people submit twice 
+                if(submittedAnswer) return;
+                
+                // add focus on selected answer 
                 $(this).parent().find('.ring-8').removeClass('ring-8');
                 $(this).addClass('ring-8');
-                var val = $(this).attr('data-option');
-                $(this).parent().find('#answer').val(val);
+
+                // submit answer 
+                answer = $(this).attr('data-option');
+                submitAnswer(answer);
+                submittedAnswer = answer;
+
+                // remove class indicating user still can submit
+                $('#form-answer .options').removeClass('cursor-pointer');
+                $('#form-answer .options').removeClass('cursor-pointer');
+                $('#form-answer .options').removeClass('options');
             });
         });
     </script>
