@@ -135,6 +135,7 @@
                 // submit answer 
                 answer = $(this).attr('data-option');
                 submitAnswer(answer);
+                submittedAnswer = answer;
 
                 // remove class indicating user still can submit
                 $('#form-answer .options').removeClass('cursor-pointer');
