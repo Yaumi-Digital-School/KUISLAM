@@ -94,6 +94,13 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
             START
         */
+        $protectOngoingMethod = Room::protectOngoingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+
+            return redirect()->route('index');
+        }
 
         $room = Room::getRoomByCode($code);
         $quizId = $room->quiz_id;
@@ -155,13 +162,37 @@ class RoomController extends Controller
         /* 
             Method ini untuk menampilkan Pertanyaan
         */
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+        
+        if(($protectWaitingMethod || $protectDoneMethod) && !$isInOngoingRoom){
+            return redirect()->route('index');
+        }
+        
         $room = Room::getRoomByCode($code);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        
-        // if(intval($order) != $savedDataOrder->order){
-        //     // User can't move to another order by changing the question order on URL
-        //     return back();
-        // }
+        if(!$savedDataOrder && intval($order) !== 1){
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => 1
+            ]);
+        }elseif(intval($order) > 1){
+            $accessibleOrder = $savedDataOrder->order + 1;
+            if(intval($order) != $accessibleOrder){
+                // User can't move to another order by changing the question order on URL
+                return redirect()->route('question.view', [
+                    'room' => $code,
+                    'order' => $accessibleOrder
+                ]);
+            }
+        }elseif(intval($order) <= 1 && $savedDataOrder){
+            $accessibleOrder = $savedDataOrder->order + 1;
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $accessibleOrder
+            ]);
+        }
 
         // $allRank = RoomUser::getAllRank($room->id);
         $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
@@ -195,6 +226,18 @@ class RoomController extends Controller
             return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
         }
 
+        if($timeLeftForQuestion < -300){
+            // if leave the game for 5 minute
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+            $dataRoomUser = [
+                'rank' => $rank,
+                'status' => 'done'
+            ];
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);  
+
+            return redirect()->route('index');
+        }
         return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
@@ -202,7 +245,19 @@ class RoomController extends Controller
         /* 
             Method ini dipanggil ketika User memasukkan link kedalam URL 
         */
+        
         $room = Room::getRoomByCode($code);
+        if(!$room){
+            return redirect()->route('index');
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            return redirect()->route('index');
+        }
         
         return redirect()->route('room.pre-waiting-player', $room->code);
     }
@@ -213,10 +268,17 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika 
             user menekan tombol Gabung setelah menginput data kode room 
         */
-
         $room = Room::getRoomByCode($request->code);
         if(!$room){
             return back()->withErrors(['code' => 'Invalid code!']);
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            return redirect()->route('index');
         }
 
         return redirect()->route('room.pre-waiting-player', $room->code);
@@ -228,9 +290,17 @@ class RoomController extends Controller
         /* Jika merujuk ke desain method ini akan di panggil ketika 
         user memasukkan link share untuk join ke room atau setelah
         user menginput data kode room pada field yang tersedia */
-
+        
         $room = Room::getRoomByCode($code);
         if(!$room){
+            return redirect()->route('index');
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
             return redirect()->route('index');
         }
 
@@ -244,34 +314,38 @@ class RoomController extends Controller
         user menekan tombol join */
 
         $room = Room::getRoomByCode($code);
+        if(!$room){
+            // if room doesn't exist 
+            return redirect()->route('index'); 
+        }
 
-        // $wantJoinOngoingRoom = RoomUser::JoinOngoingRoom();
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            return redirect()->route('index');
+        }
+
         $isInWaitingRoom = RoomUser::isInWaitingRoom();
         $isInOngoingRoom = RoomUser::isInOngoingRoom();
-        $isDone = RoomUser::isDone($room->id);
         
-        if(!$room || $isDone){
-            /* 
-                if room doesn't exist 
-                OR
-                if user want join to a room that already done
-            */
-            return redirect()->route('index'); 
-        }elseif($isInWaitingRoom){
+        if($isInWaitingRoom){
             // If already in a waiting room
             return redirect()->route('room.waiting', $isInWaitingRoom->room->code)->with('error', 'You already in a waiting room!');
         }elseif($isInOngoingRoom){
             $dataOngoingRoom = UserQuestionRoom::getDataUserQuestionRoom($isInOngoingRoom->room_id);
             $isAnswered = $dataOngoingRoom->whereNotNull('is_correct')->whereNotNull('answer_option')->first();
+            
             if($isAnswered){
                 if($isAnswered->order !== 10){
                     // return to view question if question not answered yet, as long as the order not 10
                     return redirect()->route('question.view', [
                         'room' => $isAnswered->room->code, 
                         'order' => $isAnswered->order + 1
-                    ])->with('error', 'You already in a ongoing room!');
-                }
-
+                        ])->with('error', 'You already in a ongoing room!');
+                    }
+                    
                 // return to leaderboard if question already answered
                 return redirect()->route('question.leaderboard',[
                     'room' => $isAnswered->room->code, 
@@ -300,9 +374,18 @@ class RoomController extends Controller
         /* 
             Kalau data Room tidak ada akan redirect ke home
         */
+        
         $room = Room::getRoomByCode($code);
         if(!$room){
             return redirect()->route('index');     
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            return redirect()->route('index');
         }
         
         /* 
@@ -327,10 +410,17 @@ class RoomController extends Controller
     }
 
     public function exitRoom($code){
+        $protectOngoingMethod = Room::protectOngoingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+
+            return redirect()->route('index');
+        }
+        
+        $room = Room::getRoomByCode($code);
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
-        $room = Room::getRoomByCode($code);
-
         if($host){
             /* Method ini dipanggil ketika room Master / moderator keluar */
             RoomUser::deleteRoomUserByCode($code);
@@ -350,11 +440,20 @@ class RoomController extends Controller
     }
 
     public function handleAnswer(Request $request, $code, $order){
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectWaitingMethod || $protectDoneMethod){
+
+            return redirect()->route('index');
+        }
+
         $room = Room::getRoomByCode($code);        
         $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
         $currentPoint = RoomUser::getPlayerCurrentRoomData($room->id)->points;
         $currentTotalCorrect = RoomUser::getPlayerCurrentRoomData($room->id)->total_correct;
         $currentAnswer = $request->answer_option;
+
         $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
 
         // data to be inserted (default is wrong answer)
@@ -394,9 +493,12 @@ class RoomController extends Controller
     }
 
     public function leaderboard($code, $order){
-        //if done redirect to index
-        $roomIsDone = Room::roomIsDone($code);
-        if($roomIsDone){
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+     
+        if($protectWaitingMethod && $isInOngoingRoom && $protectDoneMethod){
+
             return redirect()->route('index');
         }
 
@@ -406,8 +508,7 @@ class RoomController extends Controller
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $currentTime = Carbon::now();
-
+        
         if(intval($order) === $totalQuestion){
             $timeLeftForLeaderboard = 0;
             $final = true;
@@ -417,7 +518,8 @@ class RoomController extends Controller
         //     // User can't move to another order by changing the question order on URL
         //     return back();
         // }
-
+        
+        $currentTime = Carbon::now();
         $final = false;
         $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
         
@@ -425,6 +527,16 @@ class RoomController extends Controller
     }
 
     public function exitGame($code){
+        $room = Room::getRoomByCode($code);
+
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $authUserIsDone = RoomUser::isDone($room->id);
+        $userIsInDoneRoom = RoomUser::userIsInDoneRoom($room->id);
+        
+        if($protectDoneMethod && $userIsInDoneRoom && $authUserIsDone){
+            return redirect()->route('index');
+        }
+
         $dataRoomUser = [
             'status' => 'done',
         ];
@@ -439,7 +551,6 @@ class RoomController extends Controller
             Room::updateDoneRoom($code, $dataRoom);
         }
         
-        $room = Room::getRoomByCode($code);
         $roomUser = $room->roomusers->first();
         $quiz = Quiz::where('id', $roomUser->room->quiz_id)->first();
         $dataQuiz = [
@@ -449,10 +560,4 @@ class RoomController extends Controller
         
         return redirect()->route('index');
     }
-
-    // public function test($code, $order){
-    //     $room = Room::getRoomByCode($code);
-    //     $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-    //     dd($rank);
-    // }
 }
