@@ -64,7 +64,11 @@
     @section('script')
     <script>
         const room_code = "{{$code}}";    
-        const order = "{{$order}}";    
+        const order = "{{$order}}";
+        let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
+        url = url.replace(':room', room_code);
+        url = url.replace(':order', order);
+            
         $( document ).ready(function(){
             let intervalId = null;
             intervalId = setInterval(() => {
@@ -75,10 +79,6 @@
                     allTimer[1].innerText = timerNow-1;
                 }
                 if(timerNow <= 1){
-                    let url = "{{ route('question.handle', ['room' => ':room', 'order' => ':order']) }}"
-                    url = url.replace(':room', room_code);
-                    url = url.replace(':order', order);
-
                     const answer = $("#answer").val();
                     console.log(room_code)
                     $.ajax({
