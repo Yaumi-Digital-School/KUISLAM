@@ -82,7 +82,7 @@
                     </div>
                     {{-- User Points  --}}
                     <div class="w-2/12 sm:w-3/12 {{ $colorPointLeaderboard }}">
-                        <h1 class=" text-center">3620 pts</h1>
+                        <h1 class=" text-center">{{ $data->points }} pts</h1>
                     </div>
                 </div>
             </div>

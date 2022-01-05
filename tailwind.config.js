@@ -25,6 +25,7 @@ module.exports = {
                     darkBg: "#81C530",
                     nav: "#6DAF2B",
                     greenMain: "#52D876",
+                    greenMainHover: "#4DC86E",
                     podium: "#52D876",
                     leaderbord: "#F2FCD8",
                 },
@@ -46,13 +47,16 @@ module.exports = {
                 },
                 yellow: {
                     yellowMain: "#FFB73D",
+                    yellowMainHover: "#E1A237",
                     avatar: "#F79429",
                 },
                 red: {
                     redMain: "#FF6368",
+                    redMainHover: "#EC595E",
                 },
                 blue: {
                     blueMain: "#2F83F9",
+                    blueMainHover: "#2D7AE8",
                     facebook: "#4267B2",
                     facebookDark: "#3B5B9D",
                 },
