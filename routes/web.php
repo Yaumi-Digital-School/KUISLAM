@@ -33,28 +33,6 @@ use App\Http\Controllers\import\QuestionImportController;
         Route::get('/', [HomeController::class, 'index'])->name('index');
         Route::get('/home/{message?}', [HomeController::class, 'redirect'])->name('index.redirect');
         Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
-            
-                // testing
-                Route::get('/leaderboard', function () {
-                    return view('leaderboard');
-                });
-                Route::get('/test/quiz', function () {
-                    return view('quiz');
-                });
-                Route::get('/test/activity', function () {
-                    return view('activity');
-                })->name('test.activity');
-                Route::get('/test/activity/made', function () {
-                    return view('activity');
-                })->name('test.activity.made');
-            
-                // testing admin 
-                Route::get('/test/admin', function () {
-                    return view('admin.dashboard');
-                })->name('test.admin.dashboard');
-                Route::get('/test/admin/topics', function () {
-                    return view('admin.topics');
-                })->name('test.admin.topics');
 
         Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
