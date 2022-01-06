@@ -60,7 +60,7 @@ class Quiz extends Model
     }
 
     public static function getPopularQuiz($total){
-        return Quiz::take($total)->get()->SortBy('counter');
+        return Quiz::get()->SortByDesc('counter')->take($total);
     }
     
     public static function getOneQuiz($id){

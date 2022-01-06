@@ -234,7 +234,7 @@ class RoomController extends Controller
                     ]);
                 }elseif($timeLeftForQuestion < 1){
                     // if recent order is 1 and change order other than 1, not answer, time is up
-                    dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
+                    // dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
                     return redirect()->route('question.handle', [
                         'room' => $code,
                         'order' => $accessibleOrder
@@ -246,7 +246,7 @@ class RoomController extends Controller
                     if($timeLeftForQuestion > $roomQuestion->question->timer){
                         // if recent order 1, answered, there is time left
                         // Ceklis
-                        dd($timeLeftForQuestion > $roomQuestion->question->timer);
+                        // dd($timeLeftForQuestion > $roomQuestion->question->timer);
                         // dd('anda tidak boleh maju, walau sudah jawab tapi masih ada waktu tersisa!');
                         return redirect()->route('question.view', [
                             'room' => $code,
@@ -665,7 +665,7 @@ class RoomController extends Controller
                 }elseif($timeLeftForQuestion > 1){
                     // if order 1, not answered, there's time to choose an answer
                     // MENAMPILKAN QUIZ PERTAMA
-                    dd('if order 1, not answered, there is time left');
+                    // dd('if order 1, not answered, there is time left');
                     return redirect()->route('question.view', [
                         'room' => $code,
                         'order' => 1
