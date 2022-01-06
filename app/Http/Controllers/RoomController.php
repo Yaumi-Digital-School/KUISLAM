@@ -18,6 +18,8 @@ use App\Http\Requests\CodeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\returnValueMap;
+
 class RoomController extends Controller
 {
     public function preWaitingHost($slug){
@@ -185,15 +187,10 @@ class RoomController extends Controller
         if($savedDataOrder && $savedDataOrder->order == $totalQuestion){
             return redirect()->route('question.leaderboard', [
                 'room' => $code,
-                'order' => $savedDataOrder
+                'order' => $savedDataOrder->order
             ]);
         }elseif(!($order >= 1 && $order <= $totalQuestion)){
             // if order not between 1 - 10
-            // dd($savedDataOrder);
-            // return redirect()->route('question.leaderboard', [
-            //     'room' => $code,
-            //     'order' => $savedDataOrder
-            // ]);
             return back();
         }
 
@@ -204,60 +201,52 @@ class RoomController extends Controller
         
         if($order == 1){
             if(!$savedDataOrder){
-                if($timeLeftForQuestion > $roomQuestion->question->timer){
-                    // order cant go forward
-                    // MENAMPILKAN QUIZ PERTAMA ceklis
-                    // dd('anda tidak boleh maju, order anda sekarang 1 belum jawab dan masih ada waktu tersisa!');
+                if($timeLeftForQuestion < 1){
+                    // if order 1, not answered, time is up'
+                    // dd('if order 1, not answered, time is up');
                     return redirect()->route('question.view', [
                         'room' => $code,
                         'order' => 1
                     ]);
                 }
             }elseif($savedDataOrder){
-                //if recent order is not 1 but go to other order
                 $accessibleOrder = $savedDataOrder->order + 1;
-                if($order != $accessibleOrder){
-                    if($timeLeftForQuestion < 1){
-                        // order cant go backward
-                        //ceklis
-                        // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
-                        return redirect()->route('question.view', [
-                            'room' => $code,
-                            'order' => $accessibleOrder
-                        ]);
-                    }
+                if($timeLeftForQuestion < 1){
+                    // if recent order is not 1 and change order to 1, answered, time is up
+                    // ceklis
+                    // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
                 }
             }
         }elseif($order != 1){
-            //if recent order is not 1 but go to other order
             if(!$savedDataOrder){
-                // if recent order is not 1 adn user not answer yet, but go to other order
-                // order sekarang adalah 1 tapi belum jawab, tapi ganti order lain
                 $accessibleOrder = 1;
-                if($order != $accessibleOrder){
-                    if($timeLeftForQuestion > $roomQuestion->question->timer){
-                        // order cant go forward
-                        // Ceklis
-                        // dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu masih ada!');
-                        return redirect()->route('question.view', [
-                            'room' => $code,
-                            'order' => $accessibleOrder
-                        ]);
-                    }elseif($timeLeftForQuestion < 1){
-                        // order cant go forward
-                        dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
-                        return redirect()->route('question.view', [
-                            'room' => $code,
-                            'order' => $accessibleOrder
-                        ]);
-                    }
-                }
+                if($timeLeftForQuestion > 1){
+                    // if recent order is 1 and change order other than 1, not answer, there is time left
+                    // Ceklis
+                    // dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu masih ada!');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }elseif($timeLeftForQuestion < 1){
+                    // if recent order is 1 and change order other than 1, not answer, time is up
+                    dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
+                    return redirect()->route('question.handle', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }                
             }elseif($savedDataOrder){
                 $accessibleOrder = $savedDataOrder->order + 1;
                 if($savedDataOrder->order == 1){
                     if($timeLeftForQuestion > $roomQuestion->question->timer){
-                        // order cant go forward
+                        // if recent order 1, answered, there is time left
                         // Ceklis
+                        dd($timeLeftForQuestion > $roomQuestion->question->timer);
                         // dd('anda tidak boleh maju, walau sudah jawab tapi masih ada waktu tersisa!');
                         return redirect()->route('question.view', [
                             'room' => $code,
@@ -292,10 +281,10 @@ class RoomController extends Controller
                             'order' => $accessibleOrder - 1
                         ]);
                     }elseif($timeLeftForQuestion < 1){
-                        // order cant go backward kekurangannya data tidak tersimpan
-                        //ceklis
+                        // order cant go backward
+                        // ceklis
                         // dd($accessibleOrder,'anda tidak boleh mundur karena waktu sudah habis! bwah');
-                        return redirect()->route('question.leaderboard', [
+                        return redirect()->route('question.handle', [
                             'room' => $code,
                             'order' => $accessibleOrder
                         ]);
@@ -327,7 +316,7 @@ class RoomController extends Controller
             return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
         }
 
-        if($timeLeftForQuestion < -300){
+        if($timeLeftForQuestion < -3){
             // if leave the game more than 5 minute
             $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
             $isHost = RoomUser::isHost($code);
@@ -599,13 +588,13 @@ class RoomController extends Controller
 
             $dataUserQuestionRoom['point'] = $currentPoint + $point;
             $dataUserQuestionRoom['is_correct'] = true;
+
             $dataRoomUser['points'] = $currentPoint + $point;
             $dataRoomUser['total_correct'] = $currentTotalCorrect + 1;
         }
         UserQuestionRoom::create($dataUserQuestionRoom);
         RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
         
-        // return redirect()->route('question.leaderboard', ['room' => $code, 'order' => $order]);
         return response()->json([
             'room' => $code,
             'order' => $order,
@@ -628,35 +617,93 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        
         if(!($order >= 1 && $order <= $totalQuestion)){
             return back();
         }
         
         $roomUser = RoomUser::getTop5Rank($room->id);
-        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $isCorrect = UserQuestionRoom::where('room_id', $room->id)->where('user_id', Auth::id())->where('order', $order)->get()->first()->is_correct;
         $currentTime = Carbon::now();
         $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
         $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
+        $isCorrect = UserQuestionRoom::where('room_id', $room->id)->where('user_id', Auth::id())->where('order', $order)->first();
 
-        // if($order != $totalQuestion){
-        // }
+        if(!$isCorrect){
+            if($order == 1){
+                // if not answer when order == 1
+                return redirect()->route('question.view', [
+                    'room' => $code,
+                    'order' => 1
+                ]);
+            } 
+            // if not answer when order > 1 < 10
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $savedDataOrder->order
+            ]);
+        }elseif($isCorrect->is_correct == 1){
+            $isCorrect = true;
+        }else{
+            $isCorrect = false;
+        }
         
-        if($order == $totalQuestion){
+        if($savedDataOrder->order == 10 && $timeLeftForQuestion < 1){
             $timeLeftForLeaderboard = 0;
             $final = true;
             return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
+        }elseif($order == 1){
+            if(!$savedDataOrder){
+                if($timeLeftForQuestion < 1){
+                    // if order 1, not answered, there's no time to choose an answer
+                    // dd('if order 1, not answered, time is up');
+                    return redirect()->route('question.handle', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }elseif($timeLeftForQuestion > 1){
+                    // if order 1, not answered, there's time to choose an answer
+                    // MENAMPILKAN QUIZ PERTAMA
+                    dd('if order 1, not answered, there is time left');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }
+            }elseif($savedDataOrder){
+                //if recent order is not 1 but go to other order
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if($timeLeftForQuestion < 1){
+                    // order cant go backward
+                    //ceklis
+                    // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
+                    return redirect()->route('question.leaderboard', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }
+            }
         }elseif($order != 1){
             if($savedDataOrder){
                 // prevent user change data order when user recent order is 1
                 $accessibleOrder = $savedDataOrder->order + 1;
-                if($order != $accessibleOrder && $timeLeftForLeaderboard < 1){
-                    // User can't move to another order by changing the question order on URL
-                    return redirect()->route('question.view', [
-                        'room' => $code,
-                        'order' => $accessibleOrder
-                    ]);
+                if($order != $accessibleOrder){
+                    if($timeLeftForLeaderboard < 1){
+                        // User can't move to another order by changing the question order on URL
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $accessibleOrder
+                        ]);
+                    }elseif($timeLeftForQuestion > 1){
+                        // if recent order is not 1, answered, there is time left
+                        //ceklis
+                        // dd('if recent order is not 1, answered, there is time left');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $savedDataOrder->order
+                        ]);
+                    }
                 }
             }
         }elseif($order <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
