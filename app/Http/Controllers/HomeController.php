@@ -28,19 +28,24 @@ class HomeController extends Controller
     }
 
     public function index(){
-        $quizzes = Quiz::getPopularQuiz();
+        $quizzes = Quiz::getPopularQuiz(8);
         
+        // If user login
         if(Auth::check()){
             $roomUser = RoomUser::getAllDoneQuiz();
 
             if($roomUser->isNotEmpty()){
+                // if user has been plaued a quiz
                 $hasActivity = true;
                 return view('welcome', compact('quizzes', 'roomUser', 'hasActivity'));  
             }
 
+            // if user never plaued a quiz
             $hasActivity = false;
             return view('welcome', compact('quizzes', 'roomUser', 'hasActivity'));           
         }
+
+        // If user not login
         $hasActivity = false;
         return view('welcome', compact('quizzes', 'hasActivity'));
     }
