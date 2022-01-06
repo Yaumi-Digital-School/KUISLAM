@@ -77,31 +77,33 @@
         url = url.replace(':order', order);
 
         let submittedAnswer = "{{ isset($user_answer) ? $user_answer : null }}";
-        console.log(submittedAnswer)
+        console.log(submittedAnswer);
         let answer = "option_5";
         
         function submitAnswer(answer, timer){
-            let responseSubmitted;
-            $.ajax({
-                type: "POST",
-                url: url,
-                async: false,
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    answer_option: answer,
-                    code: room_code,
-                    order: order,
-                    timer: timer
-                },
-                success: function(response){
-                    console.log(response);
-                    responseSubmitted = response;
-                },
-                error: function(err){
-                    console.log(err);
-                }
-            });
-            return responseSubmitted;
+            // let responseSubmitted;
+            if(!submittedAnswer){
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    async: false,
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        answer_option: answer,
+                        code: room_code,
+                        order: order,
+                        timer: timer
+                    },
+                    success: function(response){
+                        console.log(response);
+                        // responseSubmitted = response;
+                    },
+                    error: function(err){
+                        console.log(err);
+                    }
+                });
+            }
+            // return responseSubmitted;
         }
         // timer countdown answer 
         $( document ).ready(function(){

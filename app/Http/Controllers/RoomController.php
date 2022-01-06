@@ -560,26 +560,26 @@ class RoomController extends Controller
             $final = true;
             return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
         }
-        // elseif(intval($order) !== 1){
-        //     if($savedDataOrder){
-        //         // prevent user change data order when user recent order is 1
-        //         $accessibleOrder = $savedDataOrder->order + 1;
-        //         if(intval($order) != $accessibleOrder && $timeLeftForLeaderboard < 1){
-        //             // User can't move to another order by changing the question order on URL
-        //             return redirect()->route('question.view', [
-        //                 'room' => $code,
-        //                 'order' => $accessibleOrder
-        //             ]);
-        //         }
-        //     }
-        // }elseif(intval($order) <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
-        //     // prevent user change data order less than 1 when user recent order is more than 1
-        //     $accessibleOrder = $savedDataOrder->order + 1;
-        //     return redirect()->route('question.view', [
-        //         'room' => $code,
-        //         'order' => $accessibleOrder
-        //     ]);
-        // }
+        elseif(intval($order) !== 1){
+            if($savedDataOrder){
+                // prevent user change data order when user recent order is 1
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if(intval($order) != $accessibleOrder && $timeLeftForLeaderboard < 1){
+                    // User can't move to another order by changing the question order on URL
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }
+            }
+        }elseif(intval($order) <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
+            // prevent user change data order less than 1 when user recent order is more than 1
+            $accessibleOrder = $savedDataOrder->order + 1;
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $accessibleOrder
+            ]);
+        }
         
         $final = false;        
         return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
