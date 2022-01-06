@@ -316,7 +316,7 @@ class RoomController extends Controller
             return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
         }
 
-        if($timeLeftForQuestion < -3){
+        if($timeLeftForQuestion < -300){
             // if leave the game more than 5 minute
             $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
             $isHost = RoomUser::isHost($code);
