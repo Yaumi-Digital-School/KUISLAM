@@ -46,19 +46,24 @@
                             <div class="flex items-center space-x-4">
                                 @if(Auth::user()->avatar)
                                     @if($file === true)
-                                        <img class="block w-20 rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
+                                        <img id="avatarInput" class="block w-20 rounded-full" src="{{ asset('storage/user/avatar/'. Auth::user()->avatar) }}" alt="">
                                     @else
-                                        <img class="block w-20 rounded-full" src="{{ Auth::user()->avatar }}" alt="">
+                                        <img id="avatarInput" class="block w-20 rounded-full" src="{{ Auth::user()->avatar }}" alt="">
                                     @endif
                                 @else
-                                    <img class="block w-20 rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="">
+                                    <img id="avatarInput" class="block w-20 rounded-full" src="{{ asset('/images/default_profpic.png') }}" alt="">
                                 @endif
                                 <div class="flex flex-col space-y-2">
                                     <span class="font-semibold">{{ Auth::user()->username }}</span>
-                                    <label class="bg-gray-inputFileButton text-sm text-gray-inputFileButtonTxt rounded p-2 cursor-pointer" >
-                                        Ganti gambar
-                                        <input accept=".png, .jpg, .jpeg" type="file" style="display: none;" name="avatar" id="image"/>
-                                    </label>
+                                    <div>
+                                        <label class="bg-gray-inputFileButton text-sm text-gray-inputFileButtonTxt rounded p-2 cursor-pointer" >
+                                            Ganti gambar
+                                            <input accept=".png, .jpg, .jpeg" type="file" style="display: none;" name="avatar" id="image"/>
+                                        </label>
+                                        @error('avatar')
+                                            <span class="ml-3 text-red-400">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
                             {{-- email  --}}
@@ -209,6 +214,20 @@
                     title: message,
                 })
             }
+        </script>
+        {{-- change image when user select input  --}}
+        <script>
+            $("#image").change(function(){
+                const file = this.files[0];
+                // console.log(file);
+                if (file){
+                    let reader = new FileReader();
+                    reader.onload = function(event){
+                        $('#avatarInput').attr('src', event.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         </script>
     @endsection
 </x-main-layout>
