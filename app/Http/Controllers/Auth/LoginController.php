@@ -28,7 +28,8 @@ class LoginController extends Controller
                 return redirect()->route('index');
             }else{
                 if($findEmailGoogle){    
-                    return redirect()->route('index')->withErrors('social', 'Email telah terdaftar');
+                    $message = "account-registered";
+                return redirect()->route('index.redirect', $message);
                 }
 
                 $password = User::generatePassword();

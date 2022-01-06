@@ -59,6 +59,8 @@ class HomeController extends Controller
             return redirect()->route('index')->with('message', 'Anda telah meninggalkan room lebih dari 5 menit!');
         }elseif($message == "room-not-exist"){
             return redirect()->route('index')->with('message', 'Room tidak ada!');
+        }elseif($message == "account-registered"){
+            return redirect()->route('index')->with('message', 'Akun sudah terdaftar!');
         }
     }
 
