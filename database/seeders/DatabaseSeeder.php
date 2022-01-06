@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $topics = ["Al-quran", "Fiqih", "Kisah Nabi", "tajwid"];
+        $topics = ["Al-quran", "Fiqih", "Kisah Nabi", "Tajwid"];
         $quizzes = [
             [
                 "Surat Al-Fatihah",
