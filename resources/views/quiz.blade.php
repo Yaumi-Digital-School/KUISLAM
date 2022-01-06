@@ -80,7 +80,7 @@
         console.log(submittedAnswer)
         let answer = "option_5";
         
-        function submitAnswer(answer){
+        function submitAnswer(answer, timer){
             let responseSubmitted;
             $.ajax({
                 type: "POST",
@@ -90,7 +90,8 @@
                     "_token": "{{ csrf_token() }}",
                     answer_option: answer,
                     code: room_code,
-                    order: order
+                    order: order,
+                    timer: timer
                 },
                 success: function(response){
                     console.log(response);
@@ -115,7 +116,7 @@
                 if(timerNow <= 1){
                     clearInterval(intervalId);
                     console.log(order);  
-                    submitAnswer("option_5");
+                    submitAnswer("option_5", 0);
                     let urlRedirect = "{{ route('question.leaderboard', ['room' => ':room', 'order' => ':order']) }}";
                     urlRedirect = urlRedirect.replace(':room', room_code);
                     urlRedirect = urlRedirect.replace(':order', order);
@@ -132,9 +133,11 @@
                 $(this).parent().find('.ring-8').removeClass('ring-8');
                 $(this).addClass('ring-8');
 
-                // submit answer 
+                // submit answer
+                const allTimer = $(".timer");
+                const timer = parseInt(allTimer[0].innerText);
                 answer = $(this).attr('data-option');
-                submitAnswer(answer);
+                submitAnswer(answer, timer);
                 submittedAnswer = answer;
 
                 // remove class indicating user still can submit

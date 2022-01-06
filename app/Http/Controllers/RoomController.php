@@ -485,6 +485,7 @@ class RoomController extends Controller
         $currentPoint = RoomUser::getPlayerCurrentRoomData($room->id)->points;
         $currentTotalCorrect = RoomUser::getPlayerCurrentRoomData($room->id)->total_correct;
         $currentAnswer = $request->answer_option;
+        $timer = $request->timer;
 
         $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
 
@@ -505,7 +506,7 @@ class RoomController extends Controller
 
         // If answer correct, update data to correct answer
         if($questionId->question->answer === $currentAnswer){
-            $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
+            $point = ($timer/$questionId->question->timer) * 1000;
             
             $dataUserQuestionRoom['point'] = $currentPoint + $point;
             $dataUserQuestionRoom['is_correct'] = true;
@@ -546,6 +547,7 @@ class RoomController extends Controller
         $roomUser = RoomUser::getTop5Rank($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
         $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $isCorrect = UserQuestionRoom::where('room_id', $room->id)->where('user_id', Auth::id())->where('order', $order)->get()->first()->is_correct;
 
         if(intval($order) !== $totalQuestion){
             $currentTime = Carbon::now();
@@ -556,30 +558,31 @@ class RoomController extends Controller
         if(intval($order) === $totalQuestion){
             $timeLeftForLeaderboard = 0;
             $final = true;
-            return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
-        }elseif(intval($order) !== 1){
-            if($savedDataOrder){
-                // prevent user change data order when user recent order is 1
-                $accessibleOrder = $savedDataOrder->order + 1;
-                if(intval($order) != $accessibleOrder && $timeLeftForLeaderboard < 1){
-                    // User can't move to another order by changing the question order on URL
-                    return redirect()->route('question.view', [
-                        'room' => $code,
-                        'order' => $accessibleOrder
-                    ]);
-                }
-            }
-        }elseif(intval($order) <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
-            // prevent user change data order less than 1 when user recent order is more than 1
-            $accessibleOrder = $savedDataOrder->order + 1;
-            return redirect()->route('question.view', [
-                'room' => $code,
-                'order' => $accessibleOrder
-            ]);
+            return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
         }
+        // elseif(intval($order) !== 1){
+        //     if($savedDataOrder){
+        //         // prevent user change data order when user recent order is 1
+        //         $accessibleOrder = $savedDataOrder->order + 1;
+        //         if(intval($order) != $accessibleOrder && $timeLeftForLeaderboard < 1){
+        //             // User can't move to another order by changing the question order on URL
+        //             return redirect()->route('question.view', [
+        //                 'room' => $code,
+        //                 'order' => $accessibleOrder
+        //             ]);
+        //         }
+        //     }
+        // }elseif(intval($order) <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
+        //     // prevent user change data order less than 1 when user recent order is more than 1
+        //     $accessibleOrder = $savedDataOrder->order + 1;
+        //     return redirect()->route('question.view', [
+        //         'room' => $code,
+        //         'order' => $accessibleOrder
+        //     ]);
+        // }
         
         $final = false;        
-        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
+        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
     }
 
     public function exitGame($code){

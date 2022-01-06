@@ -2,14 +2,27 @@
     {{-- header leaderbord  --}}
     @if($final === false)
         {{-- Breadcrumbs question --}}
-        <h1 class="text-2xl md:text-3xl text-white font-bold pt-12 pb-8 sm:px-20 z-10 relative font-poppins text-center sm:text-left">{{ $order }}/10</h1>
+        <div class="text-2xl md:text-3xl text-white font-bold pt-12 pb-8 sm:px-20 z-10 relative font-poppins flex justify-between items-center mx-4 lg:mx-0">
+            <span class="">{{ $order }}/10</span>
+            {{-- {{dd($isCorrect)}} --}}
+            @if ($isCorrect == 1)
+                <span class="bg-green-greenMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">Correct</span>
+            @else
+                <span class="bg-red-redMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">False</span>
+            @endif
+        </div>
         <h1 class="text-3xl md:text-4xl text-white font-poppins font-bold text-center z-10 relative pb-8">Curent Ranking</h1>
     @elseif($final === true)
         {{-- Button Close if it's Final Leaderboard --}}
-        <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 mb-8 ml-12 realtive">
+        <div class="text-2xl md:text-3xl text-white font-bold pt-12 pb-8 sm:px-20 z-10 relative font-poppins flex justify-between items-center mx-4 lg:mx-0">
+            <div class="bg-green-nav w-9 h-9 p-2 rounded">
                 <a href="{{ route('game.exit', $code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
             </div>
+            @if ($isCorrect == 1)
+                <span class="bg-green-greenMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">Correct</span>
+            @else
+                <span class="bg-red-redMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">False</span>
+            @endif
         </div>
         <h1 class="text-3xl md:text-4xl text-white font-poppins font-bold text-center z-10 relative pb-8">Leaderboard</h1>
     @endif
