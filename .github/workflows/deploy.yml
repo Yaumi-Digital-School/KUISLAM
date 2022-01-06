@@ -1,0 +1,29 @@
+name: Deploy
+
+# Trigger the workflow on push and 
+# pull request events on the production branch
+on:
+  workflow_dispatch:
+    branches:
+      - master
+      
+# Authenticate to the the server via ssh 
+# and run our deployment script 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and deploy to server
+        uses: appleboy/ssh-action@master
+        env:
+          ENV: ${{ secrets.ENV }}
+        with:
+          host: ${{ secrets.AWS_HOSTNAME }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          envs: ENV
+          script: |
+            cd /var/www/KUISLAM
+            rm -rf .env
+            printf "$ENV" >> .env
+            ./scripts/deploy.sh
