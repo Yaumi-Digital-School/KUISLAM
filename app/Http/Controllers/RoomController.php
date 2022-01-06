@@ -205,7 +205,7 @@ class RoomController extends Controller
             if($savedDataOrder){
                 // prevent user change data order when user recent order is 1
                 $accessibleOrder = $savedDataOrder->order + 1;
-                if(intval($order) != $accessibleOrder || $timeLeftForQuestion > $roomQuestion->question->timer){
+                if(intval($order) != $accessibleOrder && $timeLeftForQuestion > $roomQuestion->question->timer){
                     // User can't move to another order by changing the question order on URL
                     return redirect()->route('question.view', [
                         'room' => $code,
@@ -213,7 +213,7 @@ class RoomController extends Controller
                     ]);
                 }
             }
-        }elseif(intval($order) <= 1 && !(intval($order) > $totalQuestion) && $savedDataOrder || $timeLeftForQuestion > $roomQuestion->question->timer){
+        }elseif(intval($order) <= 1 && !(intval($order) > $totalQuestion) && $savedDataOrder && $timeLeftForQuestion > $roomQuestion->question->timer){
             // prevent user change data order less than 1 when user recent order is more than 1
             $accessibleOrder = $savedDataOrder->order + 1;
             return redirect()->route('question.view', [
@@ -234,7 +234,7 @@ class RoomController extends Controller
                                     ->where('room_id', $room->id)
                                     ->where('question_id', $roomQuestion->question->id)
                                     ->get()->first()->answer_option;
-
+            // dd("hehe");
             return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
         }
 
@@ -539,9 +539,9 @@ class RoomController extends Controller
 
         $room = Room::getRoomByCode($code);
         $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
-        if(!(intval($order) >= 1 && intval($order) <= $totalQuestion)){
-            return back();
-        }
+        // if(!(intval($order) >= 1 && intval($order) <= $totalQuestion)){
+        //     return back();
+        // }
         
         $roomUser = RoomUser::getTop5Rank($room->id);
         $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
@@ -561,7 +561,7 @@ class RoomController extends Controller
             if($savedDataOrder){
                 // prevent user change data order when user recent order is 1
                 $accessibleOrder = $savedDataOrder->order + 1;
-                if(intval($order) != $accessibleOrder || $timeLeftForLeaderboard < 1){
+                if(intval($order) != $accessibleOrder && $timeLeftForLeaderboard < 1){
                     // User can't move to another order by changing the question order on URL
                     return redirect()->route('question.view', [
                         'room' => $code,
@@ -569,7 +569,7 @@ class RoomController extends Controller
                     ]);
                 }
             }
-        }elseif(intval($order) <= 1 && $savedDataOrder || $timeLeftForLeaderboard < 1){
+        }elseif(intval($order) <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
             // prevent user change data order less than 1 when user recent order is more than 1
             $accessibleOrder = $savedDataOrder->order + 1;
             return redirect()->route('question.view', [
