@@ -389,6 +389,7 @@ class Question extends Model
                 'time' => 30
             ]
         ];
+        return $questions;
     }
 
     public static function getTotalQuestions($quizId){

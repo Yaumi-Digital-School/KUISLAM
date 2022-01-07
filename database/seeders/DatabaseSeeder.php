@@ -51,6 +51,9 @@ class DatabaseSeeder extends Seeder
                 if($quiz == "Nabi Ibrahim AS"){
                    $quizData['image'] = "card.png";
                    $quizData['counter'] = 50;
+                }elseif($quiz == "Nabi Muhammad SAW"){
+                    $quizData['image'] = "card.png";
+                    $quizData['counter'] = 50;
                 }
                 $newQuiz = Quiz::factory()->create($quizData); 
 
@@ -58,6 +61,12 @@ class DatabaseSeeder extends Seeder
                 if($newQuiz->id === 25){
                     // seed question nabi ibrahim
                     $dataQuestion = Question::getQuestionsQuizNabiIbrahim();
+                    foreach($dataQuestion as $question){
+                        Question::factory()->create($question);
+                    }
+                }elseif($newQuiz->id === 26){
+                    // seed question nabi ibrahim
+                    $dataQuestion = Question::getQuestionQuizNabiMuhammad();
                     foreach($dataQuestion as $question){
                         Question::factory()->create($question);
                     }

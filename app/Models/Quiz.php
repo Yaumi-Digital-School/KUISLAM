@@ -47,6 +47,7 @@ class Quiz extends Model
                 "Nabi Sholeh AS",
                 "Nabi Luth AS",
                 "Nabi Ibrahim AS",
+                "Nabi Muhammad SAW",
                 "Nabi Ismail AS",
                 "Nabi Ishaq AS",
                 "Nabi Yaqub AS",
