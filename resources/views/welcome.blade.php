@@ -35,20 +35,33 @@
                 <div class="flex flex-col md:flex-row justify-between md:space-x-8">
                     {{-- kode game  --}}
                     <div class="w-full mr-20 md:w-4/6 md:shadow-profile rounded-lg mt-3 md:m-0 z-10 md:py-3 flex justify-center items-center bg-gray-lightBg">
-                        <div class="w-full md:w-4/6 px-4 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
+                        <div class="w-full md:w-5/6 lg:md:w-4/6px-2 lg:px-14 pb-4 pt-4 @error("code") pt-6 @enderror rounded-sm">
                             <form action="{{ route('room.join-code') }}" method="POST" class="flex flex-col">
                                 @csrf
                                 <div class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-6">
                                     <input type="text" name="code"
                                         class="rounded-md h-8 lg:h-10 w-full border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                                         placeholder="Masukan kode permainan...">
-                                    <button type="submit" 
-                                        class="bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition">
-                                        Gabung
-                                    </button>
+                                    @php
+                                        $class = "bg-green-lightBg mx-auto w-full md:w-min font-semibold text-white rounded-md py-1 px-6 hover:bg-green-darkBg transition";
+                                    @endphp
+                                    @auth
+                                        <button 
+                                            type="submit"
+                                            class="{{ $class }}">
+                                            Gabung
+                                        </button>
+                                    @endauth
+                                    @guest
+                                        <a
+                                            onclick="triggerAuthPopup()"
+                                            class="{{ $class }} flex items-center justify-center">
+                                            <span>Gabung</span>
+                                        </a>
+                                    @endguest
                                 </div>
                                 @error('code')
-                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                    <span class="text-red-400 text-sm text-center mt-2 md:text-left">{{ $message }}</span>
                                 @enderror 
                             </form>
                         </div>
