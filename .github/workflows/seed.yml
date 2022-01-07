@@ -10,7 +10,7 @@ on:
 # Authenticate to the the server via ssh 
 # and run our deployment script 
 jobs:
-  seed and migrate:
+  seed-and-migrate:
     runs-on: ubuntu-latest
     steps:
       - name: SSH and deploy to server
