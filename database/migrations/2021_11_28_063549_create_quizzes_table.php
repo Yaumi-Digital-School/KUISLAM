@@ -18,7 +18,7 @@ class CreateQuizzesTable extends Migration
             $table->foreignId('topic_id')->constrained();
             $table->string('title');
             $table->string('slug');
-            $table->string('image');
+            $table->string('image')->default('card.jpg');
             $table->text('description');
             $table->integer('counter')->default(0);
             $table->timestamps();

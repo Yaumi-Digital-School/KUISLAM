@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Faker\Factory;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\User;
@@ -10,11 +11,11 @@ use App\Models\Question;
 use App\Models\QuizUser;
 use App\Models\RoomUser;
 use App\Models\Leaderboard;
-use App\Models\RoomQuestion;
-use App\Models\UserQuestionRoom;
-use Illuminate\Database\Seeder;
-use Faker\Factory;
 use Illuminate\Support\Str;
+use App\Models\RoomQuestion;
+use Illuminate\Database\Seeder;
+use App\Models\UserQuestionRoom;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -44,11 +45,11 @@ class DatabaseSeeder extends Seeder
                     'title' => $quiz,
                     'slug' => Str::slug($quiz),
                     'counter' => $index2,
-                    'image' => 'card.jpg'
+                    'image' => 'card.png'
                 ];
                 // change quiz image 
                 if($quiz == "Nabi Ibrahim AS"){
-                   $quizData['image'] = "card.jpg";
+                   $quizData['image'] = "card.png";
                    $quizData['counter'] = 50;
                 }
                 $newQuiz = Quiz::factory()->create($quizData); 
@@ -71,6 +72,14 @@ class DatabaseSeeder extends Seeder
 
         // seed users
         User::factory(4)->create();
+        $dataAdmin = [
+            "name" => "Admin KUISLAM",
+            "email" => "islamic.quizgenerator@gmail.com",
+            "username" => "admin-kuislam",
+            "password" => Hash::make("IslamQuiz2021"),
+            "role" => "admin",
+        ];
+        User::factory()->create($dataAdmin);
         
         // seed room_users 
         // make 2 new room with each room contains 2 users

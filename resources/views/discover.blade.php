@@ -87,9 +87,15 @@
                         <!-- Slides -->
                         @foreach($quiz as $data) 
                             <div class="transform transition duration-400 hover:scale-105 swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1">
-                                <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.png') }})">
-                                    <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
-                                </div>
+                                @if($data->image == "card.png")
+                                    <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/card.png') }})">
+                                        <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                    </div>
+                                @elseif($data->image != "card.png")
+                                    <div class="h-4/6 w-full relative bg-indigo-300 rounded-lg bg-cover bg-center" style="background-image: url('{{asset('storage/quiz/image/'. $data->image)}}')">
+                                        <span class="absolute bottom-2 left-2 bg-gray-card text-sm px-2 rounded-md">10 pertanyaan</span>
+                                    </div>
+                                @endif
                                 <div class="flex flex-col justify-between h-2/6 px-1">
                                     <div class="flex flex-col space-y-1 p-1">
                                         <a @auth
