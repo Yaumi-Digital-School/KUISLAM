@@ -13,6 +13,23 @@ class Question extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    public static function getQuestionsQuizNabiIbrahim()
+    {
+        $questions = [
+            [
+                'quiz_id' => 25,
+                'question' => "Dimana nabi ibrahim di lahirkan?",
+                'option_1' => 'Ur Kasdim',
+                'option_2' => 'Madinah',
+                'option_3' => 'Puerto Rico',
+                'option_4' => 'Jakarta',
+                'answer' => 'option_1',
+                'timer' => 50
+            ]
+        ];
+        return $questions;
+    }
+
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);

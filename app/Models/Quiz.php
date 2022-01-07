@@ -14,6 +14,53 @@ class Quiz extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    public static function getRawData()
+    {
+        $quizzes = [
+            [
+                "Surat Al-Fatihah",
+                "Surat Al-Baqarah",
+                "Surat Al-Imran",
+                "Surat An-Nisaa",
+                "Surat Al-Ma'ida",
+                "Surat Al-An'am",
+                "Surat Al-Anfal",
+                "Surat At-Taubah",
+                "Surat Yunus",
+            ],
+            [
+                "Tharah",
+                "Shalat",
+                "Itikaf",
+                "Puasa",
+                "Zakat",
+                "Haji",
+                "Sedekah dan Infaq",
+                "Qurban",
+                "Aqiqah",
+            ],
+            [
+                "Nabi Adam AS",
+                "Nabi Idris AS",
+                "Nabi Nuh AS",
+                "Nabi Hud AS",
+                "Nabi Sholeh AS",
+                "Nabi Luth AS",
+                "Nabi Ibrahim AS",
+                "Nabi Ismail AS",
+                "Nabi Ishaq AS",
+                "Nabi Yaqub AS",
+            ],
+            [
+                "Idhgam",
+                "Idzhar",
+                "Iqlab",
+                "Ikhfa",
+            ],
+        ];
+        return $quizzes;
+    }
+
     public function topic()
     {
         return $this->belongsTo(Topic::class);
@@ -60,7 +107,7 @@ class Quiz extends Model
     }
 
     public static function getPopularQuiz($total){
-        return Quiz::take($total)->get()->SortBy('counter');
+        return Quiz::get()->SortByDesc('counter')->take($total);
     }
     
     public static function getOneQuiz($id){

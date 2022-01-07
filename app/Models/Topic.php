@@ -11,6 +11,12 @@ class Topic extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    public static function getRawData()
+    {
+        $rawData = ["Al-quran", "Fiqih", "Kisah Nabi", "Tajwid"];
+        return $rawData;
+    }
+
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);

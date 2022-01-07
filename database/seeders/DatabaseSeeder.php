@@ -23,51 +23,12 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
-        $topics = ["Al-quran", "Fiqih", "Kisah Nabi", "Tajwid"];
-        $quizzes = [
-            [
-                "Surat Al-Fatihah",
-                "Surat Al-Baqarah",
-                "Surat Al-Imran",
-                "Surat An-Nisaa",
-                "Surat Al-Ma'ida",
-                "Surat Al-An'am",
-                "Surat Al-Anfal",
-                "Surat At-Taubah",
-                "Surat Yunus",
-            ],
-            [
-                "Tharah",
-                "Shalat",
-                "Itikaf",
-                "Puasa",
-                "Zakat",
-                "Haji",
-                "Sedekah dan Infaq",
-                "Qurban",
-                "Aqiqah",
-            ],
-            [
-                "Nabi Adam AS",
-                "Nabi Idris AS",
-                "Nabi Nuh AS",
-                "Nabi Hud AS",
-                "Nabi Sholeh AS",
-                "Nabi Luth AS",
-                "Nabi Ibrahim AS",
-                "Nabi Ismail AS",
-                "Nabi Ishaq AS",
-                "Nabi Yaqub AS",
-            ],
-            [
-                "Idhgam",
-                "Idzhar",
-                "Iqlab",
-                "Ikhfa",
-            ],
-        ];
+        $topics = Topic::getRawData(); 
+        $quizzes = Quiz::getRawData();
+
         // seed topic, quizzes, questions
         foreach($topics as $index => $topic){
             // seed topic
@@ -76,21 +37,38 @@ class DatabaseSeeder extends Seeder
                 'slug' => Str::slug($topic, "-"),
             ]);
             // seed quiz based on topic 
-            foreach($quizzes[$index] as $index => $quiz){
-                $newQuiz = Quiz::factory()->create([
+            foreach($quizzes[$index] as $index2 => $quiz){
+                // prepare quiz data
+                $quizData = [
                     'topic_id' => $newTopic->id,
                     'title' => $quiz,
                     'slug' => Str::slug($quiz),
-                    'image' => 'card.jpg',
-                ]);
-                // seed question based on  quiz 
-                Question::factory(10)->create([
-                    'quiz_id' => $newQuiz->id
-                ]);
+                    'counter' => $index2,
+                    'image' => 'card.jpg'
+                ];
+                if($quiz == "Nabi Ibrahim AS"){
+                   $quizData['image'] = "card.jpg";
+                   $quizData['counter'] = 50;
+                }
+                $newQuiz = Quiz::factory()->create($quizData); 
+
+                // seed question based on quiz 
+                if($newQuiz->id === 25){
+                    // seed question nabi ibrahim
+                    $dataQuestion = Question::getQuestionsQuizNabiIbrahim();
+                    foreach($dataQuestion as $question){
+                        Question::factory()->create($question);
+                    }
+                }else {
+                    // seed other quiz 
+                    Question::factory(10)->create([
+                        'quiz_id' => $newQuiz->id
+                    ]);
+                }
             }
         }
 
-        // // // seed users
+        // seed users
         User::factory(4)->create();
         
         // seed room_users 

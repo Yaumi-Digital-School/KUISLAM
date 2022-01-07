@@ -69,11 +69,7 @@
                         </div>
                     </div>
                     <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
-                        </div>
-                    </div>
-                    <div class="swiper-slide flex flex-col rounded-lg bg-gray-card shadow-custom1 overflow-hidden1" data-swiper-autoplay="2000">
-                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_1.png') }})">
+                        <div class="h-full w-full rounded-lg bg-cover bg-center" style="background-image: url({{ asset('./img/hero_2.png') }})">
                         </div>
                     </div>
                     <!-- If we need pagination -->
