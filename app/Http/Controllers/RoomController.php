@@ -116,10 +116,10 @@ class RoomController extends Controller
 
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        if($countPlayer < 2){
-            // if total player < 2
-            return back();
-        }
+        // if($countPlayer < 2){
+        //     // if total player < 2
+        //     return back();
+        // }
 
         // get random question
         $questionsId = Question::getRandomQuestion($quizId);
@@ -203,9 +203,27 @@ class RoomController extends Controller
         if($order == 1){
             if(!$savedDataOrder){
                 if($timeLeftForQuestion < 1){
-                    // if order 1, not answered, time is up'
-                    // dd('if order 1, not answered, time is up');
-                    return redirect()->route('question.view', [
+                    $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+
+                    $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+                    // data to be inserted (default is wrong answer)
+                    $dataUserQuestionRoom = [
+                        'user_id' => Auth::user()->id,
+                        'room_id' => $room->id,
+                        'question_id' => $questionId->question_id,
+                        'order' => $order,
+                        'point' => 0,
+                        'answer_option' => 'option_5',
+                        'is_correct' => false,
+                    ];
+                    $dataRoomUser = [
+                        'rank' => $rank,
+                    ];
+                    UserQuestionRoom::create($dataUserQuestionRoom);
+                    RoomUser::updateRoomUserByUserId($code, $dataRoomUser);
+                    
+                    return redirect()->route('question.leaderboard', [
                         'room' => $code,
                         'order' => 1
                     ]);
@@ -233,14 +251,7 @@ class RoomController extends Controller
                         'room' => $code,
                         'order' => $accessibleOrder
                     ]);
-                }elseif($timeLeftForQuestion < 1){
-                    // if recent order is 1 and change order other than 1, not answer, time is up
-                    // dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
-                    return redirect()->route('question.handle', [
-                        'room' => $code,
-                        'order' => $accessibleOrder
-                    ]);
-                }                
+                }              
             }elseif($savedDataOrder){
                 $accessibleOrder = $savedDataOrder->order + 1;
                 if($savedDataOrder->order == 1){
@@ -281,14 +292,31 @@ class RoomController extends Controller
                             'room' => $code,
                             'order' => $accessibleOrder - 1
                         ]);
-                    }elseif($timeLeftForQuestion < 1){
-                        // order cant go backward
-                        // ceklis
-                        // dd($accessibleOrder,'anda tidak boleh mundur karena waktu sudah habis! bwah');
-                        return redirect()->route('question.handle', [
+                    }elseif($timeLeftForQuestion < 1){       
+                        $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+
+                        $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+                        // data to be inserted (default is wrong answer)
+                        $dataUserQuestionRoom = [
+                            'user_id' => Auth::user()->id,
+                            'room_id' => $room->id,
+                            'question_id' => $questionId->question_id,
+                            'order' => $order,
+                            'point' => 0,
+                            'answer_option' => 'option_5',
+                            'is_correct' => false,
+                        ];
+                        $dataRoomUser = [
+                            'rank' => $rank,
+                        ];
+                        UserQuestionRoom::create($dataUserQuestionRoom);
+                        RoomUser::updateRoomUserByUserId($code, $dataRoomUser);
+                        
+                        return redirect()->route('question.leaderboard', [
                             'room' => $code,
-                            'order' => $accessibleOrder
-                        ]);
+                            'order' => $savedDataOrder->order
+                        ]);                        
                     }
                 }
             }
@@ -595,7 +623,6 @@ class RoomController extends Controller
         }
         UserQuestionRoom::create($dataUserQuestionRoom);
         RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
-        
         return response()->json([
             'room' => $code,
             'order' => $order,
@@ -634,15 +661,42 @@ class RoomController extends Controller
         if(!$isCorrect){
             if($order == 1){
                 // if not answer when order == 1
-                return redirect()->route('question.view', [
-                    'room' => $code,
-                    'order' => 1
-                ]);
-            } 
+                if($timeLeftForQuestion > 1){
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }elseif($timeLeftForQuestion < 1){
+                    $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+
+                    $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+                    // data to be inserted (default is wrong answer)
+                    $dataUserQuestionRoom = [
+                        'user_id' => Auth::user()->id,
+                        'room_id' => $room->id,
+                        'question_id' => $questionId->question_id,
+                        'order' => $order,
+                        'point' => 0,
+                        'answer_option' => 'option_5',
+                        'is_correct' => false,
+                    ];
+                    $dataRoomUser = [
+                        'rank' => $rank,
+                    ];
+                    UserQuestionRoom::create($dataUserQuestionRoom);
+                    RoomUser::updateRoomUserByUserId($code, $dataRoomUser);
+                    
+                    return redirect()->route('question.leaderboard', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }
+            }
             // if not answer when order > 1 < 10
             return redirect()->route('question.view', [
                 'room' => $code,
-                'order' => $savedDataOrder->order
+                'order' => 1
             ]);
         }elseif($isCorrect->is_correct == 1){
             $isCorrect = true;
@@ -658,7 +712,7 @@ class RoomController extends Controller
             if(!$savedDataOrder){
                 if($timeLeftForQuestion < 1){
                     // if order 1, not answered, there's no time to choose an answer
-                    // dd('if order 1, not answered, time is up');
+                    dd('if order 1, not answered, time is up');
                     return redirect()->route('question.handle', [
                         'room' => $code,
                         'order' => 1
@@ -675,13 +729,18 @@ class RoomController extends Controller
             }elseif($savedDataOrder){
                 //if recent order is not 1 but go to other order
                 $accessibleOrder = $savedDataOrder->order + 1;
-                if($timeLeftForQuestion < 1){
+                if($savedDataOrder->order != 1 && $timeLeftForQuestion < 1){
                     // order cant go backward
                     //ceklis
                     // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
                     return redirect()->route('question.leaderboard', [
                         'room' => $code,
                         'order' => $accessibleOrder
+                    ]);
+                }elseif($savedDataOrder->order == 1 && $timeLeftForQuestion > 1){
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => 1
                     ]);
                 }
             }

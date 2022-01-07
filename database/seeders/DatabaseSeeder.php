@@ -49,10 +49,10 @@ class DatabaseSeeder extends Seeder
                 ];
                 // change quiz image 
                 if($quiz == "Nabi Ibrahim AS"){
-                   $quizData['image'] = "card.png";
+                   $quizData['image'] = "Nabi Ibrahim ASImage.jpg";
                    $quizData['counter'] = 50;
                 }elseif($quiz == "Nabi Muhammad SAW"){
-                    $quizData['image'] = "card.png";
+                    $quizData['image'] = "Nabi Muhammad SAWImage.jpg";
                     $quizData['counter'] = 50;
                 }
                 $newQuiz = Quiz::factory()->create($quizData); 
