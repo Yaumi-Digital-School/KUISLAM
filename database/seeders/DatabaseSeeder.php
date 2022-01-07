@@ -79,8 +79,7 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // seed users
-        User::factory(4)->create();
+        // seed admin
         $dataAdmin = [
             "name" => "Admin KUISLAM",
             "email" => "islamic.quizgenerator@gmail.com",
