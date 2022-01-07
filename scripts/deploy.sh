@@ -35,4 +35,8 @@ npm run prod
 # Exit maintenance mode
 php artisan up
 
+# post deployment clearance
+git restore public/
+git restore package-lock.json
+
 echo "Deployment finished!"
