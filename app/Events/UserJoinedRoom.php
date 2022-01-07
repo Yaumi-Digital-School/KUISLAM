@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,6 +18,7 @@ class UserJoinedRoom implements ShouldBroadcast
     public $message;
     public $room;
     public $user_data;
+    public $user_avatar;
 
     /**
      * Create a new event instance.

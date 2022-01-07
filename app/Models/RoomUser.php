@@ -119,7 +119,7 @@ class RoomUser extends Model
 
     public static function getTop5Rank($roomId){
         // get top 5 rank
-        return RoomUser::where('room_id', $roomId)->limit(5)->get()->SortByDesc('points');
+        return RoomUser::where('room_id', $roomId)->get()->SortByDesc('points')->take(5);
     }
 
     public static function getAllRank($roomId){

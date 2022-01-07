@@ -473,7 +473,7 @@ class RoomController extends Controller
         ];
         RoomUser::create($dataRoomUser);
         
-        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name, "avatar" => Auth::user()->avatar]);
 
         return redirect()->route('room.waiting', $room->code);   
     }

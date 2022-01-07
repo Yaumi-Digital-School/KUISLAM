@@ -70,17 +70,26 @@
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
                 $( document ).ready(function(){
-                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg");                    
-                    $newUserDiv.attr("id", `user-${data.user_data.id}`);
-                    $newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
-                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full h-10");
+                    let newUserDiv = $("<div></div>").addClass("bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg");                    
+                    newUserDiv.attr("id", `user-${data.user_data.id}`);
+                    let newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
+                    
+                    const imageAvatar = data.user_data.avatar;
+                    let imageUrl;
+                    if(imageAvatar == undefined){
+                        imageUrl = `{{asset('images/default_profpic.png')}}`;
+                    } else {
+                        imageUrl = `{{asset('storage/user/avatar/${imageAvatar}')}}`;
+                    }
+                    // console.log(imageAvatar);
+                    $newUserImage = $(`<img src='${imageUrl}'></img>`).addClass("rounded-full h-10");
                     $newUserName = $("<h1></h1>").addClass("text-green-nav text-xl font-bold w-4/5").html(data.user_data.name);
 
-                    $newUserImageDiv.append($newUserImage);
-                    $newUserDiv.append($newUserImageDiv);
-                    $newUserDiv.append($newUserName);
+                    newUserImageDiv.append($newUserImage);
+                    newUserDiv.append(newUserImageDiv);
+                    newUserDiv.append($newUserName);
 
-                    $("#card-user-container").prepend($newUserDiv);
+                    $("#card-user-container").prepend(newUserDiv);
                     
                     let playerCount = $("#player-count").text();
                     playerCount = parseInt(playerCount) + 1;
