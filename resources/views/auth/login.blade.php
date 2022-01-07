@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel">
+<x-main-layout titlePage="Login">
     {{-- navbar --}}
     <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
         <nav class="text-white flex w-2/3 md:w-full justify-between items-center px-6 font-bold h-full">

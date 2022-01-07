@@ -114,7 +114,7 @@ use App\Http\Controllers\import\QuestionImportController;
     
     Route::get('/logout', function(){
         Auth::logout();
-        return redirect()->route('index');
+        // return redirect()->route('index');
     })->name('logout-anchor');
 // });
 require __DIR__.'/auth.php';

@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel">
+<x-main-layout titlePage="Register Form">
     {{-- navbar --}}
     <div class="bg-green-nav fixed w-full h-16 top-0 z-20">
         <nav class="text-white flex justify-between items-center px-6 font-bold" style="height: 8vh">
@@ -54,8 +54,8 @@
                                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5003 4.6875C7.29199 4.6875 2.84408 7.92708 1.04199 12.5C2.84408 17.0729 7.29199 20.3125 12.5003 20.3125C17.7087 20.3125 22.1566 17.0729 23.9587 12.5C22.1566 7.92708 17.7087 4.6875 12.5003 4.6875ZM12.5003 17.7083C9.62533 17.7083 7.29199 15.375 7.29199 12.5C7.29199 9.625 9.62533 7.29167 12.5003 7.29167C15.3753 7.29167 17.7087 9.625 17.7087 12.5C17.7087 15.375 15.3753 17.7083 12.5003 17.7083ZM12.5003 9.375C10.7712 9.375 9.37533 10.7708 9.37533 12.5C9.37533 14.2292 10.7712 15.625 12.5003 15.625C14.2295 15.625 15.6253 14.2292 15.6253 12.5C15.6253 10.7708 14.2295 9.375 12.5003 9.375Z" fill="#7B7B7B"/></svg>
                                 </span>
                             </span>
-                            <input id="input-password" type="password" name="password"
-                                class="rounded-md h-8 lg:h-10 w-full pr-10 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            <input id="password" type="password" name="password"
+                                class="input-password rounded-md h-8 lg:h-10 w-full pr-10 border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         </div>
                     </div>
                     <div>
@@ -76,7 +76,7 @@
         let type = "password";
         const showPasswordBtn = document.querySelector("#show-password");
         showPasswordBtn.addEventListener('click', function(){
-            const inputPassword = document.querySelector("#input-password");
+            const inputPassword = document.querySelector(".input-password");
             const eyeIcon = document.querySelector("#eye-icon");
             if(type === "password"){
                 type = "text";

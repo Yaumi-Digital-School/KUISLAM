@@ -65,41 +65,6 @@
         </script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="{{ asset('js/app.js') }}" defer></script>
-        {{-- fullscreen --}}
-        <script>
-            const body = document.documentElement;
-            const btn_fullscreen = document.getElementById('fullscreen');
-            
-            function getFullscreenElement() {
-                return document.fullscreenElement
-                    || document.msFullscreenElement
-                    || document.mozFullscreenElement
-                    || document.webkitFullscreenElement;
-            }
-
-            btn_fullscreen.addEventListener("click", ()=>{
-                toggleFullscreen();
-            });
-
-            function toggleFullscreen() {
-                if(getFullscreenElement()) {
-                    document.exitFullscreen();
-                } else {
-                    body.requestFullscreen().catch(console.log);
-                }
-            }
-
-            //icon copied to clipboard
-            const btnCopy = document.getElementById('btn-copy');
-
-            btnCopy.onclick = function() {
-                //select the link
-                document.getElementById('link').select();
-
-                //copying the link
-                document.execCommmand("copy")
-            };
-        </script>
         @yield('script')
     </body>
 </html>

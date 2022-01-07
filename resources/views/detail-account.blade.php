@@ -25,9 +25,14 @@
                     <div class="text-center space-y-1 font-semibold">
                         <p class="text-lg">{{ Auth::user()->name }}</p>
                         @php
-                            
+                            $username = Auth::user()->username;
+                            $strlen = strlen($username);
+                            if($strlen > 16){
+                                $username = substr($username, 0, 16);
+                                $username .= "...";
+                            }
                         @endphp
-                        <p class="text-gray-link">{{ Auth::user()->username }}</p>
+                        <p class="text-gray-link">{{ $username }}</p>
                     </div>
                 </div>
             </div>
@@ -188,6 +193,9 @@
                                 success: function(response){
                                     let urlRedirect = "{{ route('index') }}";
                                     window.location.href = urlRedirect;
+                                },
+                                error: function(err){
+                                    console.log(err);
                                 }
                             });
                         }
