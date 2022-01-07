@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\QuizRequest;
 use App\Models\Quiz;
-use Illuminate\Http\Request;
+use App\Models\Room;
+use App\Models\Topic;
+use App\Models\Question;
+use App\Models\QuizUser;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Requests\QuizRequest;
+use App\Http\Controllers\Controller;
 
 
 class QuizController extends Controller
@@ -15,12 +20,12 @@ class QuizController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Quiz $quiz){
+    public function index(){
         // route : quizzes (GET)
         // route name : quizzes.index
-        $quiz = Quiz::getAllQuiz();
+        $quizzes = Quiz::getAllQuiz();
         // return view('v_quizzes', compact('quiz'));
-        return '<h1> ini halaman untuk list quiz</h1>';
+        return view('admin.quizzes', compact('quizzes'));
     }
 
     /**
@@ -31,7 +36,8 @@ class QuizController extends Controller
     public function create(){
         // route : quizzes/create (GET)
         // route name : quizzes.create
-        return '<h1> ini halaman berisi FORM untuk CREATE quiz</h1>';
+        $topics = Topic::all(); 
+        return view('admin.quiz-form', compact('topics'));
     }
 
     /**
@@ -42,18 +48,23 @@ class QuizController extends Controller
      */
     public function store(QuizRequest $request){
         // route : quizzes (POST)
-        // route name : quizzes.create
-        $slug = Str::slug($request->title);
-        $imageName = $slug . '.jpg';
+        // route name : quizzes.store
+
+        $slug = Str::slug($request->title, '-');
+        $imageImage = $request->image;
+        $imageName = $request->title."Image.".$imageImage->extension();
+        $imageImage->move(storage_path('app/public/quiz/image'), $imageName);
 
         $data = [
             'topic_id' => $request->topic_id,
             'title' => $request->title,
-            'image' => $imageName
+            'slug' => $slug,
+            'image' => $imageName,
+            'description' => $request->description,
         ];
         Quiz::create($data);
         
-        return redirect()->route('quizzes.index');
+        return redirect()->route('quizzes.index')->with('message', 'Quiz berhasil disimpan');
     }
 
     /**
@@ -79,7 +90,10 @@ class QuizController extends Controller
     public function edit($id){
         // route : quizzes/{quiz}/edit (GET)
         // route name : quizzes.edit
-        return '<h1> ini halaman berisi FORM untuk EDIT quiz dengan id = ' . $id . '</h1>';
+        $topics = Topic::all();
+        $editQuiz = Quiz::find($id);
+        
+        return view('admin.quiz-form', compact('topics', 'editQuiz'));
     }
 
     /**
@@ -95,24 +109,25 @@ class QuizController extends Controller
         if ($request->image) {
             // Jika ingin ganti Image
             $imageImage = $request->image;
-            $imageFile = $request->title."Image.".$imageImage->extension();
-            $imageImage->move(storage_path('app/public/quiz/image'), $imageFile);
+            $imageName = $request->title . "Image." . $imageImage->extension();
+            $imageImage->move(storage_path('app/public/quiz/image'), $imageName);
 
             $data = [
                 'topic_id' => $request->topic_id,
                 'title' => $request->title,
-                'image' => $imageFile
-            ];
-            Quiz::updateQuiz($id, $data);
-        }else {
-            // Jika tidak ingin ganti Image
-            $data = [
-                'topic_id' => $request->topic_id,
-                'title' => $request->title,
+                'image' => $imageName
             ];
             Quiz::updateQuiz($id, $data);
         }
-        return redirect()->route('quizzes.index');
+
+        // Jika tidak ingin ganti Image
+        $data = [
+            'topic_id' => $request->topic_id,
+            'title' => $request->title,
+        ];
+        Quiz::updateQuiz($id, $data);
+
+        return redirect()->route('quizzes.index')->with('message', 'Quiz berhasil diubah');
     }
 
     /**
@@ -124,7 +139,14 @@ class QuizController extends Controller
     public function destroy($id){
         // route : quizzes/{quiz} (DELETE)
         // route name : quizzes.destroy
+        $question = Question::where('quiz_id', $id)->first();
+        $room = Room::where('quiz_id', $id)->first();
+        $quizUser = QuizUser::where('quiz_id', $id)->first();
+        if($question || $room || $quizUser){
+            return back()->with('message', 'Quiz gagal dihapus');
+        }
         Quiz::deleteQuiz($id);
-        return redirect()->route('quizzes.index');
+        return redirect()->route('quizzes.index')->with('message', 'Quiz berhasil dihapus');
+        // return response()->json(['message' => 'Quiz berhasil dihapus']);
     }
 }

@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class ProfileRequest extends FormRequest
 {
     /**
@@ -21,12 +24,17 @@ class ProfileRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'min:8', 'max:255'],
-            'avatar' => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
+        // dd($request->username);
+        $rules = [
+            'name'      => ['required', 'string', 'max:255'],
+            'username'  => ['required', 'string', 'max:255', 'alpha_dash'],
+            'avatar'    => ['image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
+        if($request->username !== Auth::user()->username){
+            $rules['username'] = ['required', 'string', 'max:255', 'alpha_dash', 'unique:users,username'];
+        }
+        return $rules;
     }
 }

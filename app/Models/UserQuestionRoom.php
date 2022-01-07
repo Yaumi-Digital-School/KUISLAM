@@ -38,6 +38,10 @@ class UserQuestionRoom extends Model
         return UserQuestionRoom::where('user_id', Auth::user()->id)->where('room_id', $roomId)->get()->SortByDesc('order');
     }
 
+    public static function getDataUserQuestionRoom($roomId){
+        return UserQuestionRoom::where('user_id', Auth::user()->id)->where('room_id', $roomId)->get()->SortByDesc('order');
+    }
+    
     public static function getAuthUserRank($roomId, $order){
         $dataRank = UserQuestionRoom::getSortByDescRank($roomId, $order);
         for($i = 0; $i < count($dataRank); $i++){

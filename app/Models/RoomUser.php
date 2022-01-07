@@ -37,7 +37,7 @@ class RoomUser extends Model
 
     public static function getAllDoneQuiz(){
         // Get All done quiz
-        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'done')->get();
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'done')->get()->SortByDesc('updated_at');
     }
 
     public static function updateOngoingRoomUser($code, $dataRoomUser){
@@ -49,13 +49,13 @@ class RoomUser extends Model
     public static function updateDoneRoomUser($code, $dataRoomUser){
         // update data in room_users table
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
     }
 
     public static function updateRoomUserByUserId($code, $dataRoomUser){
         // update data in room_users table by user_id
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
+        return RoomUser::where('user_id', Auth::id())->where('room_id', $room->id)->where('status', 'ongoing')->update($dataRoomUser);
     }
 
     public static function deleteRoomUserByCode($code){
@@ -73,22 +73,57 @@ class RoomUser extends Model
     public static function isHost($code){
         // check if user is host
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->where('status', 'waiting')->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', true)->first();
     }
 
     public static function isPlayer($code){
         // check if user is player
         $room = Room::getRoomByCode($code);
-        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->where('status', 'waiting')->first();
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $room->id)->where('is_host', false)->first();
     }
 
-    public static function getPlayerCurrentPoint($roomId){
+    public static function isInWaitingRoom(){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'waiting')->first();
+    }
+
+    public static function isInOngoingRoom(){
+        // check if user is player
+        return RoomUser::where('user_id', Auth::user()->id)->where('status', 'ongoing')->first();
+    }
+
+    public static function userIsInWaitingRoom($roomId){
+        // check if user is in waiting room
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'waiting')->first();
+    }
+
+    public static function userIsInOngoingRoom($roomId){
+        // check if user is in ongoing room
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'ongoing')->first();
+    }
+
+    public static function userIsInDoneRoom($roomId){
+        // check if user is in done room
+        return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->where('status', 'done')->first();
+    }
+
+    public static function isDone($roomId){
+        // check if user is player
+        return RoomUser::where('room_id', $roomId)->where('status', 'done')->first();
+    }
+
+    public static function getPlayerCurrentRoomData($roomId){
         // get player current point
         return RoomUser::where('user_id', Auth::user()->id)->where('room_id', $roomId)->first();
     }
 
     public static function getTop5Rank($roomId){
         // get top 5 rank
-        return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->limit(5)->get()->SortByDesc('points');
+        return RoomUser::where('room_id', $roomId)->limit(5)->get()->SortByDesc('points');
+    }
+
+    public static function getAllRank($roomId){
+        // get all rank
+        return RoomUser::where('room_id', $roomId)->where('status', 'ongoing')->get()->SortByDesc('points');
     }
 }

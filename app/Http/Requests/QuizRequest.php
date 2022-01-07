@@ -13,7 +13,7 @@ class QuizRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,9 @@ class QuizRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
+            'title'         => ['required', 'string', 'max:255'],
+            'description'   => ['required', 'string', 'max:255'],
+            'image'         => ['required_unless:image,null', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
         ];
     }
 }

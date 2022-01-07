@@ -6,11 +6,11 @@ module.exports = {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
     ],
-
     theme: {
         extend: {
-            gridTemplateColumns:{
-                '15': 'repeat(15, minmax(0, 1fr))',
+            transform: ['hover', 'focus'],
+            gridTemplateColumns: {
+                15: "repeat(15, minmax(0, 1fr))",
             },
             width: {
                 120: "30rem",
@@ -25,7 +25,9 @@ module.exports = {
                     darkBg: "#81C530",
                     nav: "#6DAF2B",
                     greenMain: "#52D876",
+                    greenMainHover: "#4DC86E",
                     podium: "#52D876",
+                    leaderbord: "#F2FCD8",
                 },
                 gray: {
                     nav: "#C4C4C4",
@@ -41,19 +43,30 @@ module.exports = {
                     link: "#9B9B9B",
                     topicList: "#F5F5F5",
                     topicListTxt: "#656565",
+                    avatar: "#CECDD2",
                 },
                 yellow: {
                     yellowMain: "#FFB73D",
+                    yellowMainHover: "#E1A237",
+                    avatar: "#F79429",
                 },
                 red: {
                     redMain: "#FF6368",
+                    redMainHover: "#EC595E",
                 },
                 blue: {
                     blueMain: "#2F83F9",
+                    blueMainHover: "#2D7AE8",
+                    facebook: "#4267B2",
+                    facebookDark: "#3B5B9D",
                 },
                 orange: {
                     podium: "#FFB436",
+                    avatar: "#FCC417",
                 },
+                brown: {
+                    leaderboard : "#525252",
+                }
             },
             screens: {
                 "3xl": "1600px",
@@ -63,6 +76,7 @@ module.exports = {
                 custom1: "0 2px 6px 0 rgba(0, 0, 0, 0.25)",
                 card: "0 2px 8px 0 rgba(0, 0, 0, 0.25)",
                 authPopup: "0 1px 4px 0 rgba(0, 0, 0, 0.5)",
+                rank: "0 10px 10px 0 rgba(109, 109, 109, 0.5)",
             },
         },
     },

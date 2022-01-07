@@ -47,12 +47,32 @@ class Room extends Model
         return Room::where('code', $code)->first();
     }
 
+    public static function protectWaitingMethod($code){
+        return Room::where('code', $code)->where('status', 'waiting')->first();
+    }
+
+    public static function protectOngoingMethod($code){
+        return Room::where('code', $code)->where('status', 'ongoing')->first();
+    }
+
+    public static function protectDoneMethod($code){
+        return Room::where('code', $code)->where('status', 'done')->first();
+    }
+
+    public static function updateOngoingRoom($code, $data){
+        return Room::where('code', $code)->where('status', 'waiting')->update($data);
+    }
+
+    public static function updateDoneRoom($code, $data){
+        return Room::where('code', $code)->where('status', 'ongoing')->update($data);
+    }
+
     public static function deleteRoom($id){
-        return Room::where('id', $id)->delete();
+        return Room::where('id', $id)->where('status', 'waiting')->delete();
     }
 
     public static function deleteRoomByCode($code){
-        return Room::where('code', $code)->delete();
+        return Room::where('code', $code)->where('status', 'waiting')->delete();
     }
 
     

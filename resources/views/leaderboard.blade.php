@@ -1,146 +1,114 @@
-<x-main-layout titlePage="Laravel">
+<x-main-layout titlePage="Leaderboard">
+    {{-- header leaderbord  --}}
     @if($final === false)
-    {{-- Breadcrumbs question --}}
-    <h1 class="font-poppins text-white text-2xl sm:hidden z-10 relative text-center pt-8 pb-2">Soal</h1>
-    <h1 class="text-3xl text-white font-bold sm:pt-12 pb-8 sm:px-20 z-10 relative font-poppins text-center sm:text-left">{{ $order }}/10</h1>
-    <h1 class="text-5xl text-white font-poppins font-bold text-center sm:z-10 hidden sm:block sm:relative pb-8">LEADERBOARD</h1>
-    @elseif($final === true)
-        {{-- Button Close if it's Final Leaderboard --}}
-        <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mt-12 mb-8 ml-12 realtive">
-                <a href="{{ route('game.exit', $code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
-            </div>
-        </div>
-        <h1 class="text-5xl text-white font-poppins font-bold text-center sm:z-10 hidden sm:block sm:relative pb-8">LEADERBOARD</h1>
-        <h1 class="text-3xl text-white font-poppins font-semibold text-center z-10 sm:hidden relative pb-8">FINAL LEADERBOARD</h1>
-    @endif
-    
-    {{-- Rank --}}
-    @foreach($roomUser as $data)
-        @php
-            $file = App\Models\User::authUserImageIsFile($data->user->avatar);
-        @endphp
-        <div class="grid grid-cols-4 gap-x-2 grid-flow-row z-10 relative sm:px-12 px-4 rounded-full items-center">
-            {{-- 1st --}}
-            {{-- Medal --}}
-            @if($loop->index === 0)
-            <div class="flex justify-end row-start-1">
-                <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/1st_medal.svg')}}"> 
-            </div>
-            <div class="col-start-2 col-end-4 bg-orange-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
-                {{-- User Info --}}
-                <div class="flex items-center">
-                    @if($data->user->avatar)
-                        @if($file === true)
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @else                        
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @endif
-                    @else
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
-                    @endif
-                    <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
-                </div>
-                {{-- score --}}
-                <h1 class=" font-poppins font-bold sm:text-xl text-xs text-white">{{ $data->points }} pts</h1>
-            </div>
-            {{-- 2nd --}}
-            {{-- Medal --}}
-            @elseif($loop->index === 1)
-            <div class="flex justify-end row-start-1">
-                <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/2nd_medal.svg')}}"> 
-            </div>
-            <div class="col-start-2 col-end-4 bg-blue-600 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
-                {{-- User Info --}}
-                <div class="flex items-center">
-                    @if($data->user->avatar)
-                        @if($file === true)
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @else                        
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @endif
-                    @else
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
-                    @endif
-                    <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
-                </div>
-                {{-- score --}}
-                <h1 class="text-white font-poppins font-bold sm:text-xl text-xs">{{ $data->points }} pts</h1>
-            </div>
-            {{-- 3rd --}}
-            {{-- Medal --}}
-            @elseif($loop->index === 2)
-            <div class="flex justify-end row-start-1">
-                <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20" src="{{asset('images/3rd_medal.svg')}}"> 
-            </div>
-            <div class="col-start-2 col-end-4 bg-green-podium flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center mb-4">
-                {{-- User Info --}}
-                <div class="flex items-center">
-                    @if($data->user->avatar)
-                        @if($file === true)
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @else                        
-                            <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
-                            </div>
-                        @endif
-                    @else
-                        <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                            <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                        </div>
-                    @endif
-                    <h1 class="text-white font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
-                </div>
-                {{-- score --}}
-                <h1 class="text-white font-poppins font-bold sm:text-xl text-xs">{{ $data->points }} pts</h1>
-            </div>
-            {{-- 4th and goes on --}}
+        {{-- Breadcrumbs question --}}
+        <div class="text-2xl md:text-3xl text-white font-bold pt-12 pb-8 sm:px-20 z-10 relative font-poppins flex justify-between items-center mx-4 lg:mx-0">
+            <span class="">{{ $order }}/10</span>
+            {{-- {{dd($isCorrect)}} --}}
+            @if ($isCorrect == 1)
+                <span class="bg-green-greenMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">Correct</span>
             @else
-                <div class="sm:flex sm:justify-end hidden row-start-{{ $data->rank}} col-end-2">
-                    <img class="z-20 relative w-10 sm:w-20 h-10 sm:h-20 row-start-{{ $data->rank}}" src="{{asset('images/4th_medal.svg')}}"> 
-                </div>
-                <div class="px-12 sm:px-0 row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 mb-4">
-                    <div class="row-start-{{ $data->rank}} sm:col-start-2 col-start-1 sm:col-end-4 col-end-4 bg-gray-100 flex justify-between sm:w-full w-60 sm:h-24 h-12 rounded-lg z-10 relative p-4 items-center">
-                        {{-- User Info --}}
-                        <div class="flex items-center">
-                            @if($data->user->avatar)
-                                @if($file === true)
-                                    <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                        <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="rounded-full border-green-nav border-2">
-                                    </div>
-                                @else                        
-                                    <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                        <img src="{{ $data->user->avatar }}" class="rounded-full border-green-nav border-2">
-                                    </div>
-                                @endif
-                            @else
-                                <div class="flex items-center sm:h-16 h-8 sm:w-16 w-8 mr-2">
-                                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full border-green-nav border-2">
-                                </div>
-                            @endif
-                            <h1 class="text-green-nav font-bold sm:text-xl text-xs font-poppins">{{ $data->user->name }}</h1>
-                        </div>
-                        {{-- score --}}
-                        <h1 class="text-green-nav font-poppins font-bold sm:text-xl text-xs">{{ $data->points }} pts</h1>
-                    </div>
-                </div>
+                <span class="bg-red-redMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">False</span>
             @endif
         </div>
-    @endforeach
+        <h1 class="text-3xl md:text-4xl text-white font-poppins font-bold text-center z-10 relative pb-8">Curent Ranking</h1>
+    @elseif($final === true)
+        {{-- Button Close if it's Final Leaderboard --}}
+        <div class="text-2xl md:text-3xl text-white font-bold pt-12 pb-8 sm:px-20 z-10 relative font-poppins flex justify-between items-center mx-4 lg:mx-0">
+            <div class="bg-green-nav w-9 h-9 p-2 rounded">
+                <a href="{{ route('game.exit', $code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
+            </div>
+            @if ($isCorrect == 1)
+                <span class="bg-green-greenMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">Correct</span>
+            @else
+                <span class="bg-red-redMain px-4 py-1 lg:px-6 lg:py-2 rounded-md shadow-md">False</span>
+            @endif
+        </div>
+        <h1 class="text-3xl md:text-4xl text-white font-poppins font-bold text-center z-10 relative pb-8">Leaderboard</h1>
+    @endif
+    
+    {{-- rank board  --}}
+    @php
+        $colorBgLeaderbord = "bg-green-leaderbord ";
+        $colorTextLeaderboard = "text-brown-leaderboard";
+        $colorPointLeaderboard = "text-green-darkBg";
+        $colorBorderAva = "border-green-nav";
+    @endphp
+    {{-- Rank Container--}}
+    <div class="z-10 relative px-12 flex mb-8 flex-col justify-center space-y-4 items-center font-poppins max-w-2xl mx-auto">
+        @foreach($roomUser as $data)
+            @if ($data->user->id == Auth::id())
+                @php
+                    $colorBgLeaderbord = "bg-white";
+                @endphp
+            @endif
+            @php
+                $file = App\Models\User::authUserImageIsFile($data->user->avatar);
+            @endphp
+            {{-- user card  --}}
+            <div class="relative z-10 h-16 md:h-20 lg:h-24 w-full">
+                @if ($final)
+                    @php
+                        $colorPointLeaderboard = "text-white";
+                        $colorTextLeaderboard = "text-white";
+                        $colorBorderAva = "border-gray-nav";
+                        if($loop->index + 1 == 1){
+                            $medal = "images/1st_medal.svg";
+                            $colorBgLeaderbord = "bg-orange-podium";
+                        } 
+                        else if($loop->index + 1 == 2){
+                            $medal = "images/2nd_medal.svg";
+                            $colorBgLeaderbord = "bg-blue-blueMain";
+                        } 
+                        else if($loop->index + 1 == 3){
+                            $medal = "images/3rd_medal.svg";
+                            $colorBgLeaderbord = "bg-red-redMain";
+                        } 
+                    @endphp
+                    {{-- medal  --}}
+                    <div class="flex justify-center absolute -left-10 sm:-left-14 top-2 sm:top-0 md:top-2 lg:top-4">
+                        <img class="z-20 relative h-10 sm:h-14" src="{{asset($medal)}}"> 
+                    </div> 
+                @endif
+                {{-- rank info --}}
+                <div class="{{ $colorBgLeaderbord }} flex justify-between items-center space-x-3 w-full h-full 
+                    rounded-lg mb-4 px-3 py-3 {{ $colorTextLeaderboard }} font-bold text-md sm:text-lg md:text-xl lg:text-2xl">
+                    {{-- User Position --}}
+                    <div class="">
+                        <h1 class="">{{$loop->index+1}}</h1>
+                    </div>
+                    {{-- User Avatar  --}}
+                    <div class="flex justify-center items-center w-3/12 sm:w-2/12 h-full">
+                        @if($data->user->avatar)
+                            @if($file === true)
+                            <img src="{{ asset('storage/user/avatar/'. $data->user->avatar) }}" class="h-10 sm:h-12 lg:h-14 rounded-full {{ $colorBorderAva }} border-4">
+                            @else                        
+                            <img src="{{ $data->user->avatar }}" class="h-10 sm:h-12 lg:h-14 rounded-full {{ $colorBorderAva }} border-4">
+                            @endif
+                        @else
+                            <img src="{{asset('images/default_profpic.png')}}" class="h-10 sm:h-12 lg:h-14 rounded-full {{ $colorBorderAva }} border-4">
+                        @endif
+                    </div>
+                    {{-- User Name  --}}
+                    <div class="w-6/12">
+                        <h1 class="">{{ $data->user->name }}</h1>
+                    </div>
+                    {{-- User Points  --}}
+                    <div class="w-2/12 sm:w-3/12 {{ $colorPointLeaderboard }}">
+                        <h1 class=" text-center">{{ $data->points }} pts</h1>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    
+    {{-- Button Show All --}}
+    @if($final)
+        <button class="px-4 py-2 mb-8 hover:bg-gray-200 transition focus:outline-none bg-white z-10 relative mx-auto mt-4 flex justify-center items-center rounded-md shadow-lg">
+            <h1 class="text-green-lightBg font-bold font-poppins sm:text-2xl text-xs">Lihat Semua</h1>
+        </button>
+    @endif
+
     @section('script')
         <script>
             const room_code = '{{$code}}';
@@ -149,12 +117,17 @@
             order = parseInt(order);
             console.log(order)
             if(!final){
-                setTimeout(() => {
+                let timeLeftForLeaderboard = '{{$timeLeftForLeaderboard}}';
+                timeLeftForLeaderboard = parseInt(timeLeftForLeaderboard) * 1000;
+                console.log(timeLeftForLeaderboard);
+                // let timeLeftForLeaderboard = 7000;
+                let intervalId = setTimeout(() => {
                     let url = "{{ route('question.view', ['room' => ':room', 'order' => ':order']) }}";
                     url = url.replace(':room', room_code);
                     url = url.replace(':order', order+1);
                     window.location.href = url;
-                }, 5000);
+                    clearTimeout(intervalId);
+                }, timeLeftForLeaderboard);
             }
         </script>
     @endsection

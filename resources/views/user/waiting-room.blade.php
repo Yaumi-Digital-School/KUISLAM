@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel" >
+<x-main-layout titlePage="Waiting Room" >
     {{-- button icon --}}
     <div class="flex justify-between mt-10 mx-8">
         <div class="flex justify-start">
@@ -46,15 +46,16 @@
     <h1 class="text-center text-white text-3xl font-bold mb-3 z-10 relative">Menunggu permainan dimulai...</h1>
     
     {{-- user card container--}}
-    <div class="w-11/12 mx-auto flex justify-between flex-wrap z-10">
-    {{-- user card --}}
+    <div id="card-user-container" class="w-11/12 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-3 mb-8 relative z-10">
+        {{-- user card --}}
         @foreach($roomUser as $data)
-            <div class="bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto">
-                <div id="user-{{ $data->user_id }}" class="flex items-center h-16 w-16 mr-2">
-                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full">
+            <div id="user-{{ $data->user_id }}"
+                class="bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg">
+                <div class="flex justify-center items-center h-full w-1/5">
+                    <img src="{{asset('images/default_profpic.png')}}" class="rounded-full h-10">
                 </div>
-                    <h1 class="text-green-nav text-xl font-bold">{{ $data->user->name }}</h1>
-            </div>      
+                <h1 class="text-green-nav text-xl font-bold w-4/5">{{ $data->user->name }}</h1>
+            </div> 
         @endforeach
     </div>
 
@@ -65,11 +66,11 @@
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
                 $( document ).ready(function(){
-                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile w-60 h-20 flex justify-center items-center px-2 py-1 rounded-lg z-10 my-4 mx-auto");                    
+                    $newUserDiv = $("<div></div>").addClass("bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg");                    
                     $newUserDiv.attr("id", `user-${data.user_data.id}`);
-                    $newUserImageDiv = $("<div></div>").addClass("flex items-center h-16 w-16 mr-2");
-                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full");
-                    $newUserName = $("<div></div>").addClass("text-green-nav text-xl font-bold").html(data.user_data.name);
+                    $newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
+                    $newUserImage = $("<img src={{asset('images/default_profpic.png')}}></img>").addClass("rounded-full h-10");
+                    $newUserName = $("<h1></h1>").addClass("text-green-nav text-xl font-bold w-4/5").html(data.user_data.name);
 
                     $newUserImageDiv.append($newUserImage);
                     $newUserDiv.append($newUserImageDiv);

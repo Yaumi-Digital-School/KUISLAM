@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\HostCancelRoom;
 use Carbon\Carbon;
-use App\Events\HostStartQuiz;
 use App\Models\Quiz;
 use App\Models\Room;
 use App\Models\Question;
@@ -12,10 +10,15 @@ use App\Models\RoomUser;
 use App\Events\UserExitRoom;
 use App\Models\RoomQuestion;
 use Illuminate\Http\Request;
+use App\Events\HostStartQuiz;
+use App\Events\HostCancelRoom;
 use App\Events\UserJoinedRoom;
 use App\Models\UserQuestionRoom;
+use App\Http\Requests\CodeRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\returnValueMap;
 
 class RoomController extends Controller
 {
@@ -40,13 +43,43 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika user menekan tombol 
             create room.
         */
+        $isInWaitingRoom = RoomUser::isInWaitingRoom();
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+        
+        if($isInWaitingRoom){
+            // If already in a waiting room
+            return redirect()->route('room.waiting', $isInWaitingRoom->room->code)->with('error', 'You already in a waiting room!');
+        }elseif($isInOngoingRoom){
+            $dataOngoingRoom = UserQuestionRoom::getDataUserQuestionRoom($isInOngoingRoom->room_id);
+            $isAnswered = $dataOngoingRoom->whereNotNull('is_correct')->whereNotNull('answer_option')->first();
+            
+            if(!$isAnswered){
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isInOngoingRoom->room->code, 
+                    'order' => 1
+                ])->with('error', 'You already in a ongoing room!');
+            }elseif($isAnswered){
+                // return to leaderboard if question already answered
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order
+                ])->with('error', 'You already in a ongoing room!');
+            }elseif($isAnswered->order != 10){
+                // return to view question if question not answered yet
+                return redirect()->route('question.view', [
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order + 1
+                ])->with('error', 'You already in a ongoing room!');
+            }
+        }
 
-        $code = Room::getCode();
-        $slugId = Quiz::getQuizSlug($slug);
+        $code = Room::getCode(); // Generate random code
+        $slugId = Quiz::getQuizSlug($slug); // Get Quiz from slug
         
         $dataRoom = [
             'quiz_id' => $slugId->id,
             'code' => $code,
+            'status' => 'waiting'
         ];
         $room = Room::create($dataRoom);
 
@@ -68,16 +101,23 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika user (host) menekan tombol 
             START
         */
+        $protectOngoingMethod = Room::protectOngoingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
+        }
 
         $room = Room::getRoomByCode($code);
         $quizId = $room->quiz_id;
         $currentTime = Carbon::now();
-        $leaderboardTime = 15;
+        $leaderboardTime = 10;
 
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        // if total player < 2
         if($countPlayer < 2){
+            // if total player < 2
             return back();
         }
 
@@ -85,7 +125,6 @@ class RoomController extends Controller
         $questionsId = Question::getRandomQuestion($quizId);
 
         for($i = 0; $i < 10; $i++){
-            
             $dataRoomQuestion = [
                 'question_id' => $questionsId[$i],
                 'room_id' => $room->id,
@@ -93,11 +132,12 @@ class RoomController extends Controller
             ];
             $roomQuestion = RoomQuestion::create($dataRoomQuestion);
 
-            $tempRoomQuestion = RoomQuestion::where('room_id', $room->id)->get();
+            $tempRoomQuestion = RoomQuestion::getRoomQuestionById($room->id);
             $getTimer = $roomQuestion->question->timer;
             
             if($roomQuestion->order == 1){
-                $timeStartDate = $currentTime->toDateTimeString();
+                $timeStartInt = strtotime($currentTime->toDateTimeString()) + 5;
+                $timeStartDate = date("Y-m-d H:i:s", $timeStartInt);
                 $timeEndInt = strtotime($currentTime) + $getTimer + $leaderboardTime;
                 $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
             }elseif($roomQuestion->order > 1){
@@ -105,16 +145,18 @@ class RoomController extends Controller
                 $timeEndInt = strtotime($tempRoomQuestion[$i-1]->time_end) + $getTimer + $leaderboardTime;
                 $timeEndDate = date("Y-m-d H:i:s", $timeEndInt);
             }
-            
-            RoomQuestion::where('room_id', $room->id)->where('order', $i+1)->update([
+
+            $dataRoomQuestion = [
                 'time_start' => $timeStartDate,
                 'time_end' => $timeEndDate,
-            ]);
+            ];
+            RoomQuestion::updateQuestionByRoomIdAndOrder($room->id,  $i+1, $dataRoomQuestion);        
         }
 
         $dataRoomUser = [
             'status' => 'ongoing',
         ];
+        Room::updateOngoingRoom($code, $dataRoomUser);
         RoomUser::updateOngoingRoomUser($code, $dataRoomUser);
 
         HostStartQuiz::dispatch($code);
@@ -129,50 +171,215 @@ class RoomController extends Controller
         /* 
             Method ini untuk menampilkan Pertanyaan
         */
-        $room = Room::getRoomByCode($code);
-        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
-        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        $currentTime = Carbon::now();
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
         
-        if($savedDataOrder){
-            $accessableOrder = $savedDataOrder->order + 1;
+        if(($protectWaitingMethod || $protectDoneMethod) && !$isInOngoingRoom){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
         
-        if(!$savedDataOrder && intval($order) != 1 && intval($order) != $accessableOrder){
-            // User can't move to another order by changing the question order on URL
+        $room = Room::getRoomByCode($code);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        if($savedDataOrder && $savedDataOrder->order == $totalQuestion){
+            return redirect()->route('question.leaderboard', [
+                'room' => $code,
+                'order' => $savedDataOrder->order
+            ]);
+        }elseif(!($order >= 1 && $order <= $totalQuestion)){
+            // if order not between 1 - 10
             return back();
         }
-        
+
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentTime = Carbon::now();
         $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+        $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
         
-        return view('quiz', compact('roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
+        if($order == 1){
+            if(!$savedDataOrder){
+                if($timeLeftForQuestion < 1){
+                    // if order 1, not answered, time is up'
+                    // dd('if order 1, not answered, time is up');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }
+            }elseif($savedDataOrder){
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if($timeLeftForQuestion < 1){
+                    // if recent order is not 1 and change order to 1, answered, time is up
+                    // ceklis
+                    // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }
+            }
+        }elseif($order != 1){
+            if(!$savedDataOrder){
+                $accessibleOrder = 1;
+                if($timeLeftForQuestion > 1){
+                    // if recent order is 1 and change order other than 1, not answer, there is time left
+                    // Ceklis
+                    // dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu masih ada!');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }elseif($timeLeftForQuestion < 1){
+                    // if recent order is 1 and change order other than 1, not answer, time is up
+                    dd('anda tidak boleh maju karena masih order 1 belum jawab dan waktu sudah habis!');
+                    return redirect()->route('question.handle', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }                
+            }elseif($savedDataOrder){
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if($savedDataOrder->order == 1){
+                    if($timeLeftForQuestion > $roomQuestion->question->timer){
+                        // if recent order 1, answered, there is time left
+                        // Ceklis
+                        dd($timeLeftForQuestion > $roomQuestion->question->timer);
+                        // dd('anda tidak boleh maju, walau sudah jawab tapi masih ada waktu tersisa!');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => 1
+                        ]);
+                    }
+                }elseif($order != $accessibleOrder){
+                    if($timeLeftForQuestion > $roomQuestion->question->timer){
+                        // order cant go forward
+                        // ceklis
+                        // dd('anda tidak boleh maju karena belum jawab bawah!');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $accessibleOrder
+                        ]);
+                    }elseif($timeLeftForQuestion < 1){
+                        // order cant go backward
+                        // ceklis
+                        // dd('anda tidak boleh mundur karena belum jawab!');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $accessibleOrder
+                        ]);
+                    }
+                }elseif($order == $accessibleOrder){
+                    if($timeLeftForQuestion > $roomQuestion->question->timer){
+                        // order cant go forward
+                        // ceklis
+                        // dd('anda tidak boleh maju walau sudah jawab tapi masih ada waktu tersisa!');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $accessibleOrder - 1
+                        ]);
+                    }elseif($timeLeftForQuestion < 1){
+                        // order cant go backward
+                        // ceklis
+                        // dd($accessibleOrder,'anda tidak boleh mundur karena waktu sudah habis! bwah');
+                        return redirect()->route('question.handle', [
+                            'room' => $code,
+                            'order' => $accessibleOrder
+                        ]);
+                    }
+                }
+            }
+        }elseif($order <= 1 && !($order > $totalQuestion) && $savedDataOrder && $timeLeftForQuestion > $roomQuestion->question->timer){
+            // prevent user change data order less than 1 when user recent order is more than 1
+            $accessibleOrder = $savedDataOrder->order + 1;
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $accessibleOrder
+            ]);
+        }
+
+        $roomUser = RoomUser::getPlayerCurrentRoomData($room->id);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        
+        // if user already submit the question 
+        if(UserQuestionRoom::where('user_id', Auth::id())
+                                    ->where('room_id', $room->id)
+                                    ->where('question_id', $roomQuestion->question->id)
+                                    ->exists() && $timeLeftForQuestion > 1){
+            $user_answer = UserQuestionRoom::where('user_id', Auth::id())
+                                    ->where('room_id', $room->id)
+                                    ->where('question_id', $roomQuestion->question->id)
+                                    ->get()->first()->answer_option;
+            // dd("hehe");
+            return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion', 'user_answer'));
+        }
+
+        if($timeLeftForQuestion < -300){
+            // if leave the game more than 5 minute
+            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+            $isHost = RoomUser::isHost($code);
+            if($isHost){
+                $dataRoom = [
+                    'status' => 'done'
+                ];
+                Room::updateDoneRoom($code, $dataRoom); 
+            }
+
+            $dataRoomUser = [
+                'rank' => $rank,
+                'status' => 'done'
+            ];
+            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);  
+
+            $message = "leave-5-minute";
+            return redirect()->route('index.redirect', $message);
+        }
+        return view('quiz', compact('roomUser', 'roomQuestion', 'code', 'order', 'timeLeftForQuestion'));
     }
 
     public function joinRoomWithLink($code){  
         /* 
             Method ini dipanggil ketika User memasukkan link kedalam URL 
         */
+        
         $room = Room::getRoomByCode($code);
+        if(!$room){
+            $message = "room-not-exist";
+            return redirect()->route('index.redirect', $message);
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
+        }
         
         return redirect()->route('room.pre-waiting-player', $room->code);
     }
 
-    public function joinRoomWithCode(Request $request){  
+    public function joinRoomWithCode(CodeRequest $request){  
         /* 
             Method ini dipanggil ketika USER menginput CODE Room
             Jika merujuk ke desain method ini akan di panggil ketika 
             user menekan tombol Gabung setelah menginput data kode room 
         */
-
-        $request->validate([
-            'code' => ['required', 'integer', 'digits:6']
-        ]);
-
         $room = Room::getRoomByCode($request->code);
-
         if(!$room){
             return back()->withErrors(['code' => 'Invalid code!']);
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
 
         return redirect()->route('room.pre-waiting-player', $room->code);
@@ -184,10 +391,20 @@ class RoomController extends Controller
         /* Jika merujuk ke desain method ini akan di panggil ketika 
         user memasukkan link share untuk join ke room atau setelah
         user menginput data kode room pada field yang tersedia */
-
+        
         $room = Room::getRoomByCode($code);
         if(!$room){
-            return redirect()->route('index');
+            $message = "room-not-exist";
+            return redirect()->route('index.redirect', $message);
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
 
         return view('user.prewaiting-room', compact('room'));
@@ -200,9 +417,51 @@ class RoomController extends Controller
         user menekan tombol join */
 
         $room = Room::getRoomByCode($code);
-        
         if(!$room){
-            return redirect()->route('index'); 
+            // if room doesn't exist 
+            $message = "room-not-exist";
+            return redirect()->route('index.redirect', $message);
+        }
+
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
+        }
+
+        $isInWaitingRoom = RoomUser::isInWaitingRoom();
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+        
+        if($isInWaitingRoom){
+            // If already in a waiting room
+            return redirect()->route('room.waiting', $isInWaitingRoom->room->code)->with('error', 'You already in a waiting room!');
+        }elseif($isInOngoingRoom){
+            $dataOngoingRoom = UserQuestionRoom::getDataUserQuestionRoom($isInOngoingRoom->room_id);
+            $isAnswered = $dataOngoingRoom->whereNotNull('is_correct')->whereNotNull('answer_option')->first();
+            
+            if(!$isAnswered){
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isInOngoingRoom->room->code, 
+                    'order' => 1
+                ])->with('error', 'You already in a ongoing room!');
+            }elseif($isAnswered){
+                if($isAnswered->order != 10){
+                    // return to view question if question not answered yet, as long as the order not 10
+                    return redirect()->route('question.view', [
+                        'room' => $isAnswered->room->code, 
+                        'order' => $isAnswered->order + 1
+                        ])->with('error', 'You already in a ongoing room!');
+                    }
+                    
+                // return to leaderboard if question already answered
+                return redirect()->route('question.leaderboard',[
+                    'room' => $isAnswered->room->code, 
+                    'order' => $isAnswered->order
+                ])->with('error', 'You already in a ongoing room!');
+            }
         }
         
         $dataRoomUser = [
@@ -222,12 +481,19 @@ class RoomController extends Controller
         /* Method ini dipanggil ketika Room berhasil dibuat */
         /* Waiting room - peserta */
 
-        /* 
-            Kalau data Room tidak ada akan redirect ke home
-        */
         $room = Room::getRoomByCode($code);
         if(!$room){
-            return redirect()->route('index');     
+            $message = "room-not-exist";
+            return redirect()->route('index.redirect', $message); 
+        }
+        
+        $protectOngoingMethod = Room::protectOngoingMethod($room->code);
+        $protectDoneMethod = Room::protectDoneMethod($room->code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            // if room status is ongoing OR done
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
         
         /* 
@@ -235,7 +501,8 @@ class RoomController extends Controller
         */
         $isInRoom = RoomUser::isInRoom($code);
         if(!$isInRoom){
-            return redirect()->route('index');     
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);   
         }
 
         $host = RoomUser::isHost($code);
@@ -252,9 +519,17 @@ class RoomController extends Controller
     }
 
     public function exitRoom($code){
+        $protectOngoingMethod = Room::protectOngoingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectOngoingMethod || $protectDoneMethod){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
+        }
+        
+        $room = Room::getRoomByCode($code);
         $host = RoomUser::isHost($code);
         $player = RoomUser::isPlayer($code);
-        $room = Room::getRoomByCode($code);
 
         if($host){
             /* Method ini dipanggil ketika room Master / moderator keluar */
@@ -275,94 +550,207 @@ class RoomController extends Controller
     }
 
     public function handleAnswer(Request $request, $code, $order){
-        $room = Room::getRoomByCode($code);        
-        $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $currentPoint = RoomUser::getPlayerCurrentPoint($room->id)->points;
-
-        if($questionId->question->answer === $request->answer_option){
-            // If answer correct
-            $point = ($questionId->question->timer/$questionId->question->timer) * 1000;
-            
-            $dataUserQuestionRoom = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'question_id' => $questionId->id,
-                'order' => $order,
-                'point' => $currentPoint + $point,
-                'answer_option' => $request->answer_option,
-                'is_correct' => true,
-            ];
-            UserQuestionRoom::create($dataUserQuestionRoom);
-
-            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-
-            $dataRoomUser = [
-                'rank' => $rank,
-                'points' => $currentPoint + $point,
-            ];
-            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
-        }else{
-            // If answer wrong
-            $dataUserQuestionRoom = [
-                'user_id' => Auth::user()->id,
-                'room_id' => $room->id,
-                'question_id' => $questionId->id,
-                'order' => $order,
-                'point' => $currentPoint + 0,
-                'answer_option' => $request->answer_option,
-                'is_correct' => false,
-            ];
-            UserQuestionRoom::create($dataUserQuestionRoom);
-
-            $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-
-            $dataRoomUser = [
-                'rank' => $rank,
-                'points' => $currentPoint + 0,
-            ];
-            RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        
+        if($protectWaitingMethod || $protectDoneMethod){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
 
+        $room = Room::getRoomByCode($code);        
+        $questionId = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentPoint = RoomUser::getPlayerCurrentRoomData($room->id)->points;
+        $currentTotalCorrect = RoomUser::getPlayerCurrentRoomData($room->id)->total_correct;
+        $currentAnswer = $request->answer_option;
+        $timer = $request->timer;
+
+        $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
+
+        // data to be inserted (default is wrong answer)
+        $dataUserQuestionRoom = [
+            'user_id' => Auth::user()->id,
+            'room_id' => $room->id,
+            'question_id' => $questionId->question_id,
+            'order' => $order,
+            'point' => $currentPoint,
+            'answer_option' => $currentAnswer,
+            'is_correct' => false,
+        ];
+        $dataRoomUser = [
+            'rank' => $rank,
+            'points' => $currentPoint,
+        ];
+
+        // If answer correct, update data to correct answer
+        if($questionId->question->answer === $currentAnswer){
+            $point = ($timer/$questionId->question->timer) * 1000;
+
+            $dataUserQuestionRoom['point'] = $currentPoint + $point;
+            $dataUserQuestionRoom['is_correct'] = true;
+
+            $dataRoomUser['points'] = $currentPoint + $point;
+            $dataRoomUser['total_correct'] = $currentTotalCorrect + 1;
+        }
+        UserQuestionRoom::create($dataUserQuestionRoom);
+        RoomUser::updateRoomUserByUserId($code, $dataRoomUser);   
+        
         return response()->json([
             'room' => $code,
-            'order' => $order
+            'order' => $order,
+            'user_answer' => $currentAnswer
         ]);
     }
 
     public function leaderboard($code, $order){
-        $room = Room::getRoomByCode($code);
-        $roomUser = RoomUser::getTop5Rank($room->id);
-        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
-        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
-        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
-        $currentTime = Carbon::now();
-        $timeLeaderboard = 15;
-
-        if(intval($order) === $totalQuestion){
-            $final = true;
-            return view('leaderboard', compact('roomUser', 'final', 'order', 'code'));
-        }elseif(intval($order) != $savedDataOrder->order){
-            // User can't move to another order by changing the question order on URL
-            return back();
+        /* 
+            Method ini untuk menampilkan Leaderboard
+        */
+        $protectWaitingMethod = Room::protectWaitingMethod($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $isInOngoingRoom = RoomUser::isInOngoingRoom();
+     
+        if($protectWaitingMethod && $isInOngoingRoom && $protectDoneMethod){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
         }
 
-        $final = false;
-        $timeLeftForLeaderboard = (strtotime($roomQuestion->time_end) - $timeLeaderboard) - strtotime($currentTime);
+        $room = Room::getRoomByCode($code);
+        $totalQuestion = RoomQuestion::getTotalQuestionsInRoom($room->id);
+        $savedDataOrder = UserQuestionRoom::getSavedDataOrder($room->id)->first();
+        
+        if(!($order >= 1 && $order <= $totalQuestion)){
+            return back();
+        }
+        
+        $roomUser = RoomUser::getTop5Rank($room->id);
+        $roomQuestion = RoomQuestion::getQuestionByRoomIdAndOrder($room->id, $order);
+        $currentTime = Carbon::now();
+        $timeLeftForQuestion = (strtotime($roomQuestion->time_start) + $roomQuestion->question->timer) - strtotime($currentTime);
+        $timeLeftForLeaderboard = strtotime($roomQuestion->time_end) - strtotime($currentTime);
+        $isCorrect = UserQuestionRoom::where('room_id', $room->id)->where('user_id', Auth::id())->where('order', $order)->first();
 
-        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard'));
+        if(!$isCorrect){
+            if($order == 1){
+                // if not answer when order == 1
+                return redirect()->route('question.view', [
+                    'room' => $code,
+                    'order' => 1
+                ]);
+            } 
+            // if not answer when order > 1 < 10
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $savedDataOrder->order
+            ]);
+        }elseif($isCorrect->is_correct == 1){
+            $isCorrect = true;
+        }else{
+            $isCorrect = false;
+        }
+        
+        if($savedDataOrder->order == 10 && $timeLeftForQuestion < 1){
+            $timeLeftForLeaderboard = 0;
+            $final = true;
+            return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
+        }elseif($order == 1){
+            if(!$savedDataOrder){
+                if($timeLeftForQuestion < 1){
+                    // if order 1, not answered, there's no time to choose an answer
+                    // dd('if order 1, not answered, time is up');
+                    return redirect()->route('question.handle', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }elseif($timeLeftForQuestion > 1){
+                    // if order 1, not answered, there's time to choose an answer
+                    // MENAMPILKAN QUIZ PERTAMA
+                    dd('if order 1, not answered, there is time left');
+                    return redirect()->route('question.view', [
+                        'room' => $code,
+                        'order' => 1
+                    ]);
+                }
+            }elseif($savedDataOrder){
+                //if recent order is not 1 but go to other order
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if($timeLeftForQuestion < 1){
+                    // order cant go backward
+                    //ceklis
+                    // dd('anda tidak boleh mundur karena waktu pada order 1 telah habis!');
+                    return redirect()->route('question.leaderboard', [
+                        'room' => $code,
+                        'order' => $accessibleOrder
+                    ]);
+                }
+            }
+        }elseif($order != 1){
+            if($savedDataOrder){
+                // prevent user change data order when user recent order is 1
+                $accessibleOrder = $savedDataOrder->order + 1;
+                if($order != $accessibleOrder){
+                    if($timeLeftForLeaderboard < 1){
+                        // User can't move to another order by changing the question order on URL
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $accessibleOrder
+                        ]);
+                    }elseif($timeLeftForQuestion > 1){
+                        // if recent order is not 1, answered, there is time left
+                        //ceklis
+                        // dd('if recent order is not 1, answered, there is time left');
+                        return redirect()->route('question.view', [
+                            'room' => $code,
+                            'order' => $savedDataOrder->order
+                        ]);
+                    }
+                }
+            }
+        }elseif($order <= 1 && $savedDataOrder && $timeLeftForLeaderboard < 1){
+            // prevent user change data order less than 1 when user recent order is more than 1
+            $accessibleOrder = $savedDataOrder->order + 1;
+            return redirect()->route('question.view', [
+                'room' => $code,
+                'order' => $accessibleOrder
+            ]);
+        }
+        
+        $final = false;        
+        return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
     }
 
     public function exitGame($code){
+        $room = Room::getRoomByCode($code);
+        $protectDoneMethod = Room::protectDoneMethod($code);
+        $userIsInDoneRoom = RoomUser::userIsInDoneRoom($room->id);
+        // $authUserIsDone = RoomUser::isDone($room->id);
+        
+        if($protectDoneMethod && $userIsInDoneRoom){
+            $message = "room-cant-access";
+            return redirect()->route('index.redirect', $message);
+        }
+
         $dataRoomUser = [
             'status' => 'done',
         ];
-        RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+        $roomUser = RoomUser::updateDoneRoomUser($code, $dataRoomUser);
+
+        $host = RoomUser::isHost($code);
+        
+        if($host){
+            $dataRoom = [
+                'status' => 'done',
+            ];
+            Room::updateDoneRoom($code, $dataRoom);
+        }
+        
+        $roomUser = $room->roomusers->first();
+        $quiz = Quiz::getQuizId($roomUser->room->quiz_id);
+        $dataQuiz = [
+            'counter' => $quiz->counter + 1,
+        ];
+        Quiz::updateQuiz($roomUser->room->quiz_id, $dataQuiz);
+        
         return redirect()->route('index');
     }
-
-    // public function test($code, $order){
-    //     $room = Room::getRoomByCode($code);
-    //     $rank = UserQuestionRoom::getAuthUserRank($room->id, $order);
-    //     dd($rank);
-    // }
 }

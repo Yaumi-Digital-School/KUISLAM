@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel" >
+<x-main-layout titlePage="Pre Waiting Room" >
     {{-- button icon --}}
     <div class="flex justify-start mt-10 ml-8">
         <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">

@@ -27,7 +27,7 @@
                     @guest
                         onclick="triggerAuthPopup()"
                     @endguest   
-                    @if (request()->routeIs("activity")) style="border-bottom: 3px solid white; " @endif>Aktivitas</a>
+                    @if (request()->routeIs("activity") || request()->routeIs("activity.made")) style="border-bottom: 3px solid white; " @endif>Aktivitas</a>
             </div>
         </div>
         <div class="hidden md:flex justify-end w-4/12 space-x-8 items-center">
@@ -80,7 +80,7 @@
                 <path d="M12.26 1.00001C7.17003 0.860011 3.00003 4.95001 3.00003 10H1.21003C0.760031 10 0.540031 10.54 0.860031 10.85L3.65003 13.65C3.85003 13.85 4.16003 13.85 4.36003 13.65L7.15003 10.85C7.46003 10.54 7.24003 10 6.79003 10H5.00003C5.00003 6.10001 8.18003 2.95001 12.1 3.00001C15.82 3.05001 18.95 6.18001 19 9.90001C19.05 13.81 15.9 17 12 17C10.39 17 8.90003 16.45 7.72003 15.52C7.32003 15.21 6.76003 15.24 6.40003 15.6C5.98003 16.02 6.01003 16.73 6.48003 17.09C8.00003 18.29 9.91003 19 12 19C17.05 19 21.14 14.83 21 9.74001C20.87 5.05001 16.95 1.13001 12.26 1.00001ZM11.75 6.00001C11.34 6.00001 11 6.34001 11 6.75001V10.43C11 10.78 11.19 11.11 11.49 11.29L14.61 13.14C14.97 13.35 15.43 13.23 15.64 12.88C15.85 12.52 15.73 12.06 15.38 11.85L12.5 10.14V6.74001C12.5 6.34001 12.16 6.00001 11.75 6.00001Z" 
                     fill="@if (request()->routeIs("activity")) #8ACC3B @else #C4C4C4 @endif"/>
             </svg>                    
-            <span class="text-sm font-semibold @if (request()->routeIs("activity")) text-green-lightBg @else text-gray-nav @endif">Aktivitas</span>
+            <span class="text-sm font-semibold @if (request()->routeIs("activity") || request()->routeIs("activity.made")) text-green-lightBg @else text-gray-nav @endif">Aktivitas</span>
         </a>
         <a href="{{  route('profile.detail-account') }}" class="flex flex-col space-y-1 justify-center items-center">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

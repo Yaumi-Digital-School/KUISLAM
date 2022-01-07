@@ -59,8 +59,8 @@ class Quiz extends Model
         return Quiz::with('topic')->latest()->get()->groupBy('topic.title');
     }
 
-    public static function getPopularQuiz(){
-        return Quiz::limit(8)->get()->SortByDesc('counter');
+    public static function getPopularQuiz($total){
+        return Quiz::take($total)->get()->SortBy('counter');
     }
     
     public static function getOneQuiz($id){
