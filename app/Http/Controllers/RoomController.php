@@ -116,10 +116,10 @@ class RoomController extends Controller
 
         // Check total player in a room
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
-        // if($countPlayer < 2){
-        //     // if total player < 2
-        //     return back();
-        // }
+        if($countPlayer < 2){
+            // if total player < 2
+            return back();
+        }
 
         // get random question
         $questionsId = Question::getRandomQuestion($quizId);
@@ -501,7 +501,7 @@ class RoomController extends Controller
         ];
         RoomUser::create($dataRoomUser);
         
-        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name, "avatar" => Auth::user()->avatar]);
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
 
         return redirect()->route('room.waiting', $room->code);   
     }
@@ -712,7 +712,7 @@ class RoomController extends Controller
             if(!$savedDataOrder){
                 if($timeLeftForQuestion < 1){
                     // if order 1, not answered, there's no time to choose an answer
-                    dd('if order 1, not answered, time is up');
+                    // dd('if order 1, not answered, time is up');
                     return redirect()->route('question.handle', [
                         'room' => $code,
                         'order' => 1
