@@ -397,9 +397,9 @@ class Question extends Model
     }
 
     public static function getRandomQuestion($quizId){
-        $numbers =  range(1, Question::getTotalQuestions($quizId));
-        shuffle($numbers);
-        return array_slice($numbers, 0, 10);
+        $questions = Question::where('quiz_id', $quizId)->get();
+        $questions = $questions->random(10);
+        return $questions;
     }
 
     public static function getAllQuestion(){

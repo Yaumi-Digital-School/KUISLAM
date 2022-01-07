@@ -123,10 +123,11 @@ class RoomController extends Controller
 
         // get random question
         $questionsId = Question::getRandomQuestion($quizId);
+        // dd($questionsId[0]->id);
 
         for($i = 0; $i < 10; $i++){
             $dataRoomQuestion = [
-                'question_id' => $questionsId[$i],
+                'question_id' => $questionsId[$i]->id,
                 'room_id' => $room->id,
                 'order' => $i+1,
             ];
