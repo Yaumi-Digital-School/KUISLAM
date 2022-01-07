@@ -25,7 +25,7 @@ class Question extends Model
                 'option_4' => 'Mekkah',
                 'answer' => 'option_1',
                 'timer' => 30
-            ].
+            ],
             [
                 'quiz_id' => 25,
                 'question' => "Nabi Ibrahim mengingatkan ayahnya untuk...",
