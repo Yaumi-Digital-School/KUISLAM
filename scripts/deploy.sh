@@ -9,7 +9,7 @@ echo "Deployment started ..."
 # Pull latest
 git pull origin master
 
-/var/www/.perm_fix.sh KUISLAM
+/var/www/perm_fix.sh KUISLAM
 
 # Install composer dependencies
 export COMPOSER_ALLOW_SUPERUSER=1
