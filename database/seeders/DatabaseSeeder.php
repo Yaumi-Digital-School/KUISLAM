@@ -79,6 +79,8 @@ class DatabaseSeeder extends Seeder
             }
         }
 
+        // seed user
+        User::factory(4)->create();
         // seed admin
         $dataAdmin = [
             "name" => "Admin KUISLAM",
