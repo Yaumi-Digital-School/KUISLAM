@@ -25,7 +25,7 @@ use App\Http\Controllers\import\QuestionImportController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::middleware('verified')->group(function () {
+Route::middleware('verified')->group(function () {
     /*
     *  Route for user 
     */ 
@@ -116,5 +116,5 @@ use App\Http\Controllers\import\QuestionImportController;
         Auth::logout();
         return redirect()->route('index');
     })->name('logout-anchor');
-// });
+});
 require __DIR__.'/auth.php';
