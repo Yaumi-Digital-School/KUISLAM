@@ -171,8 +171,8 @@
                 const logoutSwal = Swal.mixin({
                     customClass: {
                         // title: 'font-poppins',
-                        confirmButton: `${btnClass} bg-green-nav text-white mr-4 hover:bg-green-darkBg transition`,
-                        cancelButton: `${btnClass} border-2 border-green-nav text-green-nav hover:bg-gray-200 transition`,
+                        cancelButton: `${btnClass} bg-green-nav text-white ml-4 hover:bg-green-darkBg transition`,
+                        confirmButton: `${btnClass} border-2 border-green-nav text-green-nav hover:bg-gray-200 transition`,
                     },
                     buttonsStyling: false
                 });
