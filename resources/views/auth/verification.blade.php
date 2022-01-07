@@ -17,12 +17,22 @@
         <p class="text-xl mb-8 z-10 relative">Lakukan verifikasi akun untuk masuk ke akun kamu!</p>
         <p class="text-xl mb-20 z-10 relative">Klik untuk mengirimkan link verifikasi akun ke alamat<br><strong>{{ Auth::user()->email }}</strong></p>
         {{-- button --}}
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+        <div class="mt-4 flex items-center justify-center">
+            <form method="POST" action="{{ route('verification.send') }}">
+                @csrf
 
-            <div>
-                <button type="submit" class="bg-green-lightBg sm:w-40 w-28 h-12 sm:h-20 text-center text-white sm:text-2xl text-md rounded-md font-bold z-10 relative">{{ __('Kirim!') }}</button> 
-            </div>
-        </form>
+                <div>
+                    <button type="submit" class="mr-4 bg-green-lightBg sm:w-40 w-28 h-12 sm:h-20 text-center text-white sm:text-2xl text-md rounded-md font-bold z-10 relative">{{ __('Kirim!') }}</button> 
+                </div>
+            </form>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type="submit" class="ml-4 bg-green-lightBg sm:w-40 w-28 h-12 sm:h-20 text-center text-white sm:text-2xl text-md rounded-md font-bold z-10 relative">
+                    {{ __('Log Out') }}
+                </button>
+            </form>
+        </div>
     </div>
 </x-main>

@@ -25,20 +25,20 @@ use App\Http\Controllers\import\QuestionImportController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::middleware('user')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/home/{message?}', [HomeController::class, 'redirect'])->name('index.redirect');
+    Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
+});
+
 Route::middleware('verified')->group(function () {
     /*
     *  Route for user 
     */ 
-    Route::middleware('user')->group(function () {
-        Route::get('/', [HomeController::class, 'index'])->name('index');
-        Route::get('/home/{message?}', [HomeController::class, 'redirect'])->name('index.redirect');
-        Route::get('/discover', [HomeController::class, 'discover'])->name('discover');
-
-        Route::middleware('auth')->group(function () {
+    Route::middleware(['auth','user'])->group(function () {
             Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
             Route::get('/activity', [HomeController::class, 'activity'])->name('activity'); 
             Route::get('/activity/made', [HomeController::class, 'activitymade'])->name('activity.made'); 
-
 
             Route::prefix('/rooms')->group(function () {
                 Route::post('/join/code', [RoomController::class, 'joinRoomWithCode'])->name('room.join-code'); // Not Tested Yet
@@ -47,7 +47,6 @@ Route::middleware('verified')->group(function () {
                     Route::get('/host/prewaiting', [RoomController::class, 'preWaitingHost'])->name('room.pre-waiting-host');
                     Route::get('/make', [RoomController::class, 'makeRoom'])->name('room.make');
                 });
-
                 
                 Route::prefix('/{room:code}')->group(function () {
                     Route::get('/join/link', [RoomController::class, 'joinRoomWithLink'])->name('room.join-link');
@@ -55,22 +54,16 @@ Route::middleware('verified')->group(function () {
                     Route::get('/player/prewaiting', [RoomController::class, 'preWaitingPlayer'])->name('room.pre-waiting-player');
                     Route::get('/exit-game', [RoomController::class, 'exitGame'])->name('game.exit');
 
-                    // Route::middleware(['waiting'])->group(function () {
                         Route::get('/start', [RoomController::class, 'startRoom'])->name('room.start');
                         Route::get('/waiting', [RoomController::class, 'waitingRoom'])->name('room.waiting');
                         Route::get('/exit', [RoomController::class, 'exitRoom'])->name('room.exit');
-                    // });
 
                     Route::prefix('/question')->group(function () {
                         Route::get('/{order}', [RoomController::class, 'viewQuestion'])->name('question.view');
                         Route::post('/{order}', [RoomController::class, 'handleAnswer'])->name('question.handle');
                         Route::get('/{order}/leaderboard', [RoomController::class, 'leaderboard'])->name('question.leaderboard');
-                        // for testing
-                        // Route::get('/{order}/test', [RoomController::class, 'test'])->name('question.test');
                     });
-
                 });
-            });
 
             Route::get('/profiles/detail', [ProfileController::class, 'detailAccount'])->name('profile.detail-account');
             Route::put('/profiles/detail', [ProfileController::class, 'updateAccount'])->name('profile.update-account');
@@ -80,11 +73,11 @@ Route::middleware('verified')->group(function () {
         });
     });
     // End Route User
-        
+
     /*
     *  Route for Admin 
     */ 
-    Route::middleware('admin')->group(function () {    
+    Route::middleware(['auth', 'admin'])->group(function () {    
         Route::prefix('/admin')->group(function () {
             Route::get('/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
             Route::resource('/topics', TopicController::class);
@@ -108,13 +101,13 @@ Route::middleware('verified')->group(function () {
                 Route::post('/questions', [QuestionImportController::class, 'store'])->name('import.store.questions');
             });
         });
-
     });
     // End route admin
-    
-    Route::get('/logout', function(){
-        Auth::logout();
-        return redirect()->route('index');
-    })->name('logout-anchor');
 });
+
+Route::get('/logout', function(){
+    Auth::logout();
+    return redirect()->route('index');
+})->name('logout-anchor')->middleware('auth');
+
 require __DIR__.'/auth.php';
