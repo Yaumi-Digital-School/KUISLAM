@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
                     'counter' => $index2,
                     'image' => 'card.jpg'
                 ];
+                // change quiz image 
                 if($quiz == "Nabi Ibrahim AS"){
                    $quizData['image'] = "card.jpg";
                    $quizData['counter'] = 50;

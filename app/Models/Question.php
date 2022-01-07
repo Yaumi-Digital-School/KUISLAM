@@ -24,7 +24,7 @@ class Question extends Model
                 'option_3' => 'Puerto Rico',
                 'option_4' => 'Jakarta',
                 'answer' => 'option_1',
-                'timer' => 50
+                'timer' => 30
             ]
         ];
         return $questions;

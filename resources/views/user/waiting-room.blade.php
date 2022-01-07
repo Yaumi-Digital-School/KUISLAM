@@ -29,9 +29,9 @@
                         <h1 class="text-3xl">{{ $room->code }}</h1>
                     </div>
                     <h1 class="text-xl text-green-nav pt-6 pb-1 font-bold">Share Link</h1>
-                    <div class="border border-green-nav text-center py-2 flex justify-evenly items-center px-1">
-                        <h1 id="link" class="text-3xl ">quiz.com/{{ $room->code }}</h1>
-                        <button id="btn-copy" class="after:bg-green after:rounded after:h-10 after:w-10"><img src="{{asset('images/copy_vector.svg')}}" alt=""></button>
+                    <div class="border border-green-nav text-center py-2 flex justify-evenly items-center px-1 overflow-hidden">
+                            <h1 class="text-3xl ">Room {{ $room->code }}</h1>
+                            <button id="copy-btn" class=""><img src="{{asset('images/copy_vector.svg')}}" alt=""></button>
                     </div>
                     {{-- number of question --}}
                     <div class="pt-6">
@@ -151,6 +151,31 @@
                 //copying the link
                 document.execCommmand("copy")
             };
+        </script>
+        {{-- copy to cliboard  --}}
+        <script>
+            $("#copy-btn").click(function(){
+                var dummy = document.createElement('input'), text;
+                const roomCode = "{{$room->code}}";
+                text = `http://kuislam.yaumi.id/rooms/${roomCode}/join/link`;
+                document.body.appendChild(dummy);
+                dummy.value = text;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'center',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                })
+                Toast.fire({
+                    title: "Copied to cliboard!",
+                })
+            })
         </script>
     @endsection
 </x-main>

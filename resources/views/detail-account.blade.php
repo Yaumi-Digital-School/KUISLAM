@@ -24,6 +24,9 @@
                     @endif
                     <div class="text-center space-y-1 font-semibold">
                         <p class="text-lg">{{ Auth::user()->name }}</p>
+                        @php
+                            
+                        @endphp
                         <p class="text-gray-link">{{ Auth::user()->username }}</p>
                     </div>
                 </div>
