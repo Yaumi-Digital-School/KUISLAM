@@ -24,7 +24,7 @@ class Question extends Model
                 'option_3' => 'Puerto Rico',
                 'option_4' => 'Makkah',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -34,7 +34,7 @@ class Question extends Model
                 'option_3' => 'Berhenti menyembah berhala',
                 'option_4' => 'Semangat membuat berhala',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -44,7 +44,7 @@ class Question extends Model
                 'option_3' => 'Penakut',
                 'option_4' => 'Lucu',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -54,7 +54,7 @@ class Question extends Model
                 'option_3' => 'Menangkap para penjahat',
                 'option_4' => 'Menghancurkan banyak berhala',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -64,7 +64,7 @@ class Question extends Model
                 'option_3' => 'Ismail',
                 'option_4' => 'Abu Lahab',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -74,7 +74,7 @@ class Question extends Model
                 'option_3' => 'Setan',
                 'option_4' => 'Pohon',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -84,7 +84,7 @@ class Question extends Model
                 'option_3' => '3',
                 'option_4' => '1',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -94,7 +94,7 @@ class Question extends Model
                 'option_3' => 'Menteri raja',
                 'option_4' => 'Pembuat berhala',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -104,7 +104,7 @@ class Question extends Model
                 'option_3' => 'Paman',
                 'option_4' => 'Bapak',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -114,7 +114,7 @@ class Question extends Model
                 'option_3' => 'Sarah',
                 'option_4' => 'Maryam',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -124,7 +124,7 @@ class Question extends Model
                 'option_3' => 'libur',
                 'option_4' => 'Fitri',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -134,7 +134,7 @@ class Question extends Model
                 'option_3' => 'Kitab',
                 'option_4' => 'Kesabaran yang luar biasa',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -144,7 +144,7 @@ class Question extends Model
                 'option_3' => 'Asap',
                 'option_4' => 'Dingin',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -154,7 +154,7 @@ class Question extends Model
                 'option_3' => 'Agar penduduk berpikir bahwa berhala itu benda mati',
                 'option_4' => 'Agar berhala itu dianggap hebat',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -164,7 +164,7 @@ class Question extends Model
                 'option_3' => 'Menambah anaknya',
                 'option_4' => 'Mengubur anaknya',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -174,7 +174,7 @@ class Question extends Model
                 'option_3' => 'Disembelih',
                 'option_4' => 'Dibuang kelaut',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -184,7 +184,7 @@ class Question extends Model
                 'option_3' => 'Terpuji',
                 'option_4' => 'Mendatangkan keuntungan',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -194,7 +194,7 @@ class Question extends Model
                 'option_3' => 'Tidak pernah menyekutukan Allah',
                 'option_4' => 'Menyayangi anaknya',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -204,7 +204,7 @@ class Question extends Model
                 'option_3' => 'Paling buruk',
                 'option_4' => 'Paling bagus',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 25,
@@ -214,7 +214,7 @@ class Question extends Model
                 'option_3' => 'Raja Namrud',
                 'option_4' => 'Raja Cesar',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ]
         ];
         return $questions;
@@ -246,7 +246,7 @@ class Question extends Model
                 'option_3' => 'Abu thalib',
                 'option_4' => 'Abdul Muthalib',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -256,7 +256,7 @@ class Question extends Model
                 'option_3' => 'Muslimin',
                 'option_4' => 'Quraisy',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -266,7 +266,7 @@ class Question extends Model
                 'option_3' => '12 Rabiul Awal',
                 'option_4' => '12 Syawwal',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -276,7 +276,7 @@ class Question extends Model
                 'option_3' => 'Yatsrib',
                 'option_4' => 'Habasyah',
                 'answer' => 'option_3',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -286,7 +286,7 @@ class Question extends Model
                 'option_3' => 'Masjidil Haram',
                 'option_4' => 'Padang Arafah',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -294,9 +294,9 @@ class Question extends Model
                 'option_1' => '10 tahun',
                 'option_2' => '13 tahun',
                 'option_3' => '23 tahun',
-                'option_4' => '30 tahun',
+                'option_4' => '20 tahun',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -306,7 +306,7 @@ class Question extends Model
                 'option_3' => 'Dakwah dikalangan keluarga',
                 'option_4' => 'Dakwah secara terang-terangan',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -316,7 +316,7 @@ class Question extends Model
                 'option_3' => 'Abu Lahab',
                 'option_4' => 'Abbas',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -326,7 +326,7 @@ class Question extends Model
                 'option_3' => 'Mengembala unta',
                 'option_4' => 'Menanam pohon kurma',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -336,7 +336,7 @@ class Question extends Model
                 'option_3' => 'Safwan',
                 'option_4' => 'Abrahah',
                 'answer' => 'option_4',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -346,7 +346,7 @@ class Question extends Model
                 'option_3' => 'Orang yang pintar',
                 'option_4' => 'Orang yang suka menolong',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -356,7 +356,7 @@ class Question extends Model
                 'option_3' => 'Quraisy',
                 'option_4' => 'Kafir',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -366,7 +366,7 @@ class Question extends Model
                 'option_3' => 'Usman Bin Affan',
                 'option_4' => 'Ali Bin Abi Thalib',
                 'answer' => 'option_1',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -376,7 +376,7 @@ class Question extends Model
                 'option_3' => 'Siti Hajar',
                 'option_4' => 'Siti Aisyah',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ],
             [
                 'quiz_id' => 26,
@@ -386,7 +386,7 @@ class Question extends Model
                 'option_3' => 'Nabi Muhammad berusia 2 tahun',
                 'option_4' => 'Nabi Muhammad sudah jadi Nabi',
                 'answer' => 'option_2',
-                'timer' => 30
+                'timer' => 20
             ]
         ];
         return $questions;

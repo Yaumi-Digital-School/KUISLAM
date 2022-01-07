@@ -1,4 +1,4 @@
-<x-main-layout titlePage="Laravel" themePage="white">
+<x-main-layout titlePage="Question" themePage="white">
     {{-- header stats --}}
     <div class="flex justify-between mt-6 md:mt-10 mx-4 md:mx-8 items-center ">
         {{-- button icon  --}}
