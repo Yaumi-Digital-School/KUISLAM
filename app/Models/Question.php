@@ -22,7 +22,7 @@ class Question extends Model
                 'option_1' => 'Ur Kasdim',
                 'option_2' => 'Madinah',
                 'option_3' => 'Puerto Rico',
-                'option_4' => 'Mekkah',
+                'option_4' => 'Makkah',
                 'answer' => 'option_1',
                 'timer' => 30
             ],
@@ -98,7 +98,7 @@ class Question extends Model
             ],
             [
                 'quiz_id' => 25,
-                'question' => "Nabi ibrahim juga dikenal sebagai ... para Nabi",
+                'question' => "Nabi ibrahim juga dikenal sebagai...para Nabi",
                 'option_1' => 'Anak',
                 'option_2' => 'Kakek',
                 'option_3' => 'Paman',
@@ -108,7 +108,7 @@ class Question extends Model
             ],
             [
                 'quiz_id' => 25,
-                'question' => "Istri Nabi Ibrahim bernama Hajar dan ...",
+                'question' => "Istri Nabi Ibrahim bernama Hajar dan...",
                 'option_1' => 'Khadijah',
                 'option_2' => 'Aminah',
                 'option_3' => 'Sarah',
@@ -239,8 +239,8 @@ class Question extends Model
     {
         $questions = [
             [
-                'quiz_id' => 25,
-                'question' => "Ayah Nabi Muhammad bernama ......",
+                'quiz_id' => 26,
+                'question' => "Ayah Nabi Muhammad bernama...",
                 'option_1' => 'Abdullah',
                 'option_2' => 'Ibrahim',
                 'option_3' => 'Abu thalib',
@@ -249,8 +249,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Penduduk asli Madinah yang menyambut kedatangan kaum Muslimin ketika Hijrah disebut kaum ....",
+                'quiz_id' => 26,
+                'question' => "Penduduk asli Madinah yang menyambut kedatangan kaum Muslimin ketika Hijrah disebut kaum...",
                 'option_1' => 'Anshor',
                 'option_2' => 'Muhajirin',
                 'option_3' => 'Muslimin',
@@ -259,8 +259,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Nabi Muhammad dilahirkan pada tanggal ....",
+                'quiz_id' => 26,
+                'question' => "Nabi Muhammad dilahirkan pada tanggal...",
                 'option_1' => '10 Dzulhijah',
                 'option_2' => '1 Muharom',
                 'option_3' => '12 Rabiul Awal',
@@ -269,8 +269,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Sebelum Nabi Muhammad SAW. datang ke Madinah nama kota Madinah adalah….",
+                'quiz_id' => 26,
+                'question' => "Sebelum Nabi Muhammad SAW. datang ke Madinah nama kota Madinah adalah...",
                 'option_1' => 'Makkah',
                 'option_2' => 'Yaman',
                 'option_3' => 'Yatsrib',
@@ -279,8 +279,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Rasulullah SAW. menerima wahyu pertama di….",
+                'quiz_id' => 26,
+                'question' => "Rasulullah SAW. menerima wahyu pertama di...",
                 'option_1' => 'Gua Hira',
                 'option_2' => 'Kabah',
                 'option_3' => 'Masjidil Haram',
@@ -289,8 +289,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Nabi Muhammad SAW. berdakwah di Makkah selama….",
+                'quiz_id' => 26,
+                'question' => "Nabi Muhammad SAW. berdakwah di Makkah selama...",
                 'option_1' => '10 tahun',
                 'option_2' => '13 tahun',
                 'option_3' => '23 tahun',
@@ -299,18 +299,18 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Berikut ini adalah tahapan- tahapan dakwah Rasulullah saw pada periode Makkah, kecuali ….",
-                'option_1' => 'Dakwah secara diam- diam',
+                'quiz_id' => 26,
+                'question' => "Berikut ini adalah tahapan-tahapan dakwah Rasulullah saw pada periode Makkah, kecuali...",
+                'option_1' => 'Dakwah secara diam-diam',
                 'option_2' => 'Dakwah kepada berbagai suku disekitar Makkah',
                 'option_3' => 'Dakwah dikalangan keluarga',
-                'option_4' => 'Dakwah secara terang- terangan',
+                'option_4' => 'Dakwah secara terang-terangan',
                 'answer' => 'option_4',
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Paman Nabi Muhammad yang merawat dan mengajaknya berdagang adalah ....",
+                'quiz_id' => 26,
+                'question' => "Paman Nabi Muhammad yang merawat dan mengajaknya berdagang adalah...",
                 'option_1' => 'Abu Jahal',
                 'option_2' => 'Abu Thalib',
                 'option_3' => 'Abu Lahab',
@@ -319,8 +319,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Pada waktu kecil Nabi Muhammd mempunyai kegiatan ....",
+                'quiz_id' => 26,
+                'question' => "Pada waktu kecil Nabi Muhammad mempunyai kegiatan...",
                 'option_1' => 'Mengembala kambing',
                 'option_2' => 'Berdagang kambing',
                 'option_3' => 'Mengembala unta',
@@ -329,8 +329,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Tentara bergajah yang ingin menghancurkan Kabah dipimpin oleh raja ....",
+                'quiz_id' => 26,
+                'question' => "Tentara bergajah yang ingin menghancurkan Kabah dipimpin oleh raja...",
                 'option_1' => 'Abu Lahab',
                 'option_2' => 'Abu Sufyan',
                 'option_3' => 'Safwan',
@@ -339,8 +339,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Salah satu sifat Nabi Muhammad adalah Al Amiin yang artinya ...",
+                'quiz_id' => 26,
+                'question' => "Salah satu sifat Nabi Muhammad adalah Al Amiin yang artinya...",
                 'option_1' => 'Orang yang sombong',
                 'option_2' => 'Orang yang dapat dipercaya',
                 'option_3' => 'Orang yang pintar',
@@ -349,8 +349,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Kaum Muslimin yang ikut hijrah ke Madinah disebut kaum ...",
+                'quiz_id' => 26,
+                'question' => "Kaum Muslimin yang ikut hijrah ke Madinah disebut kaum...",
                 'option_1' => 'Anshor',
                 'option_2' => 'Muhajirin',
                 'option_3' => 'Quraisy',
@@ -359,8 +359,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Siapa nama sahabat Nabi Muhammad yang menemani ketika Hijrah ke Madinah ....",
+                'quiz_id' => 26,
+                'question' => "Siapa nama sahabat Nabi Muhammad yang menemani ketika Hijrah ke Madinah...",
                 'option_1' => 'Abu Bakar As shidiq',
                 'option_2' => 'Umar Bin Khattab',
                 'option_3' => 'Usman Bin Affan',
@@ -369,8 +369,8 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Ibu dari Nabi Muhammad bernama ....",
+                'quiz_id' => 26,
+                'question' => "Ibu dari Nabi Muhammad bernama...",
                 'option_1' => 'Siti Khadijah',
                 'option_2' => 'Siti Aminah',
                 'option_3' => 'Siti Hajar',
@@ -379,11 +379,11 @@ class Question extends Model
                 'timer' => 30
             ],
             [
-                'quiz_id' => 25,
-                'question' => "Ayah Nabi Muhammad meninggal saat ....",
+                'quiz_id' => 26,
+                'question' => "Ayah Nabi Muhammad meninggal saat...",
                 'option_1' => 'Nabi Muhammad berusia 5 tahun',
                 'option_2' => 'Nabi Muhammad masih dalam kandungan',
-                'option_3' => 'Nabi Muhammad berusian 2 tahun',
+                'option_3' => 'Nabi Muhammad berusia 2 tahun',
                 'option_4' => 'Nabi Muhammad sudah jadi Nabi',
                 'answer' => 'option_2',
                 'timer' => 30
