@@ -2,8 +2,8 @@
     {{-- button icon --}}
     <div class="flex justify-between mt-10 mx-8">
         <div class="flex justify-start">
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
-                <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
+            <div id="fullscreen" class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
+                <button><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
             </div>
         </div>
         <div class="bg-white w-20 rounded flex px-2 items-center justify-between z-10">
@@ -88,30 +88,6 @@
                     $(`#user-${data.user_data.id}`).remove();
                 });
             });
-        </script>
-        {{-- fullscreen  --}}
-        <script>
-            const body = document.documentElement;
-            const btn_fullscreen = document.getElementById('fullscreen');
-            
-            function getFullscreenElement() {
-                return document.fullscreenElement
-                    || document.msFullscreenElement
-                    || document.mozFullscreenElement
-                    || document.webkitFullscreenElement;
-            }
-
-            btn_fullscreen.addEventListener("click", ()=>{
-                toggleFullscreen();
-            });
-
-            function toggleFullscreen() {
-                if(getFullscreenElement()) {
-                    document.exitFullscreen();
-                } else {
-                    body.requestFullscreen().catch(console.log);
-                }
-            }
         </script>
         {{-- copy to cliboard  --}}
         <script>

@@ -5,8 +5,8 @@
             <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded mr-4">
                 <a href="{{ route('room.exit', $room->code) }}"><img src="{{asset('images/cross_icon.svg')}}"></a>
             </div>
-            <div class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
-                <button id="fullscreen"><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
+            <div id="fullscreen" class="bg-green-nav w-9 h-9 p-2 z-10 rounded">
+                <button><img src="{{asset('images/fullscreen_icon.svg')}}"></button>
             </div>
         </div>
         <div class="bg-white w-20 rounded flex px-2 items-center justify-between z-10">
@@ -116,41 +116,6 @@
                 
                 window.location.href = url;
             });
-        </script>
-        {{-- fullscreen --}}
-        <script>
-            const body = document.documentElement;
-            const btn_fullscreen = document.getElementById('fullscreen');
-            
-            function getFullscreenElement() {
-                return document.fullscreenElement
-                    || document.msFullscreenElement
-                    || document.mozFullscreenElement
-                    || document.webkitFullscreenElement;
-            }
-
-            btn_fullscreen.addEventListener("click", ()=>{
-                toggleFullscreen();
-            });
-
-            function toggleFullscreen() {
-                if(getFullscreenElement()) {
-                    document.exitFullscreen();
-                } else {
-                    body.requestFullscreen().catch(console.log);
-                }
-            }
-
-            //icon copied to clipboard
-            const btnCopy = document.getElementById('btn-copy');
-
-            btnCopy.onclick = function() {
-                //select the link
-                document.getElementById('link').select();
-
-                //copying the link
-                document.execCommmand("copy")
-            };
         </script>
         {{-- copy to cliboard  --}}
         <script>
