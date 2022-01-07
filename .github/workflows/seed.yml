@@ -24,4 +24,5 @@ jobs:
           envs: ENV
           script: |
             cd /var/www/KUISLAM
+            php artisan optimize:clear
             php artisan migrate:fresh --seed
