@@ -707,7 +707,7 @@ class RoomController extends Controller
         if($savedDataOrder->order == 10 && $timeLeftForQuestion < 1){
             $timeLeftForLeaderboard = 0;
             $final = true;
-            $roomUser = Question::getAllRank($room->id);
+            $roomUser = Quiz::getAllRank($room->id);
             return view('leaderboard', compact('roomUser', 'final', 'order', 'code', 'timeLeftForLeaderboard', 'isCorrect'));
         }elseif($order == 1){
             if(!$savedDataOrder){
