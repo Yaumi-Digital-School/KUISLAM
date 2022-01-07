@@ -665,7 +665,7 @@ class RoomController extends Controller
                 }elseif($timeLeftForQuestion > 1){
                     // if order 1, not answered, there's time to choose an answer
                     // MENAMPILKAN QUIZ PERTAMA
-                    dd('if order 1, not answered, there is time left');
+                    // dd('if order 1, not answered, there is time left');
                     return redirect()->route('question.view', [
                         'room' => $code,
                         'order' => 1
