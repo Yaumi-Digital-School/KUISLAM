@@ -18,10 +18,20 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+<<<<<<< HEAD
+        if (auth()->user()->role == 'admin'){
+            return $next($request);
+        } elseif (auth()->user()->role == 'user') {
+            return $next($request);
+        }
+        return redirect()->route('index');
+
+=======
         if(Auth::user()->role === 'admin'){
             return $next($request);
         }elseif (Auth::user()->role === 'user') {
             return redirect()->route('index');
         }
+>>>>>>> 49480b437b992f1903d8380b4dd926b2aee15ad5
     }
 }
