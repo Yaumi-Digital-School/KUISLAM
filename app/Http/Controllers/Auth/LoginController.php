@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,7 @@ class LoginController extends Controller
             }else{
                 if($findEmailGoogle){    
                     $message = "account-registered";
-                return redirect()->route('index.redirect', $message);
+                    return redirect()->route('index.redirect', $message);
                 }
 
                 $password = User::generatePassword();
@@ -37,6 +38,7 @@ class LoginController extends Controller
                 $newUser = User::create([
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
+                    'email_verified_at' => Carbon::now(),
                     'username' => $user->getEmail(),
                     'password' => Hash::make($password),
                     'avatar' => $user->getAvatar(),
@@ -44,7 +46,8 @@ class LoginController extends Controller
                 ]);
                 Auth::login($newUser);
 
-                return redirect()->route('index');
+                $message = "register-success";
+                return redirect()->route('index.redirect', $message);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -68,7 +71,8 @@ class LoginController extends Controller
                 return redirect()->route('index');
             }else{
                 if($findEmailFacebook){
-                    return redirect()->route('index')->withErrors('social', 'Email telah terdaftar');
+                    $message = "account-registered";
+                    return redirect()->route('index.redirect', $message);
                 }
 
                 $password = User::generatePassword();
@@ -76,6 +80,7 @@ class LoginController extends Controller
                 $newUser = User::create([
                     'name' => $user->getName(),
                     'email' => $user->getEmail(),
+                    'email_verified_at' => Carbon::now(),
                     'username' => $user->getEmail(),
                     'password' => Hash::make($password),
                     'avatar' => $user->getAvatar(),
@@ -83,7 +88,8 @@ class LoginController extends Controller
                 ]);
                 Auth::login($newUser);
 
-                return redirect()->route('index');
+                $message = "register-success";
+                return redirect()->route('index.redirect', $message);
             }
         } catch (\Throwable $th) {
             //throw $th;

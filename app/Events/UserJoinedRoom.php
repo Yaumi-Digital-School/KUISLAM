@@ -18,7 +18,6 @@ class UserJoinedRoom implements ShouldBroadcast
     public $message;
     public $room;
     public $user_data;
-    public $user_avatar;
 
     /**
      * Create a new event instance.

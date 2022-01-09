@@ -76,17 +76,24 @@
         <script>
             const room_id = "{{$room->id}}";
             window.Echo.channel(`joined-room-${room_id}`).listen("UserJoinedRoom", (data) => {
+                console.log(data.target);
                 $( document ).ready(function(){
                     let newUserDiv = $("<div></div>").addClass("bg-white shadow-profile mx-auto w-56 h-20 flex justify-between items-center space-x-2 px-2 py-1 rounded-lg");                    
                     newUserDiv.attr("id", `user-${data.user_data.id}`);
                     let newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
                     
                     const imageAvatar = data.user_data.avatar;
+                    const isFile = data.user_data.isFile;
+                    console.log(imageAvatar, isFile);
                     let imageUrl;
                     if(imageAvatar == undefined){
                         imageUrl = `{{asset('images/default_profpic.png')}}`;
                     } else {
-                        imageUrl = `{{asset('storage/user/avatar/${imageAvatar}')}}`;
+                        if(isFile){
+                            imageUrl = `{{ asset('storage/user/avatar/${imageAvatar}') }}`;
+                        }else{
+                            imageUrl = `{{ '${imageAvatar}' }}`;
+                        }
                     }
                     // console.log(imageAvatar);
                     $newUserImage = $(`<img src='${imageUrl}'></img>`).addClass("rounded-full h-10");
@@ -129,7 +136,7 @@
         {{-- list host cancel quiz  --}}
         <script>
             window.Echo.channel(`host-cancel-room-${room_id}`).listen("HostCancelRoom", (data) => {
-                const message = "host_exit_room";
+                const message = "host-exit-room";
 
                 let url = "{{ route('index.redirect', ['message' => ':message']) }}";
                 url = url.replace(':message', message);

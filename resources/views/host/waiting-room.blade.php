@@ -75,13 +75,18 @@
                     let newUserImageDiv = $("<div></div>").addClass("flex justify-center items-center h-full w-1/5");
                     
                     const imageAvatar = data.user_data.avatar;
+                    const isFile = data.user_data.isFile;
+                    console.log(imageAvatar, isFile);
                     let imageUrl;
                     if(imageAvatar == undefined){
                         imageUrl = `{{asset('images/default_profpic.png')}}`;
                     } else {
-                        imageUrl = `{{asset('storage/user/avatar/${imageAvatar}')}}`;
+                        if(isFile == true){
+                            imageUrl = `{{ asset('storage/user/avatar/${imageAvatar}') }}`;
+                        }else{
+                            imageUrl = `{{ '${imageAvatar}' }}`;
+                        }
                     }
-                    // console.log(imageAvatar);
                     $newUserImage = $(`<img src='${imageUrl}'></img>`).addClass("rounded-full h-10");
                     $newUserName = $("<h1></h1>").addClass("text-green-nav text-xl font-bold w-4/5").html(data.user_data.name);
 

@@ -47,7 +47,6 @@ class RegisteredUserController extends Controller
     }
 
     public function registerForm(){
-
         return view('auth.register-form');
     }
 }

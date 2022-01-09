@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Quiz;
 use App\Models\Room;
+use App\Models\User;
 use App\Models\Question;
 use App\Models\RoomUser;
 use App\Events\UserExitRoom;
@@ -16,8 +17,8 @@ use App\Events\UserJoinedRoom;
 use App\Models\UserQuestionRoom;
 use App\Http\Requests\CodeRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use function PHPUnit\Framework\returnValueMap;
 
 class RoomController extends Controller
@@ -501,7 +502,8 @@ class RoomController extends Controller
         ];
         RoomUser::create($dataRoomUser);
         
-        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name]);
+        $isFile = User::authUserImageIsFile(Auth::user()->avatar);
+        UserJoinedRoom::dispatch('user has joined', $room, ["id" => Auth::user()->id, "name" => Auth::user()->name, "avatar" => Auth::user()->avatar, "isFile" => $isFile ]);
 
         return redirect()->route('room.waiting', $room->code);   
     }
