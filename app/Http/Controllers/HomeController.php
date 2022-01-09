@@ -63,6 +63,8 @@ class HomeController extends Controller
             return redirect()->route('index')->with('message', 'Akun sudah terdaftar!');
         }elseif($message == "register-success"){
             return redirect()->route('index')->with('message', 'Terima kasih telah mendaftar!');
+        }elseif($message == "question-less-than-10"){
+            return redirect()->route('index')->with('message', 'Soal belum tersedia, silahkan coba quiz lain!');
         }
     }
 

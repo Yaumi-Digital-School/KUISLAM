@@ -31,10 +31,13 @@
                             <button id="copy-btn" class=""><img src="{{asset('images/copy_vector.svg')}}" alt=""></button>
                         </div>
                         {{-- button --}}
-                        <div class="flex justify-around mt-10 mb-2">
+                        <div class="flex justify-around mt-10 mb-2 ">
                             <a href="{{ route('room.start', $room->code) }}" class="bg-green-nav hover:bg-green-darkBg transition text-white text-2xl px-7 py-1 rounded-sm font-semibold">MULAI</a>
                             <a href="{{ route('room.exit', $room->code) }}" class="border hover:bg-gray-100 transition border-green-nav text-green-nav px-7 py-1 text-2xl rounded-sm font-semibold">BATAL</a>
                         </div>
+                        @error("count") 
+                            <span class="text-red-400 text-l text-center mt-2">{{ $message }}</span>
+                        @enderror
                     </div>
             </div>
         </div>

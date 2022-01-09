@@ -44,6 +44,14 @@ class RoomController extends Controller
             Jika merujuk ke desain method ini akan di panggil ketika user menekan tombol 
             create room.
         */
+        // Check if quiz have questions less than 10
+        $slugId = Quiz::getQuizSlug($slug); // Get Quiz from slug
+        $countQuestion = Question::getTotalQuestions($slugId->id);
+        if($countQuestion < 10){
+            $message = "question-less-than-10";
+            return redirect()->route('index.redirect', $message);
+        }
+
         $isInWaitingRoom = RoomUser::isInWaitingRoom();
         $isInOngoingRoom = RoomUser::isInOngoingRoom();
         
@@ -75,7 +83,7 @@ class RoomController extends Controller
         }
 
         $code = Room::getCode(); // Generate random code
-        $slugId = Quiz::getQuizSlug($slug); // Get Quiz from slug
+        
         
         $dataRoom = [
             'quiz_id' => $slugId->id,
@@ -119,7 +127,7 @@ class RoomController extends Controller
         $countPlayer = RoomUser::getAllWaitingPlayer($code)->count();
         if($countPlayer < 2){
             // if total player < 2
-            return back();
+            return back()->withErrors(['count' => 'Minimal pemain adalah 2 orang!']);
         }
 
         // get random question
