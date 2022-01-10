@@ -73,7 +73,7 @@ class HomeController extends Controller
         $selectedTopic = Request()->query('topic');
 
         $topic = Topic::where('slug', $selectedTopic)->first();
-        $topics = Topic::limit(4)->get();
+        $topics = Topic::get()->random(4);
         
         if($search){
             $quizzes = Quiz::where('title', 'LIKE', "%{$search}%")->orWhere('slug', 'LIKE', "%{$search}%")->orWhere('description', 'LIKE', "%{$search}%")->with('topic')->latest()->get()->groupBy('topic.title');
@@ -88,7 +88,6 @@ class HomeController extends Controller
 
     public function activity(){
         $roomUser = RoomUser::getAllDoneQuiz();
-        // dd($roomUser);
         return view('activity', compact('roomUser'));   
     }
 

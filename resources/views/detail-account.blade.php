@@ -103,8 +103,8 @@
                             <button class="w-full bg-green-nav mx-auto text-white rounded-md py-1 hover:bg-green-darkBg transition" type="submit">Simpan Perubahan</button>
                         </div>
                     </form>
+                    @if(!Auth::user()->google_id && !Auth::user()->facebook_id)
                     {{-- form password  --}}
-                    @if(!Auth::user()->google_id || !Auth::user()->facebook_id)
                         <form action="{{ route('profile.change-password') }}" method="POST" class="flex flex-col space-y-4 py-4 px-6">
                             @csrf
                             @method('PUT')

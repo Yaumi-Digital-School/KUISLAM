@@ -8,9 +8,9 @@ use App\Models\Topic;
 use App\Models\Question;
 use App\Models\QuizUser;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Requests\QuizRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateQuizRequest;
 
 
 class QuizController extends Controller
@@ -103,7 +103,7 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(QuizRequest $request, $id){
+    public function update(UpdateQuizRequest $request, $id){
         // route : quizzes/{quiz} (PUT)
         // route name : quizzes.update
         if ($request->image) {
